@@ -46,22 +46,6 @@ Desenvolver um aplicativo móvel para o lançamento de reembolso de despesas, ga
   
 ## 📊 Backlog e User Stories
 
-<details>
- <summary>Product Backlog</summary>
-   
-| Rank | Prioridade | US | Requisito Funcional | Estimativa (horas) | Sprint | Critério de aceitação |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | Alta | Como funcionário, quero poder visualizar, criar e acompanhar tickets na página de tickets, para registrar e monitorar problemas ou solicitações de forma eficiente. | RF2 | 15 | 1 | Como usuário, quero um botão para criar tickets, para registrar problemas ou pedidos facilmente. |
-| 2 | Alta | Como funcionário, quero acessar uma página principal com atalhos para tickets e documentos, para visualizar rapidamente informações importantes e navegar facilmente no sistema. | RF4 | 15 | 1 | Como usuário, quero ver a página principal com informações importantes e links rápidos, para acessar tickets e produtividade de forma fácil. |
-| 3 | Alta | Como administrador, quero acessar um painel de administração com controle de usuários e permissões, para definir quem pode acessar diferentes áreas do sistema. | RF1 | 20 | 2 | Como administrador, quero ver uma lista de usuários com a opção de editar suas permissões e opção de criar novos usuários, para garantir que apenas usuários autorizados tenham acesso a certas funcionalidades. |
-| 4 | Alta | Como gestor, quero fazer upload de documentos, para que os usuários possam acessar documentação e normas da empresa. | RF5 | 20 | 2 | Como gestor, quero fazer uploads de documentos para que os funcionários consigam acessar as normas e documentos da empresa de maneira fácil.  |
-| 5 | Média | Como usuário, quero fazer download de documentos, para que eu possa verificar normas e documentaçõe da empresa. | RF8 | 15 | 2 | Como ususário quero fazer downloads de forma rápida e intuitiva, para que eu possa trabalhar de acordo com as normas da empresa. |
-| 6 | Alta | Como usuário, quero trasnferir tickets para outras áreas e usuários, para que possamos organizar as tarefas da empresa. | RF3 | 15 | 2 | Como usuário quero transferir tickets para outras áreas e pessoas para que as tarefas sejam executadas com rapidez e eficiencia.  |
-| 7 | Alta | Como gestor, quero visualizar relatórios e um dashboard com métricas da equipe, para acompanhar o progresso e tomar decisões baseadas em dados. | RF7 | 15 | 3 | Como usuario, quero ver um dashboard com gráficos e métricas sobre aprodutividade da equipe, para monitorar o desempenho . |
-| 8 | Alta | Como funcionário, quero acessar um chat interno na plataforma, para me comunicar com outros colegas . | RF3 | 12 | 4 | Como usuário, quero enviar e receber mensagens de outros funcionários, para facilitar a comunicação rápida e direta dentro da plataforma. |
-
-</details>
-
 <div style="display: flex;">
   <img src="https://github.com/user-attachments/assets/b5448131-7067-4751-81be-069a6ea4493e" width="450"/>
   <img src="https://github.com/user-attachments/assets/af5f993d-5503-4104-bea1-5046054e9a13" width="450"/>
