@@ -3,7 +3,7 @@ import React from 'react';
 import Home from '../pages/home/Home';
 import Historico from "../pages/historico/Historico";
 import Perfil from "../pages/perfil/Perfil";
-/*import CustomTabBar from '../components/customTabBar';*/
+import CustomTabBar from '../components/customTabBar';
 import RegistroDespesa from '../pages/registroDespesa/RegistroDespesa';
 
 const Tab = createBottomTabNavigator();
@@ -14,7 +14,7 @@ export default function BottomRoutes() {
         screenOptions={{
         headerShown:false,
         }}
-        /*tabBar={pros=><CustomTabBar {...pros} />}*/
+        tabBar={pros=><CustomTabBar {...pros} />}
     >
         
         <Tab.Screen 
