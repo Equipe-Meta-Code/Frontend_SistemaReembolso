@@ -4,11 +4,13 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ProjectCard from '../../components/home/ProjectCard';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import api from '../../api'; 
 
 interface Project {
   id: string;
   department: string;
   name: string;
+  descricao: string;
   category: string[];
   total: number;
   spent: number;
@@ -30,18 +32,23 @@ const Home: React.FC = () => {
     const fetchProjects = async () => {
       setLoading(true);
       try {
-        // Simulação
-        const data: Project[] = [
-          { id: '1', department: 'Departamento X', name: 'Projeto 1', total: 1000, spent: 450, category: ['Transporte', 'Alimentação'] },
-          { id: '2', department: 'Departamento Y', name: 'Projeto 2', total: 5000, spent: 200, category: ['Alimentação'] },
-          { id: '3', department: 'Departamento Z', name: 'Projeto 3', total: 800, spent: 790, category: ['Transporte', 'Hospedagem'] },
-        ];
-        setTimeout(() => {
-          setProjects(data);
-          setLoading(false);
-        }, 2000);
+        const response = await api.get('/projetos'); 
+        const data = response.data;
+
+        const formattedProjects: Project[] = data[0].projects.map((project: any) => ({
+          id: project.id,
+          name: project.name,
+          descricao: project.descricao,
+          department: project.departamentos.map((dep: any) => dep.nome).join(', '),
+          category: project.categorias.map((cat: any) => cat.nome),
+          total: project.categorias.reduce((acc: number, cat: any) => acc + cat.valor_maximo, 0),
+          spent: 0, // Adicionar valor gasto
+        }));
+
+        setProjects(formattedProjects);
       } catch (error) {
         console.error('Erro ao buscar projetos:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -56,7 +63,8 @@ const Home: React.FC = () => {
         <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
           <Image source={require('../../../assets/icon.png')} style={styles.image} />
         </TouchableOpacity>
-    </View>        
+      </View>        
+      
       <View style={styles.projectsList}>
         <Text style={styles.projectTitle}>Projetos</Text>
         {loading ? (

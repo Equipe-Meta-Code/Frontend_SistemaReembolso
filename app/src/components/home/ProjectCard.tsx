@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; 
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -7,12 +7,12 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 export interface Project {
   id: string;
   department: string;
+  descricao: string;
   name: string;
+  category: string[];
   total: number;
   spent: number;
-  category: string[];
 }
-
 type RootStackParamList = {
   Historico: { projectId: string };
 };
@@ -23,7 +23,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const valueLeft = project.total - project.spent;
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Historico', { projectId: project.id })}>
+    <TouchableOpacity onPress={() => navigation.navigate('Historico', { projectId: project.id })}> {/* Adicionar navegação para a projeto */}
       <View style={styles.card}>
         <View style={styles.departmentContainer}>
           {project.department?.split(',').map((department: string, index: number) => (
@@ -34,6 +34,8 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
         </View>
 
         <Text style={styles.cardTitle}>{project.name}</Text>
+
+        <Text style={styles.cardDescription}>{project.descricao}</Text>
 
         <Text>Limite de Gastos: R${project.total.toFixed(2)}</Text>
 
@@ -60,6 +62,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  cardDescription: {
+    color: 'gray',
+    fontWeight: 'bold',
+    fontSize: 14,
     marginBottom: 5,
   },
   category: {
