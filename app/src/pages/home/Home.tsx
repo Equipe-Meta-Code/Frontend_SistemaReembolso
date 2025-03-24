@@ -78,24 +78,6 @@ const Home: React.FC = () => {
         )}
       </View>
 
-      {/* Footer com Botões de Navegação */}
-      <View style={styles.footer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Icon name="home" size={30} color="white" />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('RegistroDespesa')}>
-          <Icon name="add" size={30} color="white" />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('Historico')}>
-          <Icon name="history" size={30} color="white" />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-          <Icon name="person" size={30} color="white" />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -130,15 +112,6 @@ const styles = StyleSheet.create({
   projectsList: {
     flex: 1,
     padding: 30,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    flexDirection: 'row',
-    padding: 20,
-    justifyContent: 'space-evenly',
-    backgroundColor: '#1F48AA',
   },
 });
 
