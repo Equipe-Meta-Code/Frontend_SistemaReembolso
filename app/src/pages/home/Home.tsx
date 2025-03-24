@@ -61,7 +61,7 @@ const Home: React.FC = () => {
       <View style={styles.top}>
         <Text style={styles.title}>Welcome!</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-          <Image source={require('../../../assets/icon.png')} style={styles.image} />
+          <Image source={require('../../assets/perfil.png')} style={styles.image} />
         </TouchableOpacity>
       </View>        
       
