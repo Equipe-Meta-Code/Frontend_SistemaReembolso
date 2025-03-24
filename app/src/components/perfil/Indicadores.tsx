@@ -1,26 +1,24 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { style } from "./styles";
 
-const Indicadores = () => {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Indicadores</Text>
-        </View>
-    );
+interface IndicadoresProps {
+  titulo: string;
+  quantia: string;
+}
+
+const Indicadores: React.FC<IndicadoresProps> = ({ titulo, quantia}) => {
+  return (
+      <View style={style.container}>
+        <Text style={style.titulo}>
+          {titulo}
+        </Text>
+        <Text style={style.quantia}>
+          {quantia}
+        </Text>
+      </View>
+  );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f5f5f5',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-});
 
 export default Indicadores;
