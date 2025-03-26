@@ -6,7 +6,7 @@ import { styles } from "../../styles/historico.styles";
 
 interface Expense {
   data: string;
-  tipo: string;
+  projeto: string;
   valor: string;
   status: string;
 }
