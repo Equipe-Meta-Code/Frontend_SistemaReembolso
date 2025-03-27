@@ -15,6 +15,12 @@ export default function Cadastro() {
     const [showPassword, setShowPassword] = useState(false); 
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false); 
 
+    // Função para validar a senha com expressões regulares
+    const validatePassword = (password: string): boolean => {
+        const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'|\\,.<>\/?]).+$/;
+        return regex.test(password);
+    };
+
     async function getCadastro() {
         try {
             setLoading(true);
@@ -27,6 +33,11 @@ export default function Cadastro() {
             // Verificar se as senhas coincidem
             if (password !== passwordConfirm) {
                 return Alert.alert('Erro', 'As senhas não coincidem!');
+            }
+
+            // Validar a senha
+            if (!validatePassword(password)) {
+                return Alert.alert('Erro', 'A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial!');
             }
 
             // Verificar se os termos foram aceitos
