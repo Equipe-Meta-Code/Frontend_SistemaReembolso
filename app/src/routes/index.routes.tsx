@@ -1,7 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../pages/login/Login";
-import Cadastro from "../pages/Cadastro/Cadastro";
 import BottomRoutes from "./bottom.routes";
 
 export default function Routes(){
@@ -9,7 +8,7 @@ export default function Routes(){
 
     return (
         <Stack.Navigator
-            initialRouteName="Login"
+            initialRouteName="BottomRoutes"
             screenOptions={{
                 headerShown:false,
                 cardStyle:{
