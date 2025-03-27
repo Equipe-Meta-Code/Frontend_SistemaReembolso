@@ -27,9 +27,18 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({ categoria, icone, itens
         <Text style={styles.sectionTitle}>{categoria}</Text>
       </View>
 
+      {/* Cabeçalho das colunas */}
+      <View style={styles.tableHeader}>
+        <Text style={styles.headerText}>Data</Text>
+        <Text style={styles.headerText}>Projeto</Text>
+        <Text style={styles.headerText}>Valor</Text>
+        <Text style={styles.headerText}>Status</Text>
+      </View>
+      
       {itens.map((despesa, index) => (
-        <ExpenseItem key={index} {...despesa} />
+        <ExpenseItem key={index} {...despesa} index={index} />
       ))}
+
     </View>
   );
 };

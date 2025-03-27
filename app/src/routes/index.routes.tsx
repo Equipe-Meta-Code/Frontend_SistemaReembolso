@@ -7,7 +7,13 @@ export default function Routes(){
     const Stack = createStackNavigator()
 
     return (
-        <Stack.Navigator initialRouteName="BottomRoutes">
+        <Stack.Navigator initialRouteName="BottomRoutes" 
+        screenOptions={{
+            headerShown: false, 
+            cardStyle: {
+                backgroundColor: "#FFF",
+            },
+        }}>
             <Stack.Screen name="BottomRoutes" component={BottomRoutes} />
             <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
