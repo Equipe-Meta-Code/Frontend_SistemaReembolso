@@ -9,22 +9,22 @@ const despesas = [
     categoria: "Transporte",
     icone: "🚖",
     itens: [
-      { data: "27/05/2024", projeto: "Uber", valor: "R$ 14,80", status: "REPROVADO" },
-      { data: "28/05/2024", projeto: "Ônibus", valor: "R$ 22,30", status: "APROVADO" },
-      { data: "29/05/2024", projeto: "Ônibus", valor: "R$ 60,90", status: "APROVADO" },
-      { data: "30/05/2024", projeto: "Uber", valor: "R$ 25,40", status: "APROVADO" },
-      { data: "01/06/2024", projeto: "Táxi", valor: "R$ 48,00", status: "APROVADO" },
+      { data: "27/05/2024", projeto: "Projeto 2", valor: "R$ 14,80" },
+      { data: "28/05/2024", projeto: "Projeto 1", valor: "R$ 22,30" },
+      { data: "29/05/2024", projeto: "Projeto 2", valor: "R$ 60,90" },
+      { data: "30/05/2024", projeto: "Projeto 1", valor: "R$ 25,40" },
+      { data: "01/06/2024", projeto: "Projeto 1", valor: "R$ 48,00" },
     ],
   },
   {
     categoria: "Hospedagem",
     icone: "🏨",
     itens: [
-      { data: "27/05/2024", projeto: "Hotel", valor: "R$ 14,80", status: "APROVADO" },
-      { data: "28/05/2024", projeto: "Hotel", valor: "R$ 22,30", status: "REPROVADO" },
-      { data: "29/05/2024", projeto: "Hotel", valor: "R$ 60,90", status: "APROVADO" },
-      { data: "30/05/2024", projeto: "Airbnb", valor: "R$ 120,00", status: "APROVADO" },
-      { data: "30/05/2024", projeto: "Airbnb", valor: "R$ 7,48", status: "REPROVADO" },
+      { data: "27/05/2024", projeto: "Projeto 3", valor: "R$ 14,80" },
+      { data: "28/05/2024", projeto: "Projeto 3", valor: "R$ 22,30" },
+      { data: "29/05/2024", projeto: "Projeto 3", valor: "R$ 60,90"},
+      { data: "30/05/2024", projeto: "Projeto 2", valor: "R$ 120,00"},
+      { data: "30/05/2024", projeto: "Projeto 2", valor: "R$ 7,48"},
 
     ],
   },
@@ -32,33 +32,33 @@ const despesas = [
     categoria: "Alimentação",
     icone: "🍔",
     itens: [
-      { data: "12/06/2024", projeto: "Restaurante", valor: "R$ 856,13", status: "APROVADO" },
-      { data: "14/06/2024", projeto: "Lanchonete", valor: "R$ 45,90", status: "APROVADO" },
-      { data: "15/06/2024", projeto: "Mercado", valor: "R$ 210,75", status: "APROVADO" },
+      { data: "12/06/2024", projeto: "Projeto 1", valor: "R$ 856,13" },
+      { data: "14/06/2024", projeto: "Projeto 2", valor: "R$ 45,90" },
+      { data: "15/06/2024", projeto: "Projeto 3", valor: "R$ 210,75" },
     ],
   },
   {
     categoria: "Entretenimento",
     icone: "🎬",
     itens: [
-      { data: "05/06/2024", projeto: "Cinema", valor: "R$ 50,00", status: "APROVADO" },
-      { data: "10/06/2024", projeto: "Teatro", valor: "R$ 120,00", status: "REPROVADO" },
+      { data: "05/06/2024", projeto: "Projeto 2", valor: "R$ 50,00"},
+      { data: "10/06/2024", projeto: "Projeto 2", valor: "R$ 120,00" },
     ],
   },
   {
     categoria: "Educação",
     icone: "📚",
     itens: [
-      { data: "02/06/2024", projeto: "Curso Online", valor: "R$ 299,99", status: "APROVADO" },
-      { data: "03/06/2024", projeto: "Livro", valor: "R$ 89,90", status: "APROVADO" },
+      { data: "02/06/2024", projeto: "Projeto 3", valor: "R$ 299,99" },
+      { data: "03/06/2024", projeto: "Projeto 3", valor: "R$ 89,90" },
     ],
   },
   {
     categoria: "Saúde",
     icone: "⚕️",
     itens: [
-      { data: "08/06/2024", projeto: "Consulta Médica", valor: "R$ 250,00", status: "APROVADO" },
-      { data: "09/06/2024", projeto: "Farmácia", valor: "R$ 80,45", status: "APROVADO" },
+      { data: "08/06/2024", projeto: "Projeto 1", valor: "R$ 250,00"},
+      { data: "09/06/2024", projeto: "Projeto 1", valor: "R$ 80,45" },
     ],
   },
 ];
@@ -100,7 +100,7 @@ const Historico: React.FC = () => {
           <Text style={styles.circleText}>{dataAtual}</Text>
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.buttonText}>Projeto Makro</Text>
+          <Text style={styles.buttonText}>Total Gasto</Text>
           <Text style={styles.buttonValue}>R$ {totalDespesas}</Text>
         </View>
       </TouchableOpacity>
