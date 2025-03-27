@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Switch  } from 'react-
 import { style } from "./styles";
 import Indicadores from '../../components/perfil/Indicadores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-
+import CustomButton from '../../components/perfil/Botao';
 
 const Perfil = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -44,28 +43,28 @@ const Perfil = () => {
             </View>
 
             <View style={style.containerBotoes}>
-                <TouchableOpacity style={style.botao} onPress={() => alert("Botão Personal Info clicado")}>
-                    <Text style={style.textoBotao}>Informações pessoais</Text>
-                    <Ionicons name="chevron-forward" size={20} color="#000" />
-                </TouchableOpacity>
 
-                </View>
-                
-            </View>
+                <CustomButton
+                    titulo="Informações pessoais"
+                    onPress={() => alert("Informações pessoais")}
+                    iconName="chevron-forward"
+                    iconColor="#000"
+                />
 
+                <CustomButton
+                    titulo="Manual do usuário"
+                    onPress={() => alert("Manual do usuário")}
+                    iconName="chevron-forward"
+                    iconColor="#000"
+                />
 
-                <View style={style.editContainer}>
-                    <Text style={style.textoBotao}>
-                        Editar Perfil
-                    </Text>
-                </View>
+                <CustomButton
+                    titulo="Alterar Senha"
+                    onPress={() => alert("Alterar Senha")}
+                    iconName="chevron-forward"
+                    iconColor="#000"
+                />
 
-                <View style={style.editContainer}>
-                <Text style={style.textoBotao}>
-                    Alterar Senhaa
-                </Text>
-                </View>
-            </View> */}
         </View>
     );
 };
