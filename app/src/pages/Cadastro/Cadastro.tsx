@@ -4,16 +4,18 @@ import { Text, View, Image, Alert, TextInput, TouchableOpacity, TouchableWithout
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
+import axios from "axios";
+
 export default function Cadastro() {
     const navigation = useNavigation<NavigationProp<any>>();
-    const [nome, setNome] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState<string>('');
-    const [passwordConfirm, setPasswordConfirm] = useState<string>('');    
-    const [acceptTerms, setAcceptTerms] = useState(false); 
+    const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+    const [acceptTerms, setAcceptTerms] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); 
-    const [showPasswordConfirm, setShowPasswordConfirm] = useState(false); 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
     // Função para validar a senha com expressões regulares
     const validatePassword = (password: string): boolean => {
@@ -26,7 +28,7 @@ export default function Cadastro() {
             setLoading(true);
 
             // Verificar se os campos obrigatórios estão preenchidos
-            if (!email || !password || !passwordConfirm) {
+            if (!name || !email || !password || !passwordConfirm) {
                 return Alert.alert('Atenção', 'Informe todos os campos obrigatórios!');
             }
 
@@ -45,12 +47,19 @@ export default function Cadastro() {
                 return Alert.alert('Erro', 'Você precisa aceitar os termos e condições para se cadastrar!');
             }
 
+            const response = await axios.post('http://192.168.1.106:3333/register', {
+                name,
+                email,
+                password
+            });
+            const user = response.data;
+
             // Lógica para cadastro (exemplo simples)
             setTimeout(() => {
                 Alert.alert('Cadastro realizado com sucesso!');
                 navigation.navigate("Login"); // Redireciona para a tela de login após cadastro
                 setLoading(false);
-            }, 3000);
+            }, 1500);
 
         } catch (error) {
             console.log(error);
@@ -76,7 +85,7 @@ export default function Cadastro() {
 
                     {/* Nome Completo */}
                     <Text style={style.inputTitle}>Nome Completo</Text>
-                    <TextInput style={style.input} placeholder="Digite seu nome completo" placeholderTextColor="gray" value={nome} onChangeText={setNome} />
+                    <TextInput style={style.input} placeholder="Digite seu nome completo" placeholderTextColor="gray" value={name} onChangeText={setName} />
 
                     {/* Email */}
                     <Text style={style.inputTitle}>Email</Text>
@@ -126,21 +135,21 @@ export default function Cadastro() {
 
                     {/* Aceitar Termos */}
                     <View style={style.checkboxContainer}>
-                        <TouchableOpacity 
-                            style={style.checkbox} 
+                        <TouchableOpacity
+                            style={style.checkbox}
                             onPress={() => setAcceptTerms(prev => !prev)}
                         >
-                            <MaterialIcons 
-                                name={acceptTerms ? "check-box" : "check-box-outline-blank"} 
-                                size={24} 
-                                color={acceptTerms ? "green" : "gray"} 
+                            <MaterialIcons
+                                name={acceptTerms ? "check-box" : "check-box-outline-blank"}
+                                size={24}
+                                color={acceptTerms ? "green" : "gray"}
                             />
                         </TouchableOpacity>
                         <Text style={style.checkboxText}>Eu aceito todos os termos e condições</Text>
                     </View>
 
                     {/* Botão Cadastro */}
-                    <TouchableOpacity style={style.signupButton} onPress={getCadastro}>
+                    <TouchableOpacity style={style.signupButton} onPress={() => getCadastro()}>
                         {loading ? (
                             <ActivityIndicator color={"white"} size={"small"} />
                         ) : (
@@ -150,7 +159,7 @@ export default function Cadastro() {
 
                     {/* Texto "Já possui uma conta?" com "Login" em azul */}
                     <View style={style.lineContainer}>
-                        <Text style={style.noAccountText}>Já possui uma conta? 
+                        <Text style={style.noAccountText}>Já possui uma conta?
                             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                                 <Text style={{ color: '#1F48AA' }}> Login</Text>
                             </TouchableOpacity>
