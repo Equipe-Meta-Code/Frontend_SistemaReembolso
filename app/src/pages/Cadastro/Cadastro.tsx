@@ -15,6 +15,38 @@ export default function Cadastro() {
     const [showPassword, setShowPassword] = useState(false); 
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false); 
 
+    async function getCadastro() {
+        try {
+            setLoading(true);
+
+            // Verificar se os campos obrigatórios estão preenchidos
+            if (!email || !password || !passwordConfirm) {
+                return Alert.alert('Atenção', 'Informe todos os campos obrigatórios!');
+            }
+
+            // Verificar se as senhas coincidem
+            if (password !== passwordConfirm) {
+                return Alert.alert('Erro', 'As senhas não coincidem!');
+            }
+
+            // Verificar se os termos foram aceitos
+            if (!acceptTerms) {
+                return Alert.alert('Erro', 'Você precisa aceitar os termos e condições para se cadastrar!');
+            }
+
+            // Lógica para cadastro (exemplo simples)
+            setTimeout(() => {
+                Alert.alert('Cadastro realizado com sucesso!');
+                navigation.navigate("Login"); // Redireciona para a tela de login após cadastro
+                setLoading(false);
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={style.container}>
