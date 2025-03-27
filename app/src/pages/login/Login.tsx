@@ -11,6 +11,30 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false); 
 
+    async function getLogin() {
+        try {
+            setLoading(true);
+            if (!email || !password) {
+                return Alert.alert('Atenção', 'Informe os campos obrigatórios!');
+            }
+
+            setTimeout(() => {
+                if (email == 'admin@gmail' && password == '123456') {
+                    Alert.alert('Logado com sucesso');
+                    navigation.navigate('Home');
+                } else {
+                    Alert.alert('Usuário não foi encontrado');
+                }
+
+                setLoading(false);
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <KeyboardAvoidingView
