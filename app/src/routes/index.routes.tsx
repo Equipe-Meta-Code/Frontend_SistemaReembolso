@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../pages/login/Login";
 import BottomRoutes from "./bottom.routes";
 import Home from "../pages/home/Home";
+import RegistroDespesa from "../pages/registroDespesa/RegistroDespesa";
 
 export default function Routes(){
     const Stack = createStackNavigator()
@@ -23,8 +24,8 @@ export default function Routes(){
                 component={Login}
             />
             <Stack.Screen   
-                name="Cadastro"
-                component={Cadastro}
+                name="Despesa"
+                component={RegistroDespesa}
             />
             <Stack.Screen   
                 name="Home"
