@@ -11,11 +11,10 @@ const Tab = createBottomTabNavigator();
 export default function BottomRoutes() {
   return (
     <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: { position: "absolute", bottom: 0, height: 60 },
+    screenOptions={{
+      headerShown:false,
       }}
-      tabBar={(props) => <CustomTabBar {...props} />}
+      tabBar={pros=><CustomTabBar {...pros} />}
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Registrar" component={RegistroDespesa} />
