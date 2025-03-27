@@ -4,6 +4,7 @@ import { style } from "./styles";
 import Indicadores from '../../components/perfil/Indicadores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../../components/perfil/Botao';
+import CustomSwitchButton from '../../components/perfil/BotaoOpcao';
 
 const Perfil = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -65,6 +66,26 @@ const Perfil = () => {
                     iconColor="#000"
                 />
 
+                <CustomSwitchButton
+                    titulo="Darkmode"
+                    value={isDarkMode}
+                    onValueChange={toggleDarkMode}
+                    trackColor={{ false: "#E0E0E0", true: "#1F48AA" }}
+                    thumbColor="#ffffff"
+                />
+                
+            </View>
+
+            <View style={style.containerBotoes}>
+                <CustomButton
+                    titulo="Sair"
+                    onPress={() => alert("Botão Language clicado")}
+                    iconName="log-out-outline"
+                    iconColor="#ff0000"
+                    iconSize={40}
+                />
+            </View>
+            
         </View>
     );
 };
