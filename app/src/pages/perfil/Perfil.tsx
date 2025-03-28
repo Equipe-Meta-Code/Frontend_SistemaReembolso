@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Switch  } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Switch } from 'react-native';
 import { style } from "./styles";
 import Indicadores from '../../components/perfil/Indicadores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../../components/perfil/Botao';
 import CustomSwitchButton from '../../components/perfil/BotaoOpcao';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutAction } from '../../(redux)/authSlice';
+import { RootState } from "../../(redux)/store";
+import { useNavigation } from '@react-navigation/native';
+
 
 const Perfil = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -13,24 +19,37 @@ const Perfil = () => {
         setIsDarkMode(previousState => !previousState);
     };
 
+    const navigation = useNavigation();
+
+    const dispatch = useDispatch();
+    const user = useSelector((state: RootState) => state.auth.user);
+    const handleLogout = () => {
+        dispatch(logoutAction());
+    };
+
     return (
         <View style={style.container}>
             <View style={style.corTopo}></View>
             <View style={style.topoPerfil}>
                 <View style={style.imagemPerfil}>
                     <Image
-                    source={require('../../assets/perfil.png')}
-                    style={style.fotoPerfil}
+                        source={require('../../assets/perfil.png')}
+                        style={style.fotoPerfil}
                     />
                 </View>
-                <Text style={style.nomeFuncionario}>
-                Pedro Henrique Ribeiro
-                </Text>
+                {user ? (
+                    <>
+                        <Text style={style.nomeFuncionario}>
+                            {user?.name || 'Nome não disponível'}
+                        </Text>
 
-                <Text style={style.emailFuncionario}>
-                    pedro09.2004@gmail.com
-                </Text>        
-               
+                        <Text style={style.emailFuncionario}>
+                            {user?.email || 'Email não disponível'}
+                        </Text>
+                    </>
+                ) : (
+                    <Text>No user logged in</Text>
+                )};
             </View>
             <View style={style.divisor} />
 
@@ -73,19 +92,19 @@ const Perfil = () => {
                     trackColor={{ false: "#E0E0E0", true: "#1F48AA" }}
                     thumbColor="#ffffff"
                 />
-                
+
             </View>
 
             <View style={style.containerBotoes}>
                 <CustomButton
                     titulo="Sair"
-                    onPress={() => alert("Botão Language clicado")}
+                    onPress={() => handleLogout()}
                     iconName="log-out-outline"
                     iconColor="#ff0000"
                     iconSize={40}
                 />
             </View>
-            
+
         </View>
     );
 };
