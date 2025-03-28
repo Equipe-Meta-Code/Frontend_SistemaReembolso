@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { style } from "./styles";
 import { Text, View, Image, Alert, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserAction } from "../../(redux)/authSlice";
+import axios from "axios";
 
 export default function Login() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -11,26 +15,50 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false); 
 
+    const dispatch = useDispatch(); //dispatch
+    const user = useSelector((state: any) => state.auth.user); // Seleciona o estado do usuário
+
+    // Verifica o estado do usuário sempre que ele for atualizado
+    useEffect(() => {
+        console.log("Estado do usuário:", user);
+        if (user) {
+            console.log("Usuário logado:", user.email);
+        } else {
+            console.log("Nenhum usuário logado.");
+        }
+    }, [user]);
+
     async function getLogin() {
         try {
-            setLoading(true);
             if (!email || !password) {
                 return Alert.alert('Atenção', 'Informe os campos obrigatórios!');
             }
 
+            setLoading(true);
+
+            const response = await axios.post('http://192.168.1.106:3333/login', {
+                email,
+                password
+            });
+            const user = response.data;
+
+            // Aqui, despacha a ação para atualizar o estado global com os dados do usuário
+            dispatch(loginUserAction(user));  // Atualiza o estado global com as informações do usuário
+            console.log("Usuário recebido da API:", user);
+
             setTimeout(() => {
-                if (email == 'admin@gmail' && password == '123456') {
+                if (user.token) {  // Verifica se recebeu um token válido
                     Alert.alert('Logado com sucesso');
-                    navigation.navigate('Home');
+                    navigation.navigate('BottomRoutes');
                 } else {
                     Alert.alert('Usuário não foi encontrado');
-                }
-
+                }                
                 setLoading(false);
-            }, 3000);
+            }, 1500);
 
         } catch (error) {
-            console.log(error);
+            console.log('Erro ao logar o usuário.', error);
+            Alert.alert('Erro', 'Não foi possível realizar o login. Tente novamente.');
         } finally {
             setLoading(false);
         }

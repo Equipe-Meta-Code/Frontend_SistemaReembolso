@@ -23,7 +23,7 @@ export const style = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: 10,
+        gap: 5,
     },
     imagemPerfil: {
         display: "flex",
@@ -31,55 +31,73 @@ export const style = StyleSheet.create({
     },
     fotoPerfil: {
         width: 150,
-        height: 150
+        height: 150,
+        borderRadius: 100,
+        borderWidth: 3,
+        borderColor: "#FFFFFF",
     },
     nomeFuncionario: {
         fontSize: 28,
         fontWeight: "bold",
     },
-    departamentoFuncionario: {
+    emailFuncionario: {
         fontSize: 22,
+        fontWeight: "400",
         color: "#494949",
     },
-    departamento: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#d2ebfc",
-        paddingTop: 5,
-        paddingRight: 20,
-        paddingBottom: 5,
-        paddingLeft: 20,
-        borderRadius: 20,
-        maxWidth: 300,
-    },
-    departamentoTexto: {
-        fontSize: 22,
-        fontWeight: "bold",
-        color: "#494949",
-    },
-    botoes: {
+    divisor: {
         marginTop: 20,
-        gap: 20,
-    },
-    editContainer: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#1F48AA",
-        width: 300,
-        height: 50,
-        borderRadius: 56,
-    },
-    textoBotao: {
-        fontSize: 24, 
-        color: "#FFFFFF",
-        fontWeight: "bold",
-    },
-    containerMostradores: {
+        width: "90%",  
+        height: 1,  
+        backgroundColor: "#E0E0E0",  
+        marginVertical: 15,  
+        alignSelf: "center",  
+    },    
+    subtituloContainer: {
         marginTop: 30,
+        width: "90%",
+        alignSelf: "center",
+        alignItems: "flex-start", // Alinha o conteúdo à esquerda
+    },
+       
+    subtitulo: {
+        fontSize: 22,
+        fontWeight: "bold",
+        textAlign: "left", // Garante que o texto esteja alinhado à esquerda
+    },    
+    containerBotoes: {
+        marginTop: 10,
+        width: "90%",
+        backgroundColor: "#ffffff",
+        borderRadius: 12,
+        padding: 5,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+        borderWidth: 1,
+        borderColor: "#cecece",
+    },
+    botao: {
+        width: "100%",
+        height: 50,
+        borderRadius: 8,
+        backgroundColor: "#ffffff",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: "#E0E0E0",
+    },    
+    textoBotao: {
+        fontSize: 18,
+        fontWeight: "400",
+        color: "#000000",
+    },    
+    containerMostradores: {
+        marginTop: 10,
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
