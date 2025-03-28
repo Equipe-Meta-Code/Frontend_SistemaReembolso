@@ -47,7 +47,7 @@ export default function Cadastro() {
                 return Alert.alert('Erro', 'Você precisa aceitar os termos e condições para se cadastrar!');
             }
 
-            const response = await axios.post('http://192.168.1.106:3333/register', {
+            const response = await axios.post('http://<ip-da-sua-maquina>:3333/register', {
                 name,
                 email,
                 password
