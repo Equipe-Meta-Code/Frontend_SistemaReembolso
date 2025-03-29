@@ -8,7 +8,6 @@ interface Expense {
   data: string;
   projeto: string;
   valor: string;
-  status: string;
 }
 
 interface ExpenseSectionProps {
@@ -32,7 +31,7 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({ categoria, icone, itens
         <Text style={styles.headerText}>Data</Text>
         <Text style={styles.headerText}>Projeto</Text>
         <Text style={styles.headerText}>Valor</Text>
-        <Text style={styles.headerText}>Status</Text>
+        {/* <Text style={styles.headerText}>Status</Text> */}
       </View>
       
       {itens.map((despesa, index) => (
