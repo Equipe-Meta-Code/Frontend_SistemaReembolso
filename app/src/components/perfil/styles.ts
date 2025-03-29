@@ -33,5 +33,17 @@ export const style = StyleSheet.create({
         fontSize: 18,
         fontWeight: "400",
         color: "#000000",
-    },   
+    },  
+    botaoTopo: {
+        width: "auto",
+        height: 50,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    textoBotaoTopo: {
+        fontSize: 18,
+        fontWeight: "400",
+        color: "#000000",
+    },
 });
