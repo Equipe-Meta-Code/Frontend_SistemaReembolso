@@ -3,6 +3,8 @@ import { createSlice, PayloadAction, createAsyncThunk  } from "@reduxjs/toolkit"
 
 // Definindo a estrutura do tipo User
 interface User {
+    userId:Number;
+    id: Number;
     name: string;
     email: string;
     password: string;
@@ -34,8 +36,11 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         loginUserAction: (state, action: PayloadAction<User>) => {
-            state.user = action.payload;
-            AsyncStorage.setItem("userInfo", JSON.stringify(action.payload));
+            state.user = {
+                ...action.payload,
+                userId: action.payload.userId || action.payload.id,
+            };
+            AsyncStorage.setItem("userInfo", JSON.stringify(state.user));
         },
         logoutAction: (state) => {
             state.user = null;
