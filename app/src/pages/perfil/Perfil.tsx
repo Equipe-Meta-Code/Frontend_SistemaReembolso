@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../../components/perfil/Botao';
 import CustomSwitchButton from '../../components/perfil/BotaoOpcao';
 import api from '../../api'; 
+import api2 from '../../services/api2'; 
 
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../../(redux)/authSlice';
@@ -43,26 +44,68 @@ interface ProjetosResponse {
     projects: Projeto[];
 }
 
+interface Despesa {
+    _id: string;
+    projetoId: string;
+    userId: string;
+    categoria: string;
+    data: string;
+    valor_gasto: number;
+    descricao: string;
+    aprovacao: string;
+  }
+
 const Perfil = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
-    // Define the RootStackParamList type
-    type RootStackParamList = {
-        InfosPessoais: undefined; // Add other routes and their parameters here
-    };
-    
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const toggleDarkMode = () => {
         setIsDarkMode(previousState => !previousState);
     };
 
-
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    type RootStackParamList = {
+        InfosPessoais: undefined;
+    };
 
     const user = useSelector((state: RootState) => state.auth.user);
     const dispatch = useDispatch();
     console.log("Usuário do Redux:", user?.userId);
+    
     const handleLogout = () => {
         dispatch(logoutAction());
     };
+
+    const [despesas, setDespesas] = useState<Despesa[]>([]);
+    const [totalFiltrado, setTotalFiltrado] = useState<number>(0);
+  
+    useEffect(() => {
+        const fetchDespesas = async () => {
+          try {
+            const response = await api2.get("/despesa");
+            const todasDespesas: Despesa[] = response.data;
+
+            const despesasFiltradas = todasDespesas.filter(
+                (despesa: Despesa) =>
+                  despesa.aprovacao === "Pendente" && String(despesa.userId) === String(user?.userId)
+            );
+              
+            const total = despesasFiltradas.reduce(
+              (acc: number, despesa: Despesa) => acc + despesa.valor_gasto,
+              0
+            );
+
+            setDespesas(despesasFiltradas);
+            setTotalFiltrado(total);
+            console.log('Despesas sem filtro:', response.data)
+            console.log('Despesas filtradas:', despesas)
+            console.log('Despesas Somadas:', total)
+          } catch (err) {
+            console.error("Erro ao carregar despesas", err);
+          } finally {
+            console.log("Carregou as despesas");
+          }
+        };
+        fetchDespesas();
+      }, [user?.userId]);
 
     const [quantidadeProjetos, setQuantidadeProjetos] = useState<number>(0);
 
@@ -113,7 +156,7 @@ const Perfil = () => {
 
             <View style={style.containerMostradores}>
                 <Indicadores titulo="Projetos" quantia={`${quantidadeProjetos}`} />
-                <Indicadores titulo="Pendente" quantia={"R$4K"} />
+                <Indicadores titulo="Pendente" quantia={`R$${totalFiltrado}`} />
             </View>
             <View style={style.subtituloContainer}>
 
