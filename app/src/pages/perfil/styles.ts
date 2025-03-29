@@ -107,4 +107,17 @@ export const style = StyleSheet.create({
         justifyContent: "center",
         gap: 60,
     },
+    containerBotoesTopo: {
+        marginTop: 40,
+        display: "flex",
+        flexDirection: "row",
+        width: "90%",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    titulo: {
+        fontSize: 22,
+        fontWeight: "bold",
+        color: "#000000",
+    },
 });

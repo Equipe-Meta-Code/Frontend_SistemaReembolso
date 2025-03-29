@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
 import { style } from "./styles";
 import CustomButton from '../../components/perfil/Botao';
+import BotaoInfoPessoal from '../../components/perfil/BotaoInfoPessoal';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 
@@ -18,6 +19,18 @@ const InfosPessoais = () => {
 
     return (
         <ScrollView contentContainerStyle={style.container}>
+            <View style={style.containerBotoesTopo}>
+                <BotaoInfoPessoal 
+                    titulo="Cancelar"
+                    onPress={() => navigation.navigate('Perfil')}
+                />
+                <Text style={style.titulo}>Informações pessoais</Text>
+                <BotaoInfoPessoal 
+                    titulo="OK"
+                    onPress={() => navigation.navigate('Perfil')}
+                />
+            </View>
+
             <View style={style.containerBotoes}>
                 <View style={style.imagemPerfil}>
                     <Image

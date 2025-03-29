@@ -5,6 +5,7 @@ import Historico from "../pages/historico";
 import Perfil from "../pages/perfil/Perfil";
 import RegistroDespesa from "../pages/registroDespesa/RegistroDespesa";
 import CustomTabBar from "../components/customTabBar";
+import InfosPessoais from "../pages/perfil/InfosPessoais";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +21,7 @@ export default function BottomRoutes() {
       <Tab.Screen name="Registrar" component={RegistroDespesa} />
       <Tab.Screen name="Historico" component={Historico} />
       <Tab.Screen name="Perfil" component={Perfil} />
+      <Tab.Screen name="InfosPessoais" component={InfosPessoais} />
     </Tab.Navigator>
   );
 }
