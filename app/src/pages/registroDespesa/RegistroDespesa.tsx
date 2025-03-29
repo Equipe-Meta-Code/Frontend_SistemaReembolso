@@ -8,6 +8,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import api2 from '../../services/api2';
 import api from '../../services/api';
+import {  useSelector } from 'react-redux';
+import { RootState } from "../../(redux)/store";
 
 const RegistroDespesa = () => {
     const [error, setError] = useState("");
@@ -19,6 +21,7 @@ const RegistroDespesa = () => {
     const [date, setDate] = useState("");
     const [amount, setAmount] = useState("");
     const [description, setDescription] = useState('');
+    const user = useSelector((state: RootState) => state.auth.user);
 
     type Category = {
       id_categoria: string;
@@ -112,10 +115,12 @@ const RegistroDespesa = () => {
       try {
         const response = await api2.post("/despesa", {
           projetoId: selectedProject,
+          userId: user?.userId,
           categoria: category,
           data: finalDate,
           valor_gasto: parsedValue,
           descricao: description,
+          aprovacao: "Pendente",
         });
         console.log(response.data);
         setSuccessMessage("Despesa cadastrada com sucesso!");
