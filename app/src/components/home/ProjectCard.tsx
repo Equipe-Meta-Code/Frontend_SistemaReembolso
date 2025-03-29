@@ -6,13 +6,14 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 
 export interface Project {
   id: string;
-  department: string;
-  descricao: string;
+  department?: string; // Torna opcional para evitar erros
+  descricao?: string;
   name: string;
-  category: string[];
+  category?: string[];
   total: number;
   spent: number;
 }
+
 type RootStackParamList = {
   Historico: { projectId: string };
 };
@@ -23,27 +24,35 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const valueLeft = project.total - project.spent;
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Historico', { projectId: project.id })}> {/* Adicionar navegação para a projeto */}
+    <TouchableOpacity onPress={() => navigation.navigate('Historico', { projectId: project.id })}>
       <View style={styles.card}>
-        <View style={styles.departmentContainer}>
-          {project.department?.split(',').map((department: string, index: number) => (
-            <Text key={index} style={[styles.department, { backgroundColor: "#FFFCF1" }]}>
-              {department.trim()}
-            </Text>
-          ))}
-        </View>
+        
+        {project.department && (
+          <View style={styles.departmentContainer}>
+            {project.department.split(',').map((department, index) => (
+              <Text key={index} style={[styles.department, { backgroundColor: "#FFFCF1" }]}>
+                {department.trim()}
+              </Text>
+            ))}
+          </View>
+        )}
 
-        <Text style={styles.cardTitle}>{project.name}</Text>
+        <Text style={styles.cardTitle}>{project.name || 'Sem Nome'}</Text>
 
-        <Text style={styles.cardDescription}>{project.descricao}</Text>
+        {project.descricao && <Text style={styles.cardDescription}>{project.descricao}</Text>}
 
-        <Text>Limite de Gastos: R${project.total.toFixed(2)}</Text>
+        <Text>Limite de Gastos: R${project.total?.toFixed(2) ?? '0.00'}</Text>
 
         <ProgressBar progress={progress} color="#1F48AA" style={styles.progressBar} />
 
-        <Text>Gasto: R${project.spent.toFixed(2)} / Restante: R${valueLeft.toFixed(2)}</Text>
+        <Text>
+          Gasto: R${project.spent?.toFixed(2) ?? '0.00'} / Restante: R${valueLeft?.toFixed(2) ?? '0.00'}
+        </Text>
 
-        <Text style={styles.category}>{project.category?.join(' • ') || 'Sem Categoria'}</Text>
+        <Text style={styles.category}>
+          {project.category?.length ? project.category.join(' • ') : 'Sem Categoria'}
+        </Text>
+
       </View>
     </TouchableOpacity>
   );

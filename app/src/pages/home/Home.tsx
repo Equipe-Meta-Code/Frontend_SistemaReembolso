@@ -39,11 +39,12 @@ const Home: React.FC = () => {
           id: project.id,
           name: project.name,
           descricao: project.descricao,
-          department: project.departamentos.map((dep: any) => dep.nome).join(', '),
-          category: project.categorias.map((cat: any) => cat.nome),
-          total: project.categorias.reduce((acc: number, cat: any) => acc + cat.valor_maximo, 0),
-          spent: 0, // Adicionar valor gasto
+          department: project.departamentos?.map((dep: any) => dep.nome).join(', ') || '',
+          category: project.categorias?.map((cat: any) => cat.nome) || [],
+          total: project.categorias?.reduce((acc: number, cat: any) => acc + (cat.valor_maximo || 0), 0) || 0,
+          spent: 0,
         }));
+        
 
         setProjects(formattedProjects);
       } catch (error) {
