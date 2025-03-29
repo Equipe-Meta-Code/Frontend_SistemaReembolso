@@ -100,7 +100,7 @@ const Historico: React.FC = () => {
           <Text style={styles.circleText}>{dataAtual}</Text>
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.buttonText}>Total Gasto</Text>
+          <Text style={styles.buttonText}>Total de Despesas</Text>
           <Text style={styles.buttonValue}>R$ {totalDespesas}</Text>
         </View>
       </TouchableOpacity>
