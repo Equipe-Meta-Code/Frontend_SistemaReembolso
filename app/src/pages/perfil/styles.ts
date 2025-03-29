@@ -28,6 +28,9 @@ export const style = StyleSheet.create({
     imagemPerfil: {
         display: "flex",
         flexDirection: "column",
+        alignContent: "center",
+        justifyContent: "center",
+        alignItems: "center",
     },
     fotoPerfil: {
         width: 150,

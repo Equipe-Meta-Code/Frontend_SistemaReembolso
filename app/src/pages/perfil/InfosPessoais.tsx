@@ -18,6 +18,21 @@ const InfosPessoais = () => {
 
     return (
         <ScrollView contentContainerStyle={style.container}>
+            <View style={style.containerBotoes}>
+                <View style={style.imagemPerfil}>
+                    <Image
+                        source={require('../../assets/perfil.png')}
+                        style={style.fotoPerfil}
+                    />
+                </View>
+
+                <CustomButton
+                        titulo={`Editar imagem de perfil`}
+                        onPress={() => alert("Selecionar Imagem")}
+                        iconName="chevron-forward"
+                        iconColor="#000"
+                />
+            </View>
 
             <View style={style.subtituloContainer}>
 
