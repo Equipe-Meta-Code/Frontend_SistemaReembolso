@@ -12,6 +12,35 @@ import { logoutAction } from '../../(redux)/authSlice';
 import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
 
+interface Funcionario {
+    id: string;
+}
+
+interface Categoria {
+    id_categoria: string;
+    nome: string;
+    valor_maximo: number;
+}
+
+interface Departamento {
+    id_departamento: string;
+    nome: string;
+}
+
+interface Projeto {
+    id: string;
+    createdAt: number;
+    name: string;
+    descricao: string;
+    data: number;
+    categorias: Categoria[];
+    departamentos: Departamento[];
+    funcionarios: Funcionario[];
+}
+
+interface ProjetosResponse {
+    projects: Projeto[];
+}
 
 const Perfil = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -19,29 +48,37 @@ const Perfil = () => {
     const toggleDarkMode = () => {
         setIsDarkMode(previousState => !previousState);
     };
-    const [quantidadeProjetos, setQuantidadeProjetos] = useState<number>(0);
 
-    useEffect(() => {
-    const fetchProjectsCount = async () => {
-        try {
-        const response = await api.get('/projetos');
-        const quantidade = response.data[0].projects.length;
-        } catch (error) {
-        console.error('Erro ao buscar a quantidade de projetos:', error);
-        }
-    };
-
-    fetchProjectsCount();
-    }, []);
 
 
     const navigation = useNavigation();
-
-    const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.auth.user);
+    const dispatch = useDispatch();
+    console.log("Usuário do Redux:", user?.userId);
     const handleLogout = () => {
         dispatch(logoutAction());
     };
+
+    const [quantidadeProjetos, setQuantidadeProjetos] = useState<number>(0);
+
+    useEffect(() => {
+        const fetchProjectsCount = async () => {
+            try {
+                const response = await api.get<ProjetosResponse[]>('/projetos');
+                const projetos = response.data[0].projects;
+                const userId = user?.userId?.toString();
+                const projetosDoUsuario = projetos.filter((projeto: Projeto) => 
+                    projeto.funcionarios.some((funcionario: Funcionario) => funcionario.id === userId)
+                );
+                const quantidade = projetosDoUsuario.length;
+                setQuantidadeProjetos(quantidade);
+            } catch (error) {
+                console.error('Erro ao buscar a quantidade de projetos:', error);
+            }
+        };
+    
+        fetchProjectsCount();
+    }, [user?.userId]);
 
     return (
         <View style={style.container}>
@@ -70,8 +107,7 @@ const Perfil = () => {
             <View style={style.divisor} />
 
             <View style={style.containerMostradores}>
-            <Indicadores titulo="Projetos" quantia={`${quantidadeProjetos}`} />
-                <Indicadores titulo="Projetos" quantia={"2"} />
+                <Indicadores titulo="Projetos" quantia={`${quantidadeProjetos}`} />
                 <Indicadores titulo="Pendente" quantia={"R$4K"} />
             </View>
             <View style={style.subtituloContainer}>
