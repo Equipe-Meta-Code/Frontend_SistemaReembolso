@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../../(redux)/authSlice';
 import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 
 interface Funcionario {
     id: string;
@@ -44,14 +45,18 @@ interface ProjetosResponse {
 
 const Perfil = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
-
+    // Define the RootStackParamList type
+    type RootStackParamList = {
+        InfosPessoais: undefined; // Add other routes and their parameters here
+    };
+    
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const toggleDarkMode = () => {
         setIsDarkMode(previousState => !previousState);
     };
 
 
 
-    const navigation = useNavigation();
     const user = useSelector((state: RootState) => state.auth.user);
     const dispatch = useDispatch();
     console.log("Usuário do Redux:", user?.userId);
@@ -102,7 +107,7 @@ const Perfil = () => {
                     </>
                 ) : (
                     <Text>No user logged in</Text>
-                )};
+                )}
             </View>
             <View style={style.divisor} />
 
@@ -119,7 +124,7 @@ const Perfil = () => {
 
                 <CustomButton
                     titulo="Informações pessoais"
-                    onPress={() => alert("Informações pessoais")}
+                    onPress={() => navigation.navigate('InfosPessoais')}
                     iconName="chevron-forward"
                     iconColor="#000"
                 />
