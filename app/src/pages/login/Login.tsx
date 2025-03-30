@@ -6,7 +6,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserAction } from "../../(redux)/authSlice";
-import axios from "axios";
+import api2 from "../../services/api2";
 
 export default function Login() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -36,7 +36,7 @@ export default function Login() {
 
             setLoading(true);
 
-            const response = await axios.post('http://<ip-da-sua-maquina>:3333/login', {
+            const response = await api2.post('/login', {
                 email,
                 password
             });
