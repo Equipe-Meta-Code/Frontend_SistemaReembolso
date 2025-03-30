@@ -13,6 +13,7 @@ import { logoutAction } from '../../(redux)/authSlice';
 import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 
 interface Funcionario {
     id: string;
@@ -50,7 +51,7 @@ interface Despesa {
     userId: string;
     categoria: string;
     data: string;
-    valor_gasto: number;
+    valor_gasto: Float;
     descricao: string;
     aprovacao: string;
   }
@@ -156,7 +157,11 @@ const Perfil = () => {
 
             <View style={style.containerMostradores}>
                 <Indicadores titulo="Projetos" quantia={`${quantidadeProjetos}`} />
-                <Indicadores titulo="Pendente" quantia={`R$${totalFiltrado}`} />
+                <Indicadores 
+                    titulo="Pendente" 
+                    quantia={`R$${totalFiltrado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} 
+                />
+                
             </View>
             <View style={style.subtituloContainer}>
 

@@ -5,6 +5,8 @@ import ProjectCard from '../../components/home/ProjectCard';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import api from '../../api'; 
+import { useSelector } from 'react-redux';
+import { RootState } from "../../(redux)/store";
 
 interface Project {
   id: string;
@@ -27,6 +29,7 @@ const Home: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -34,8 +37,12 @@ const Home: React.FC = () => {
       try {
         const response = await api.get('/projetos'); 
         const data = response.data;
+        const userId = user?.userId?.toString();
+        const userProjects = data[0].projects.filter((project: { funcionarios: { id: string }[] }) => 
+          project.funcionarios.some((funcionario) => funcionario.id === userId)
+        );
 
-        const formattedProjects: Project[] = data[0].projects.map((project: any) => ({
+        const formattedProjects: Project[] = userProjects.map((project: any) => ({
           id: project.id,
           name: project.name,
           descricao: project.descricao,
@@ -44,7 +51,6 @@ const Home: React.FC = () => {
           total: project.categorias?.reduce((acc: number, cat: any) => acc + (cat.valor_maximo || 0), 0) || 0,
           spent: 0,
         }));
-        
 
         setProjects(formattedProjects);
       } catch (error) {

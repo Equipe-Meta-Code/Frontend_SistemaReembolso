@@ -40,13 +40,20 @@ const RegistroDespesa = () => {
     const fetchData = async () => {
         try {
           let response = await api.get('/projetos');
-          const projectList = response.data[0].projects; 
-          const formattedProjects = projectList.map((project:{ id: string; name: string }) => ({
+          const projectList = response.data[0].projects;
+          const userId = user?.userId?.toString();
+          
+          const userProjects = projectList.filter((project: { funcionarios: { id: string }[] }) => 
+            project.funcionarios.some((funcionario) => funcionario.id === userId)
+          );
+          
+          const formattedProjects = userProjects.map((project: { id: string; name: string }) => ({
             label: project.name,  
             value: project.id, 
           }));
 
-          projectList.forEach((project: Project) => {
+
+          userProjects.forEach((project: Project) => {
             categoriesObj[project.id] = project.categorias.map((category: Category) => ({
               label: category.nome,
               value: category.nome,
