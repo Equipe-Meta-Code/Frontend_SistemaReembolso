@@ -52,7 +52,6 @@ const RegistroDespesa = () => {
             value: project.id, 
           }));
 
-
           userProjects.forEach((project: Project) => {
             categoriesObj[project.id] = project.categorias.map((category: Category) => ({
               label: category.nome,
@@ -131,6 +130,15 @@ const RegistroDespesa = () => {
         });
         console.log(response.data);
         setSuccessMessage("Despesa cadastrada com sucesso!");
+        
+        setTimeout(() => {
+          setCategory("");
+          setSelectedProject("");
+          setDate("");
+          setAmount("");
+          setDescription("");
+          setSuccessMessage("");
+        }, 1500);
       } catch(error) {
         console.error("Erro ao cadastrar despesa:", error);
         setError("Erro ao cadastrar despesa. Por favor, tente novamente.");

@@ -114,10 +114,15 @@ export const style = StyleSheet.create({
         width: "90%",
         justifyContent: "space-between",
         alignItems: "center",
+      /*   textAlign: "center", */
+        position: "relative",
     },
     titulo: {
         fontSize: 22,
         fontWeight: "bold",
         color: "#000000",
+        position: "absolute",
+        left: "50%",
+        transform: [{translateX: -26}],
     },
 });

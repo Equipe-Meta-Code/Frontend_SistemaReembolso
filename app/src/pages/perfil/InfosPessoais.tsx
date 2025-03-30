@@ -24,7 +24,7 @@ const InfosPessoais = () => {
                     titulo="Cancelar"
                     onPress={() => navigation.navigate('Perfil')}
                 />
-                <Text style={style.titulo}>Informações pessoais</Text>
+                <Text style={style.titulo}>Editar</Text>
                 <BotaoInfoPessoal 
                     titulo="OK"
                     onPress={() => navigation.navigate('Perfil')}

@@ -65,6 +65,7 @@ const Perfil = () => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     type RootStackParamList = {
         InfosPessoais: undefined;
+        Login: undefined;
     };
 
     const user = useSelector((state: RootState) => state.auth.user);
@@ -73,6 +74,7 @@ const Perfil = () => {
     
     const handleLogout = () => {
         dispatch(logoutAction());
+        navigation.navigate('Login');
     };
 
     const [despesas, setDespesas] = useState<Despesa[]>([]);
