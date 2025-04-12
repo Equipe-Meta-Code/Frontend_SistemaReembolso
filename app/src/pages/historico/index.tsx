@@ -4,99 +4,125 @@ import { useRoute } from "@react-navigation/native";
 import Header from "../../components/historico/Header";
 import ExpenseSection from "../../components/historico/ExpenseSection";
 import { styles } from "../../styles/historico.styles";
+import api2 from "../../services/api2";
+import api from "../../services/api";
 
-const despesas = [
-  {
-    categoria: "Transporte",
-    icone: "🚖",
-    itens: [
-      { data: "27/05/2024", projeto: "Projeto Alpha", valor: "R$ 14,80" },
-      { data: "28/05/2024", projeto: "Projeto Beta", valor: "R$ 22,30" },
-      { data: "29/05/2024", projeto: "Projeto Gama", valor: "R$ 60,90" },
-      { data: "30/05/2024", projeto: "Projeto Delta", valor: "R$ 25,40" },
-      { data: "01/06/2024", projeto: "Projeto Epsilon", valor: "R$ 48,00" },
-    ],
-  },
-  {
-    categoria: "Hospedagem",
-    icone: "🏨",
-    itens: [
-      { data: "27/05/2024", projeto: "Projeto Zeta", valor: "R$ 14,80" },
-      { data: "28/05/2024", projeto: "Projeto Theta", valor: "R$ 22,30" },
-      { data: "29/05/2024", projeto: "Projeto Iota", valor: "R$ 60,90"},
-      { data: "30/05/2024", projeto: "Projeto Alpha", valor: "R$ 120,00"},
-      { data: "30/05/2024", projeto: "Projeto Epsilon", valor: "R$ 7,48"},
+interface Despesa {
+  _id: string;
+  projetoId: string;
+  userId: string;
+  categoria: string;
+  data: string;
+  valor_gasto: number;
+  descricao: string;
+  aprovacao: string;
+}
 
-    ],
-  },
-  {
-    categoria: "Alimentação",
-    icone: "🍔",
-    itens: [
-      { data: "12/06/2024", projeto: "Projeto Theta", valor: "R$ 856,13" },
-      { data: "14/06/2024", projeto: "Projeto Alpha", valor: "R$ 45,90" },
-      { data: "15/06/2024", projeto: "Projeto Beta", valor: "R$ 210,75" },
-    ],
-  },
-  {
-    categoria: "Entretenimento",
-    icone: "🎬",
-    itens: [
-      { data: "05/06/2024", projeto: "Projeto Gama", valor: "R$ 50,00"},
-      { data: "10/06/2024", projeto: "Projeto Alpha", valor: "R$ 120,00" },
-    ],
-  },
-  {
-    categoria: "Educação",
-    icone: "📚",
-    itens: [
-      { data: "02/06/2024", projeto: "Projeto Zeta", valor: "R$ 299,99" },
-      { data: "03/06/2024", projeto: "Projeto Beta", valor: "R$ 89,90" },
-    ],
-  },
-  {
-    categoria: "Saúde",
-    icone: "⚕️",
-    itens: [
-      { data: "08/06/2024", projeto: "Projeto Delta", valor: "R$ 250,00"},
-      { data: "09/06/2024", projeto: "Projeto Iota", valor: "R$ 80,45" },
-    ],
-  },
-];
-
+interface Projeto {
+  _id: string;
+  nome: string;
+}
 
 const Historico: React.FC = () => {
   interface RouteParams {
     projectId?: string;
   }
-  
+
   const route = useRoute();
-  const { projectId } = route.params as RouteParams || {};
+  const { projectId } = (route.params as RouteParams) || {};
 
-  const despesasFiltradas = projectId
-    ? despesas.map((categoria) => ({
-        ...categoria,
-        itens: categoria.itens.filter((item) => item.projeto === projectId),
-      })).filter((categoria) => categoria.itens.length > 0)
-    : despesas;
-
-  const calcularTotal = () => {
-    return despesasFiltradas
-      .flatMap((categoria) => categoria.itens)
-      .reduce((total, item) => total + parseFloat(item.valor.replace("R$ ", "").replace(",", ".")), 0)
-      .toFixed(2)
-      .replace(".", ",");
-  };
-
-  const totalDespesas = calcularTotal();
+  const [despesas, setDespesas] = useState<Despesa[]>([]);
+  const [projetos, setProjetos] = useState<Projeto[]>([]);
   const [dataAtual, setDataAtual] = useState("");
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [resDespesas, resProjetos] = await Promise.all([
+          api2.get("/despesa"),
+          api.get("/projetos"),
+        ]);
+  
+        setDespesas(resDespesas.data);
+        setProjetos(resProjetos.data);
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    };
+  
+    fetchData();
+  
     const hoje = new Date();
     const dia = hoje.getDate().toString().padStart(2, "0");
     const mes = (hoje.getMonth() + 1).toString().padStart(2, "0");
     setDataAtual(`${dia}/${mes}`);
   }, []);
+  
+
+  const getNomeProjeto = (id: string) => {
+    const projeto = projetos.find((p) => p._id === id);
+    return projeto ? projeto.nome : `Projeto ${id}`;
+  };
+
+  const getIconeCategoria = (categoria: string) => {
+    const icones: Record<string, string> = {
+      Transporte: "🚖",
+      Hospedagem: "🏨",
+      Alimentação: "🍔",
+      Entretenimento: "🎬",
+      Educação: "📚",
+      Saúde: "⚕️",
+      Outros: "💼",
+    };
+  
+    return icones[categoria] || "💰";
+  };  
+
+  const despesasAgrupadas = despesas.reduce((acc: any[], despesa) => {
+    const nomeProjeto = getNomeProjeto(despesa.projetoId);
+
+    const itemFormatado = {
+      data: new Date(despesa.data).toLocaleDateString("pt-BR"),
+      projeto: nomeProjeto,
+      valor: `R$ ${despesa.valor_gasto.toFixed(2).replace(".", ",")}`,
+      descricao: despesa.descricao,
+      status: despesa.aprovacao,
+    };
+
+    const categoriaExistente = acc.find((c) => c.categoria === despesa.categoria);
+
+    if (categoriaExistente) {
+      categoriaExistente.itens.push(itemFormatado);
+    } else {
+      acc.push({
+        categoria: despesa.categoria,
+        icone: getIconeCategoria(despesa.categoria),
+        itens: [itemFormatado],
+      });
+    }
+
+    return acc;
+  }, []);
+
+  const despesasFiltradas = projectId
+    ? despesasAgrupadas.map((categoria) => ({
+        ...categoria,
+        itens: categoria.itens.filter((item: any) => item.projeto === getNomeProjeto(projectId)),
+      })).filter((categoria) => categoria.itens.length > 0)
+    : despesasAgrupadas;
+
+  const calcularTotal = () => {
+    return despesasFiltradas
+      .flatMap((categoria) => categoria.itens)
+      .reduce((total, item) => {
+        const valorNumerico = parseFloat(item.valor.replace("R$ ", "").replace(",", "."));
+        return total + (isNaN(valorNumerico) ? 0 : valorNumerico);
+      }, 0)
+      .toFixed(2)
+      .replace(".", ",");
+  };
+
+  const totalDespesas = calcularTotal();
 
   return (
     <View style={styles.container}>
@@ -107,7 +133,7 @@ const Historico: React.FC = () => {
         renderItem={({ item }) => <ExpenseSection {...item} />}
         contentContainerStyle={styles.listContainer}
       />
-      
+
       <TouchableOpacity style={styles.fixedButton}>
         <View style={styles.circleButton}>
           <Text style={styles.circleText}>{dataAtual}</Text>

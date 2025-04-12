@@ -7,22 +7,25 @@ interface ExpenseItemProps {
   projeto: string;
   valor: string;
   index: number;
+  descricao: string;
+  status: string;
 }
 
-const ExpenseItem: React.FC<ExpenseItemProps> = ({ data, projeto, valor, index  }) => {
+const ExpenseItem: React.FC<ExpenseItemProps> = ({ data, projeto, descricao, valor, status, index  }) => {
   return (
     <View style={[styles.despesaItem, { backgroundColor: index % 2 === 0 ? "#F8F8F8" : "#FFFFFF" }]}>
       <Text style={styles.data}>{data}</Text>
       <Text style={styles.tipoDespesa}>{projeto}</Text>
+      <Text style={styles.tipoDespesa}>{descricao}</Text>
       <Text style={styles.valor}>{valor}</Text>
-      {/* <Text
+      <Text
         style={[
           styles.status,
           { color: status === "REPROVADO" ? "red" : status === "APROVADO" ? "green" : "#000000" }
         ]}
       >
         {status}
-      </Text> */}
+      </Text>
 
     </View>
   );
