@@ -5,8 +5,7 @@ import Indicadores from '../../components/perfil/Indicadores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../../components/perfil/Botao';
 import CustomSwitchButton from '../../components/perfil/BotaoOpcao';
-import api from '../../api'; 
-import api2 from '../../services/api2'; 
+import api from '../../services/api'; 
 
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../../(redux)/authSlice';
@@ -83,7 +82,7 @@ const Perfil = () => {
     useEffect(() => {
         const fetchDespesas = async () => {
           try {
-            const response = await api2.get("/despesa");
+            const response = await api.get("/despesa");
             const todasDespesas: Despesa[] = response.data;
 
             const despesasFiltradas = todasDespesas.filter(

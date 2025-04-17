@@ -6,7 +6,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserAction } from "../../(redux)/authSlice";
-import api2 from "../../services/api2";
+import api from "../../services/api";
 
 export default function Login() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -36,7 +36,7 @@ export default function Login() {
 
             setLoading(true);
 
-            const response = await api2.post('/login', {
+            const response = await api.post('/login', {
                 email,
                 password
             });

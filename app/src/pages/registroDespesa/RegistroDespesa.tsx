@@ -1,12 +1,11 @@
 import { Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { styles } from './styles';
 import CustomDropdown from '../../components/customDropdown';
 import CustomDatePicker from '../../components/customDate/index';
 import { TextInputMask } from 'react-native-masked-text';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import api2 from '../../services/api2';
 import api from '../../services/api';
 import {  useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
@@ -20,61 +19,113 @@ const RegistroDespesa = () => {
     const [projects, setProjects] = useState([]);
     const [date, setDate] = useState("");
     const [amount, setAmount] = useState("");
+    const [amountFormatted, setAmountFormatted] = useState(0);
     const [description, setDescription] = useState('');
+    const [allProjects, setAllProjects] = useState<Project[]>([]);
+    const [totalGastoCategoria, setTotalGastoCategoria] = useState([]);
+    const [categoryName, setCategoryName] = useState('');
     const user = useSelector((state: RootState) => state.auth.user);
 
     type Category = {
-      id_categoria: string;
+      categoriaId: string;
       nome: string;
       valor_maximo: number;
     };
     
     type Project = {
-      id: string;
-      name: string;
+      projetoId: string;
+      nome: string;
       categorias: Category[];
     };
 
-    const categoriesObj: { [key: string]: { label: string; value: string }[] } = {};
-
     const fetchData = async () => {
         try {
-          let response = await api.get('/projetos');
-          const projectList = response.data[0].projects;
-          const userId = user?.userId?.toString();
-          
-          const userProjects = projectList.filter((project: { funcionarios: { id: string }[] }) => 
-            project.funcionarios.some((funcionario) => funcionario.id === userId)
-          );
-          
-          const formattedProjects = userProjects.map((project: { id: string; name: string }) => ({
-            label: project.name,  
-            value: project.id, 
+          let response = await api.get('/projeto');
+
+          const projetos = response.data;
+          setAllProjects(projetos);
+
+          // Transforma a lista de projetos para o dropdown
+          const formattedProjects = projetos.map((projeto: Project) => ({
+            label: projeto.nome,
+            value: projeto.projetoId.toString(), // Certifique-se de que é string
           }));
-
-          userProjects.forEach((project: Project) => {
-            categoriesObj[project.id] = project.categorias.map((category: Category) => ({
-              label: category.nome,
-              value: category.nome,
+      
+          // Cria um objeto com categorias agrupadas por projeto
+          const categoriasPorProjeto: { [key: string]: { label: string; value: string }[] } = {};
+      
+          projetos.forEach((projeto: any) => {
+            const categoriasFormatadas = projeto.categorias.map((cat: Category) => ({
+              label: cat.nome,
+              value: cat.categoriaId.toString(),
             }));
+            categoriasPorProjeto[projeto.projetoId.toString()] = categoriasFormatadas;
           });
-
+      
           setProjects(formattedProjects);
-          setCategoriesByProject(categoriesObj);
+          setCategoriesByProject(categoriasPorProjeto);
         } catch (error) {
           console.error("Erro ao buscar projetos:", error);
         }
       };
+
+      useEffect(() => {
+        if (selectedProject && category) {
+          const fetchDataDespesas = async () => {
+            try {
+              let response = await api.get('/despesa');
+      
+              const despesas = response.data;
+      
+              const despesasFiltradas = despesas.filter(
+                (despesa: any) =>
+                  despesa.projetoId.toString() === selectedProject &&
+                  despesa.categoria.toString() === category
+              );
+      
+              const total = despesasFiltradas.reduce((acc: number, curr: any) => {
+                return acc + parseFloat(curr.valor_gasto);
+              }, 0);
+      
+              setTotalGastoCategoria(total);
+      
+            } catch (error) {
+              console.error("Erro ao buscar despesas por categoria:", error);
+            }
+          };
+      
+          fetchDataDespesas();
+        }
+      }, [selectedProject, category]);
 
       const filteredCategories = categoriesByProject[selectedProject] || [];
       
       useEffect(() => {
         fetchData();
       }, []);
+
+      const valor_maximo = useMemo(() => {
+        if (!selectedProject || !category) return 0;
+      
+        const selectedProjectData = allProjects.find(
+          (project) => project.projetoId.toString() === selectedProject
+        );
+      
+        const selectedCategoryData = selectedProjectData?.categorias.find(
+          (cat) => cat.categoriaId.toString() === category
+        );
+      
+        return selectedCategoryData?.valor_maximo || 0;
+      }, [selectedProject, category, allProjects]);
     
   
     const handleCategoryChange = (value: string) => {
       setCategory(value);
+
+      const selected = filteredCategories.find(cat => cat.value === value);
+      if (selected) {
+        setCategoryName(selected.label);
+      }
     };
   
     const handleProjectChange = (value: string) => {
@@ -87,6 +138,7 @@ const RegistroDespesa = () => {
   
     const handleAmountChange = (value: string) => {
       setAmount(value);
+      setAmountFormatted(parseFloat(value.replace(/[R$\s.]/g, '').replace(',', '.')));
     };
   
     const handleDescriptionChange = (value: string) => {
@@ -102,7 +154,7 @@ const RegistroDespesa = () => {
         setError("Por favor, preencha todos os campos.");
         return;
       }
-      const parsedValue = parseFloat(amount.replace(/[^\d.-]/g, ''))/100;
+      const parsedValue = parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.'));
   
       if (isNaN(parsedValue)) {
         setError("Valor inválido. Por favor, insira um valor válido.");
@@ -119,7 +171,7 @@ const RegistroDespesa = () => {
       let finalDate = new Date(dateFormated)
     
       try {
-        const response = await api2.post("/despesa", {
+        const response = await api.post("/despesa", {
           projetoId: selectedProject,
           userId: user?.userId,
           categoria: category,
@@ -191,6 +243,9 @@ const RegistroDespesa = () => {
             style={styles.inputMask}
             placeholder='R$ 0,00'
             />
+            {amountFormatted > valor_maximo &&
+              <Text style={{ color: 'red' }}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar, 
+                por favor insira uma descrição justificando a despesa.</Text>}
           
           <Text style={styles.textBottom}>Descrição</Text>
           <TextInput
