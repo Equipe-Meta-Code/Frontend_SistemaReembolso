@@ -24,7 +24,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const valueLeft = project.total - project.spent;
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Historico', { projectId: project.name })}>
+    <TouchableOpacity onPress={() => navigation.navigate('Historico', { projectId: project.id })}>
       <View style={styles.card}>
         
         {project.department && (
