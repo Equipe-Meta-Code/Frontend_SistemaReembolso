@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     },
     boxTop: {
         backgroundColor: '#1f4baa',
-        height: '30%',
+        height: '28%',
     },
     boxTitle: {
         alignItems: 'center',
@@ -138,5 +138,32 @@ export const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 8,
         margin: 'auto',
-      }
+      },
+      progressBar: {
+        marginTop: 12,
+        height: 18,
+        borderRadius: 5,
+        backgroundColor: '#e0e0e0',
+        overflow: 'hidden',
+      },
+      progressBarFill: {
+        height: '100%',
+      },
+      progressBarText: {
+        position: 'absolute',
+        width: '100%',
+        textAlign: 'center',
+        fontWeight: 'bold',
+      },
+      progressBarPorcentent: {
+        textAlign: 'center',
+        justifyContent: 'center',
+        marginTop: 6,
+        fontSize: 16,
+      },
+      limit: {
+        color: 'red',
+        fontSize: 16,
+        marginTop: 6,
+      },
 });

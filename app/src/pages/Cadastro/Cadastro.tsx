@@ -4,7 +4,7 @@ import { Text, View, Image, Alert, TextInput, TouchableOpacity, TouchableWithout
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-import api2 from "../../services/api2";
+import api from "../../services/api";
 
 export default function Cadastro() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -47,7 +47,7 @@ export default function Cadastro() {
                 return Alert.alert('Erro', 'Você precisa aceitar os termos e condições para se cadastrar!');
             }
 
-            const response = await api2.post('/register', {
+            const response = await api.post('/register', {
                 name,
                 email,
                 password
