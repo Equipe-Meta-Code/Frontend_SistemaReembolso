@@ -1,5 +1,13 @@
 import { StyleSheet } from "react-native";
 
+export const COLUMN_WIDTHS = {
+  data: 90,
+  projeto: 100,
+  descricao: 120,
+  valor: 90,
+  status: 100,
+};
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -77,7 +85,6 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
-    width: 80,
     color: "#2C3E50",
   },
 
@@ -92,21 +99,23 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
     elevation: 1,
   },
+
+  
   data: {
-    width: 80,
+    width: COLUMN_WIDTHS.data,
     fontSize: 16,
     color: "#666",
     textAlign: "center",
   },
   tipoDespesa: {
-    width: 80,
+    width: COLUMN_WIDTHS.projeto,
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
     color: "#2C3E50",
   },
   valor: {
-    width: 80,
+    width: COLUMN_WIDTHS.valor,
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
@@ -114,7 +123,7 @@ export const styles = StyleSheet.create({
   },
   status: {
     fontSize: 16,
-    width: 100,
+    width: COLUMN_WIDTHS.status,
     fontWeight: "bold",
     textAlign: "center",
     paddingVertical: 5,

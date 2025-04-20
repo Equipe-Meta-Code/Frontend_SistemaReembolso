@@ -6,6 +6,9 @@ import ExpenseSection from "../../components/historico/ExpenseSection";
 import { styles } from "../../styles/historico.styles";
 import api2 from "../../services/api2";
 import api from "../../services/api";
+import { RootState } from "../../(redux)/store";
+import { useSelector } from "react-redux";
+
 
 interface Despesa {
   _id: string;
@@ -19,8 +22,8 @@ interface Despesa {
 }
 
 interface Projeto {
-  _id: string;
-  nome: string;
+  id: string;
+  name: string;
 }
 
 const Historico: React.FC = () => {
@@ -34,6 +37,7 @@ const Historico: React.FC = () => {
   const [despesas, setDespesas] = useState<Despesa[]>([]);
   const [projetos, setProjetos] = useState<Projeto[]>([]);
   const [dataAtual, setDataAtual] = useState("");
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,13 +46,22 @@ const Historico: React.FC = () => {
           api2.get("/despesa"),
           api.get("/projetos"),
         ]);
-  
+    
         setDespesas(resDespesas.data);
-        setProjetos(resProjetos.data);
+        const userId = user?.userId?.toString();
+    
+        const todosProjetos = resProjetos.data.flatMap((entry: any) => entry.projects || []);
+    
+        const projetosFiltrados = todosProjetos.filter((projeto: any) =>
+          projeto.funcionarios?.some((funcionario: any) => funcionario.id === userId)
+        );
+    
+        setProjetos(projetosFiltrados);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
     };
+    
   
     fetchData();
   
@@ -56,14 +69,13 @@ const Historico: React.FC = () => {
     const dia = hoje.getDate().toString().padStart(2, "0");
     const mes = (hoje.getMonth() + 1).toString().padStart(2, "0");
     setDataAtual(`${dia}/${mes}`);
-  }, []);
-  
-
+  }, [user]);
+ 
   const getNomeProjeto = (id: string) => {
-    const projeto = projetos.find((p) => p._id === id);
-    return projeto ? projeto.nome : `Projeto ${id}`;
+    const projeto = projetos.find((p) => String(p.id) === String(id));
+    return projeto ? projeto.name : `teste ${id}`;
   };
-
+  
   const getIconeCategoria = (categoria: string) => {
     const icones: Record<string, string> = {
       Transporte: "🚖",
@@ -77,39 +89,47 @@ const Historico: React.FC = () => {
   
     return icones[categoria] || "💰";
   };  
+  
 
-  const despesasAgrupadas = despesas.reduce((acc: any[], despesa) => {
-    const nomeProjeto = getNomeProjeto(despesa.projetoId);
+  const despesasDoProjeto = projectId
+  ? despesas.filter((d) =>  String(d.projetoId) === String(projectId))
+  : despesas.filter((d) => projetos.some((p) => String(p.id) === String(d.projetoId)));
 
-    const itemFormatado = {
-      data: new Date(despesa.data).toLocaleDateString("pt-BR"),
-      projeto: nomeProjeto,
-      valor: `R$ ${despesa.valor_gasto.toFixed(2).replace(".", ",")}`,
-      descricao: despesa.descricao,
-      status: despesa.aprovacao,
-    };
+const despesasAgrupadas = despesasDoProjeto.reduce((acc: any[], despesa) => {
+  const nomeProjeto = getNomeProjeto(String(despesa.projetoId));
 
-    const categoriaExistente = acc.find((c) => c.categoria === despesa.categoria);
+  const itemFormatado = {
+    data: new Date(despesa.data).toLocaleDateString("pt-BR"),
+    projeto: nomeProjeto,
+    projetoId: despesa.projetoId,
+    valor: `R$ ${despesa.valor_gasto.toFixed(2).replace(".", ",")}`,
+    descricao: despesa.descricao,
+    status: despesa.aprovacao,
+  };
 
-    if (categoriaExistente) {
-      categoriaExistente.itens.push(itemFormatado);
-    } else {
-      acc.push({
-        categoria: despesa.categoria,
-        icone: getIconeCategoria(despesa.categoria),
-        itens: [itemFormatado],
-      });
-    }
+  const categoriaExistente = acc.find((c) => c.categoria === despesa.categoria);
 
-    return acc;
-  }, []);
+  if (categoriaExistente) {
+    categoriaExistente.itens.push(itemFormatado);
+  } else {
+    acc.push({
+      categoria: despesa.categoria,
+      icone: getIconeCategoria(despesa.categoria),
+      itens: [itemFormatado],
+    });
+  }
 
-  const despesasFiltradas = projectId
-    ? despesasAgrupadas.map((categoria) => ({
-        ...categoria,
-        itens: categoria.itens.filter((item: any) => item.projeto === getNomeProjeto(projectId)),
-      })).filter((categoria) => categoria.itens.length > 0)
-    : despesasAgrupadas;
+  return acc;
+}, []);
+
+const despesasFiltradas = projectId
+? despesasAgrupadas
+    .map((categoria) => ({
+      ...categoria,
+      itens: categoria.itens.filter((item: any) => String(item.projetoId) === String(projectId)),
+    }))
+    .filter((categoria) => categoria.itens.length > 0)
+: despesasAgrupadas;
 
   const calcularTotal = () => {
     return despesasFiltradas
