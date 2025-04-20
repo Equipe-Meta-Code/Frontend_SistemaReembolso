@@ -9,6 +9,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import api from '../../services/api';
 import {  useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 
 const RegistroDespesa = () => {
     const [error, setError] = useState("");
@@ -22,9 +24,18 @@ const RegistroDespesa = () => {
     const [amountFormatted, setAmountFormatted] = useState(0);
     const [description, setDescription] = useState('');
     const [allProjects, setAllProjects] = useState<Project[]>([]);
-    const [totalGastoCategoria, setTotalGastoCategoria] = useState([]);
+    const [totalGastoCategoria, setTotalGastoCategoria] = useState(0);
     const [categoryName, setCategoryName] = useState('');
     const user = useSelector((state: RootState) => state.auth.user);
+
+    type RootStackParamList = {
+      Home: undefined;
+      RegistroDespesa: undefined;
+      Historico: undefined;
+      Perfil: undefined;
+    };
+
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
     type Category = {
       categoriaId: string;
@@ -88,12 +99,10 @@ const RegistroDespesa = () => {
               }, 0);
       
               setTotalGastoCategoria(total);
-      
             } catch (error) {
               console.error("Erro ao buscar despesas por categoria:", error);
             }
-          };
-      
+          };     
           fetchDataDespesas();
         }
       }, [selectedProject, category]);
@@ -126,11 +135,15 @@ const RegistroDespesa = () => {
       if (selected) {
         setCategoryName(selected.label);
       }
+      setAmount("");
+      setAmountFormatted(0);
     };
   
     const handleProjectChange = (value: string) => {
         setSelectedProject(value);
         setCategory("");
+        setAmount("");
+        setAmountFormatted(0);
     };
     const handleDateChange = (date: string) => {
       setDate(date);
@@ -205,7 +218,9 @@ const RegistroDespesa = () => {
               style={styles.container}
           >
         <View style={styles.boxTop}>
-          <AntDesign name="arrowleft" style={styles.arrow} />
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <AntDesign name="arrowleft" style={styles.arrow} />
+          </TouchableOpacity>
             <View style={styles.boxTitle}>
               <Text style={styles.title}>Novo Registro</Text>
               <Text style={styles.subTitle}>Insira as informações sobre o seu novo gasto para poder registrá-lo no projeto</Text>
@@ -235,7 +250,7 @@ const RegistroDespesa = () => {
             onValueChange={handleDateChange}
           />
   
-          <Text style={styles.textBottom}>Valor Gasto</Text>
+          <Text style={styles.textBottom}>Valor gasto</Text>
           <TextInputMask
             type={'money'}
             value={amount}
@@ -243,9 +258,27 @@ const RegistroDespesa = () => {
             style={styles.inputMask}
             placeholder='R$ 0,00'
             />
-            {amountFormatted > valor_maximo &&
+            {amountFormatted > valor_maximo && selectedProject && category &&
               <Text style={{ color: 'red' }}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar, 
                 por favor insira uma descrição justificando a despesa.</Text>}
+
+          {selectedProject && category && 
+          <>
+            <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressBarFill, { width: `${(totalGastoCategoria / valor_maximo) * 100}%` },
+               {
+                backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : '#1f4baa',
+              },]} />
+              <Text style={styles.progressBarText}>
+                {`R$ ${totalGastoCategoria} / R$ ${valor_maximo}`}
+              </Text>
+            </View>
+            <Text style={styles.progressBarPorcentent}>
+                {totalGastoCategoria > valor_maximo ? "Limite excedido!" : 
+                  `Você já gastou ${((totalGastoCategoria / valor_maximo) * 100).toFixed(0)}% do valor permitido.`}
+            </Text>
+          </>}
           
           <Text style={styles.textBottom}>Descrição</Text>
           <TextInput
