@@ -258,10 +258,14 @@ const RegistroDespesa = () => {
             style={styles.inputMask}
             placeholder='R$ 0,00'
             />
-            {amountFormatted > valor_maximo && selectedProject && category &&
-              <Text style={{ color: 'red' }}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar, 
-                por favor insira uma descrição justificando a despesa.</Text>}
+            {totalGastoCategoria > valor_maximo ? 
+              <Text style={styles.limit}>O valor máximo já foi atingido. Caso deseje continuar,
+              por favor insira uma descrição justificando a despesa.</Text> : null}
 
+            {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
+              <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar, 
+                por favor insira uma descrição justificando a despesa.</Text>}
+  
           {selectedProject && category && 
           <>
             <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>

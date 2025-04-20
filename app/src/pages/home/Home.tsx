@@ -63,6 +63,7 @@ const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (projects.length > 0) {
     const fetchDespesas = async () => {
       setLoading(true);
       try {
@@ -97,10 +98,9 @@ const Home: React.FC = () => {
         setLoading(false);
       }
     };
-    if (projects.length > 0) {
       fetchDespesas();
-    }
-  }, []);
+    } 
+  }, [projects.length]);
 
   return (
     <View style={styles.container}>

@@ -161,4 +161,9 @@ export const styles = StyleSheet.create({
         marginTop: 6,
         fontSize: 16,
       },
+      limit: {
+        color: 'red',
+        fontSize: 16,
+        marginTop: 6,
+      },
 });
