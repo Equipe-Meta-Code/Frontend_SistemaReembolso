@@ -27,6 +27,8 @@ const RegistroDespesa = () => {
     const [totalGastoCategoria, setTotalGastoCategoria] = useState(0);
     const [categoryName, setCategoryName] = useState('');
     const user = useSelector((state: RootState) => state.auth.user);
+    const [pacotes, setPacotes] = useState<{ label: string; value: string }[]>([]);
+    const [selectedPacote, setSelectedPacote] = useState("");
 
     type RootStackParamList = {
       Home: undefined;
@@ -47,6 +49,12 @@ const RegistroDespesa = () => {
       projetoId: string;
       nome: string;
       categorias: Category[];
+    };
+
+      pacoteId: number;
+      nome: string;
+      projetoId: string;
+      userId: string;
     };
 
     const fetchData = async () => {
@@ -80,6 +88,34 @@ const RegistroDespesa = () => {
         }
       };
 
+        try {
+          const response = await api.get('/pacote');
+          const pacotes: Pacote[] = response.data;
+          console.log(pacotes)
+
+          // Filtra os pacotes que pertencem ao usuário
+          const pacotesByUser = pacotes.filter(
+            (pacote) => pacote.userId.toString() === user?.userId.toString()
+          );
+      
+          // Filtra os pacotes que pertencem ao projeto selecionado
+          const pacotesFiltrados = pacotesByUser.filter(
+            (pacote) => pacote.projetoId.toString() === projetoId
+          );
+      
+          // Formata os pacotes filtrados para o dropdown
+          const pacotesFormatados = pacotesFiltrados.map((pacote) => ({
+            label: pacote.nome,
+            value: pacote.pacoteId.toString(),
+          }));
+      
+          setPacotes(pacotesFormatados); 
+          console.log('formatados:',pacotesFormatados)
+        } catch (error) {
+          console.error("Erro ao buscar pacotes:", error);
+        }
+      };  
+      
       useEffect(() => {
         if (selectedProject && category) {
           const fetchDataDespesas = async () => {
@@ -112,6 +148,12 @@ const RegistroDespesa = () => {
       useEffect(() => {
         fetchData();
       }, []);
+
+        if (selectedProject) {
+          fetchPacotes(selectedProject);  
+          fetchData();
+        }
+      }, [selectedProject]);
 
       const valor_maximo = useMemo(() => {
         if (!selectedProject || !category) return 0;
