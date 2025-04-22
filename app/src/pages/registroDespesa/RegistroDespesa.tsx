@@ -29,6 +29,8 @@ const RegistroDespesa = () => {
     const user = useSelector((state: RootState) => state.auth.user);
     const [pacotes, setPacotes] = useState<{ label: string; value: string }[]>([]);
     const [selectedPacote, setSelectedPacote] = useState("");
+    const [creatingPacote, setCreatingPacote] = useState(false);
+    const [newPacoteName, setNewPacoteName] = useState("");
 
     type RootStackParamList = {
       Home: undefined;
@@ -147,6 +149,41 @@ const RegistroDespesa = () => {
 
       const filteredCategories = categoriesByProject[selectedProject] || [];
       
+      // Para criar um novo pacote de despesas
+      const handleCreatePacote = async () => {
+
+        if (!newPacoteName || !selectedProject) {
+          setError("Informe o nome do pacote.");
+          return;
+        }
+      
+        try {
+          const response = await api.post("/pacote", {
+            nome: newPacoteName,
+            projetoId: selectedProject,
+            userId: user?.userId,
+          });
+      
+          const novoPacote = response.data;
+      
+          // Formata para o dropdown
+          const novoPacoteFormatado = {
+            label: novoPacote.nome,
+            value: novoPacote.pacoteId.toString(),
+          };
+
+          //Adiciona o novo pacote ao estado pacotes, mantendo os que já existiam
+          setPacotes((prev) => [...prev, novoPacoteFormatado]);
+
+          setSelectedPacote(novoPacote.pacoteId.toString());
+          setCreatingPacote(false);
+          setNewPacoteName("");
+        } catch (error) {
+          console.error("Erro ao criar pacote:", error);
+          setError("Erro ao criar pacote. Tente novamente.");
+        }
+      };
+
       useEffect(() => {
         fetchData();
       }, []);
@@ -294,6 +331,30 @@ const RegistroDespesa = () => {
             value={selectedPacote}
             onValueChange={handlePacoteChange}
           />
+
+        {/* Se o usuário quiser criar um novo pacote */}
+        {!creatingPacote ? (
+          <TouchableOpacity onPress={() => setCreatingPacote(true)}>
+            <Text style={styles.link}> + Criar novo pacote </Text>
+          </TouchableOpacity>
+        ) : (
+          <>
+            <TextInput
+              placeholder="Nome do novo pacote"
+              value={newPacoteName}
+              onChangeText={setNewPacoteName}
+              style={styles.inputNome}
+            />
+            
+            <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
+              <Text style={styles.buttonText}> Criar Pacote </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity onPress={() => setCreatingPacote(false)}>
+              <Text style={styles.link}> Cancelar </Text>
+            </TouchableOpacity>
+          </>
+        )}
 
           <Text style={styles.textBottom}>Categoria</Text>
           <CustomDropdown 

@@ -166,4 +166,27 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 6,
       },
+
+      link: {
+        color: '#1f4baa',
+        marginTop: 8,
+        textDecorationLine: 'underline',
+      },
+      
+      smallButton: {
+        backgroundColor: '#1f4baa',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginTop: 8,
+      },
+      
+      inputNome: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        marginTop: 8,
+      }
+      
 });
