@@ -13,7 +13,7 @@
   npm install
   ```
 * Configurar o arquivo de API
-  * Acesse o arquivo [api2.ts](./app/src/services/api2.ts)
+  * Acesse o arquivo [api.ts](./app/src/services/api.ts)
   * Substitua ```<ip-da-sua-maquina>``` pelo IP correto da sua máquina.
 
 * Inicie o frontend com o comando:
