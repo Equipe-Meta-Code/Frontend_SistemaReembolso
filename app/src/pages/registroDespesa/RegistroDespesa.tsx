@@ -51,6 +51,7 @@ const RegistroDespesa = () => {
       categorias: Category[];
     };
 
+    type Pacote = {
       pacoteId: number;
       nome: string;
       projetoId: string;
@@ -88,6 +89,7 @@ const RegistroDespesa = () => {
         }
       };
 
+      const fetchPacotes = async (projetoId: string) => {
         try {
           const response = await api.get('/pacote');
           const pacotes: Pacote[] = response.data;
@@ -149,6 +151,7 @@ const RegistroDespesa = () => {
         fetchData();
       }, []);
 
+      useEffect(() => {
         if (selectedProject) {
           fetchPacotes(selectedProject);  
           fetchData();
@@ -187,6 +190,9 @@ const RegistroDespesa = () => {
         setAmount("");
         setAmountFormatted(0);
     };
+    const handlePacoteChange = (value: string) => {
+      setSelectedPacote(value);
+  };
     const handleDateChange = (date: string) => {
       setDate(date);
     };
@@ -205,7 +211,7 @@ const RegistroDespesa = () => {
       setError(""); // Limpar mensagem de erro anterior
       setSuccessMessage(""); // Limpar mensagem de sucesso anterior
       
-      if (!category || !selectedProject || !date || !amount || !description) {
+      if (!selectedPacote || !category || !selectedProject || !date || !amount || !description) {
         setError("Por favor, preencha todos os campos.");
         return;
       }
@@ -227,6 +233,7 @@ const RegistroDespesa = () => {
     
       try {
         const response = await api.post("/despesa", {
+          pacoteId: selectedPacote,
           projetoId: selectedProject,
           userId: user?.userId,
           categoria: category,
@@ -239,6 +246,7 @@ const RegistroDespesa = () => {
         setSuccessMessage("Despesa cadastrada com sucesso!");
         
         setTimeout(() => {
+          setSelectedPacote("");
           setCategory("");
           setSelectedProject("");
           setDate("");
@@ -278,6 +286,15 @@ const RegistroDespesa = () => {
           </View>
         </View>
         <View style={styles.boxBottom}>
+
+        <Text style={styles.textBottom}>Pacote</Text>
+          <CustomDropdown 
+            data={pacotes}
+            placeholder='Selecione um pacote'
+            value={selectedPacote}
+            onValueChange={handlePacoteChange}
+          />
+
           <Text style={styles.textBottom}>Categoria</Text>
           <CustomDropdown 
             data={filteredCategories}
