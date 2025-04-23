@@ -20,7 +20,7 @@ interface Pacote {
   nome: string;
   projetoId: string;
   userId: string;
-  status: string[];
+  status: string;
   despesas?: string[];
 }
 
@@ -30,7 +30,7 @@ const PacotesScreen = ({ route }: any) => {
   const [despesasMap, setDespesasMap] = useState<Record<string, Despesa>>({});
 
   useEffect(() => {
-    const fetchPacotesEComDespesas = async () => {
+    const fetchPacotesDespesas = async () => {
       try {
         const response = await api.get<Pacote[]>('/pacote');
         const pacotesDoProjeto = response.data.filter((p) => p.projetoId === projectId);
@@ -44,7 +44,6 @@ const PacotesScreen = ({ route }: any) => {
           const despesasResponse = await api.post('/despesas/by-ids', { ids: allDespesaIds });
           const despesasDetalhadas = despesasResponse.data;
 
-          // Criar um map: id -> despesa
           const map: Record<string, Despesa> = {};
           despesasDetalhadas.forEach((d: Despesa) => {
             map[d.despesaId] = d;
@@ -57,7 +56,7 @@ const PacotesScreen = ({ route }: any) => {
       }
     };
 
-    fetchPacotesEComDespesas();
+    fetchPacotesDespesas();
   }, [projectId]);
 
   return (
@@ -73,7 +72,14 @@ const PacotesScreen = ({ route }: any) => {
           keyExtractor={(item) => item.pacoteId}
           renderItem={({ item }) => {
             const despesasDetalhadas = item.despesas?.map(id => despesasMap[id])?.filter(Boolean);
-            return <PacoteCard nome={item.nome} despesas={despesasDetalhadas} pacoteId={''} projetoId={''} userId={''} status={[]} />;
+            return <PacoteCard 
+                nome={item.nome} 
+                despesas={despesasDetalhadas} 
+                pacoteId={item.pacoteId} 
+                projetoId={item.projetoId} 
+                userId={item.userId} 
+                status={item.status} 
+            />;
           }}
         />
       </View>
@@ -85,7 +91,7 @@ const PacotesScreen = ({ route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FBFBFB',
   },
   top: {
     flexDirection: 'row',

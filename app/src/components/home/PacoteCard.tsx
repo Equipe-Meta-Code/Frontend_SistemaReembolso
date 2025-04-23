@@ -17,6 +17,7 @@ export interface Despesa {
     projetoId: string;
     userId: string;
     status: string[];
+    status: string;
     despesas?: Despesa[];
   }
 
@@ -44,6 +45,9 @@ export interface Despesa {
   
     return (
       <View style={styles.card}>
+        <View style={styles.statusContainer}>
+          <Text style={[styles.statusText, { backgroundColor: '#F2F3F4' }]}>{status}</Text>
+        </View>
         <Text style={styles.cardTitle}>{nome}</Text>
         <Text style={styles.cardSubtitle}>Histórico de Despesas:</Text>
   
@@ -65,34 +69,59 @@ export interface Despesa {
     );
   };
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#fdfdfd',
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  cardSubtitle: {
-    marginTop: 8,
-    fontWeight: '600',
-    color: '#555',
-  },
-  despesaItem: {
-    marginTop: 4,
-    color: '#333',
-  },
-  semDespesa: {
-    marginTop: 4,
-    color: '#999',
-    fontStyle: 'italic',
-  },
-});
+  const styles = StyleSheet.create({
+    card: {
+      backgroundColor: '#FBFBFB',
+      padding: 10,
+      borderRadius: 16,
+      marginVertical: 12,
+      elevation: 2,
+    },
+    cardTitle: {
+      fontSize: 20,
+      fontWeight: '700',
+      color: '#1A1A1A',
+      marginBottom: 4,
+    },
+    cardSubtitle: {
+      marginTop: 16,
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#374151', 
+    },
+    despesaItem: {
+      marginTop: 6,
+      fontSize: 15,
+      color: '#4B5563',
+      lineHeight: 22,
+    },
+    semDespesa: {
+      marginTop: 15,
+      marginBottom: 10,
+      color: '#9CA3AF', 
+      fontSize: 14,
+      fontStyle: 'italic',
+    },
+    statusContainer: {
+      flexDirection: 'row',
+      marginBottom: 8,
+    },
+    statusText: {
+      backgroundColor: '#E5E7EB', 
+      color: '#374151',
+      fontSize: 12,
+      paddingHorizontal: 10,
+      paddingVertical: 4,
+      borderRadius: 8,
+      textTransform: 'uppercase',
+      fontWeight: '600',
+    },
+    categoriaCard: {
+      padding: 16,
+      borderRadius: 12,
+      marginTop: 12,
+    },
+  });
+  
 
 export default PacoteCard;
