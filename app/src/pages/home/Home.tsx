@@ -39,10 +39,11 @@ const Home: React.FC = () => {
         const response = await api.get('/projeto'); 
         const data = response.data;
         const userId = Number(user?.userId);
+    
         const userProjects = data.filter((project: any) =>
-          project.funcionarios?.includes(7) //Incluir o id do usuário aqui
+          project.funcionarios?.some((func: any) => String(func.userId) === String(userId))
         );
-
+    
         const formattedProjects: Project[] = userProjects.map((project: any) => ({
           id: project.projetoId,
           name: project.nome,
@@ -59,6 +60,7 @@ const Home: React.FC = () => {
         setLoading(false);
       }
     };
+        
     fetchProjects();
   }, []);
 
