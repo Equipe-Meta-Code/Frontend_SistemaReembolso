@@ -166,6 +166,11 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 6,
       },
+      aviso: {
+        color: 'gray',
+        fontSize: 16,
+        marginTop: 6,
+      },
 
       link: {
         color: '#1f4baa',
