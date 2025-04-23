@@ -46,6 +46,24 @@ export interface Despesa {
   
       return acc;
     }, []);
+
+    const cardCategoriaCores: Record<string, string> = {
+      'Alimentação': 'rgba(16, 185, 129, 0.11)',
+      'Hospedagem': 'rgba(255, 194, 38, 0.15)',
+      'Transporte': 'rgba(52, 123, 238, 0.1)',
+      'Serviços Terceirizados': 'rgba(90, 128, 19, 0.1)',
+      'Materiais': 'rgba(245, 94, 132, 0.1)',
+      'Outros': 'rgba(97, 97, 97, 0.1)',
+    };    
+
+    const tituloCategoriaCores: Record<string, string> = {
+      'Alimentação': 'rgba(12, 78, 56, 0.5)',
+      'Hospedagem': 'rgba(121, 97, 39, 0.5)',
+      'Transporte': 'rgba(19, 54, 110, 0.5)',
+      'Serviços Terceirizados': 'rgba(50, 70, 13, 0.5)',
+      'Materiais': 'rgba(102, 22, 42, 0.5)',
+      'Outros': 'rgba(54, 52, 52, 0.5)',
+    };    
   
     return (
       <View style={styles.card}>
@@ -57,10 +75,15 @@ export interface Despesa {
   
         {despesas && despesas.length > 0 ? (
           despesasAgrupadas?.map((grupo) => (
-            <View key={grupo.categoria} style={styles.card}>
-              <Text style={styles.cardSubtitle}>{grupo.categoria}</Text>
+            <View 
+              key={grupo.categoria} 
+              style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || '#F9FAFB' },]}>
+
+              <Text style={[styles.cardSubtitle, { color: tituloCategoriaCores[grupo.categoria] || '#F9FAFB' },]}>{grupo.categoria}</Text>
               {grupo.itens.map((item: any, index: number) => (
-                <Text key={index} style={styles.despesaItem}>
+                <Text 
+                  key={index} 
+                  style={styles.despesaItem}>
                   • {item.data} - {item.descricao} - {item.valor}
                 </Text>
               ))}
