@@ -1,13 +1,15 @@
+// src/(redux)/authSlice.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createSlice, PayloadAction, createAsyncThunk  } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Definindo a estrutura do tipo User
 interface User {
-    userId:Number;
-    id: Number;
-    name: string;
-    email: string;
-    password: string;
+  userId: Number;
+  id: Number;
+  name: string;
+  email: string;
+  password: string;
+  profileImage?: string;
 }
 
 // Definindo o tipo do estado de autenticação
@@ -32,30 +34,42 @@ const initialState: AuthState = {
 
 // Criando o slice para autenticação
 const authSlice = createSlice({
-    name: "auth",
-    initialState,
-    reducers: {
-        loginUserAction: (state, action: PayloadAction<User>) => {
-            state.user = {
-                ...action.payload,
-                userId: action.payload.userId || action.payload.id,
-            };
-            AsyncStorage.setItem("userInfo", JSON.stringify(state.user));
-        },
-        logoutAction: (state) => {
-            state.user = null;
-            AsyncStorage.removeItem("userInfo");
-        },
-        setUserAction: (state, action: PayloadAction<User | null>) => {
-            state.user = action.payload;
-        },
+  name: "auth",
+  initialState,
+  reducers: {
+    loginUserAction: (state, action: PayloadAction<User>) => {
+      state.user = {
+        ...action.payload,
+        userId: action.payload.userId || action.payload.id,
+      };
+      AsyncStorage.setItem("userInfo", JSON.stringify(state.user));
     },
+    logoutAction: (state) => {
+      state.user = null;
+      AsyncStorage.removeItem("userInfo");
+    },
+    setUserAction: (state, action: PayloadAction<User | null>) => {
+      state.user = action.payload;
+    },
+    setProfileImage: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user = { ...state.user, profileImage: action.payload };
+        AsyncStorage.setItem("userInfo", JSON.stringify(state.user)).catch((error) =>
+          console.error("Erro ao salvar imagem no AsyncStorage", error)
+        );
+      }
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(loadUser.fulfilled, (state, action: PayloadAction<User | null>) => {
+      if (action.payload) {
+        state.user = action.payload;
+      }
+    });
+  }
 });
 
-// Gerando as ações a partir do slice
-export const { loginUserAction, logoutAction, setUserAction } = authSlice.actions;
-
-// Exportando o reducer
+export const { loginUserAction, logoutAction, setUserAction, setProfileImage } = authSlice.actions;
 export const authReducer = authSlice.reducer;
 
 // Função thunk para carregar o usuário do AsyncStorage

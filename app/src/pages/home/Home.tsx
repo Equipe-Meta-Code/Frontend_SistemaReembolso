@@ -7,6 +7,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import api from '../../api'; 
 import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Project {
   id: string;
@@ -62,13 +63,17 @@ const Home: React.FC = () => {
 
     fetchProjects();
   }, []);
+  
+  const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
 
   return (
     <View style={styles.container}>
       <View style={styles.top}>
         <Text style={styles.title}>Welcome!</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-          <Image source={require('../../assets/perfil.png')} style={styles.image} />
+          <Image 
+                source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
+                style={styles.image} />
         </TouchableOpacity>
       </View>        
       

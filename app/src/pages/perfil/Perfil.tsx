@@ -6,8 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../../components/perfil/Botao';
 import CustomSwitchButton from '../../components/perfil/BotaoOpcao';
 import api from '../../api'; 
-import api2 from '../../services/api2'; 
-
+import api2 from '../../services/api2';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../../(redux)/authSlice';
 import { RootState } from "../../(redux)/store";
@@ -130,14 +130,16 @@ const Perfil = () => {
     
         fetchProjectsCount();
     }, [user?.userId]);
-
+    
+    const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
+    
     return (
         <View style={style.container}>
             <View style={style.corTopo}></View>
             <View style={style.topoPerfil}>
                 <View style={style.imagemPerfil}>
                     <Image
-                        source={require('../../assets/perfil.png')}
+                        source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
                         style={style.fotoPerfil}
                     />
                 </View>
