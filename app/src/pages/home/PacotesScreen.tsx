@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import api from '../../services/api';
 import PacoteCard from '../../components/home/PacoteCard';
-
+import { RootState } from "../../(redux)/store";
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 interface Despesa {
   despesaId: string;
@@ -24,7 +28,15 @@ interface Pacote {
   despesas?: string[];
 }
 
+type RootStackParamList = {
+  Home: undefined;
+  RegistroDespesa: undefined;
+  Historico: undefined;
+  Perfil: undefined;
+};
+
 const PacotesScreen = ({ route }: any) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { projectId } = route.params;
   const [pacotes, setPacotes] = useState<Pacote[]>([]);
   const [despesasMap, setDespesasMap] = useState<Record<string, Despesa>>({});
@@ -66,6 +78,9 @@ const PacotesScreen = ({ route }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+              <AntDesign name="arrowleft" style={styles.arrow} />
+        </TouchableOpacity>
         <Text style={styles.title}>{nomeProjeto || 'Carregando...'}</Text>
       </View>
 
@@ -100,7 +115,6 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     padding: 20,
     paddingTop: 50,
     backgroundColor: '#1F48AA',
@@ -110,6 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
+    paddingLeft: 15,
   },
   image: {
     width: 50,
@@ -123,6 +138,10 @@ const styles = StyleSheet.create({
   pacotesList: {
     flex: 1,
     padding: 30,
+  },
+  arrow: {
+    fontSize: 24,
+    color: '#FFFFFF',
   },
 });
 
