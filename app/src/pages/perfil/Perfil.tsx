@@ -15,8 +15,9 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 
 interface Funcionario {
-    id: string;
-}
+    userId: number;
+    name: string;
+  }
 
 interface Categoria {
     id_categoria: string;
@@ -38,10 +39,7 @@ interface Projeto {
     categorias: Categoria[];
     departamentos: Departamento[];
     funcionarios: Funcionario[];
-}
-
-interface ProjetosResponse {
-    projects: Projeto[];
+    projetoId: number;
 }
 
 interface Despesa {
@@ -114,11 +112,13 @@ const Perfil = () => {
     useEffect(() => {
         const fetchProjectsCount = async () => {
             try {
-                const response = await api.get<ProjetosResponse[]>('/projetos');
-                const projetos = response.data[0].projects;
+                const response = await api.get<Projeto[]>('/projeto');
+                const projetos = response.data;
                 const userId = user?.userId?.toString();
-                const projetosDoUsuario = projetos.filter((projeto: Projeto) => 
-                    projeto.funcionarios.some((funcionario: Funcionario) => funcionario.id === userId)
+                const projetosDoUsuario = projetos.filter((projeto: Projeto) =>
+                    projeto.funcionarios.some(
+                        (funcionario: Funcionario) => String(funcionario.userId) === String(userId)
+                    )
                 );
                 const quantidade = projetosDoUsuario.length;
                 setQuantidadeProjetos(quantidade);
