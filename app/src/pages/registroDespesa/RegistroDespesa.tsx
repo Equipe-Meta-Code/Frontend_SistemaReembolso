@@ -321,6 +321,8 @@ const RegistroDespesa = () => {
         setAmount("");
         setDescription("");
         setSuccessMessage("");
+        setKm("");
+        setCategoryName("");
       }, 1500);
     } catch (error) {
       console.error("Erro ao cadastrar despesa:", error);
