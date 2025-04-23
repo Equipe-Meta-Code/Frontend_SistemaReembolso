@@ -76,9 +76,12 @@ const Perfil = () => {
 
     const [despesas, setDespesas] = useState<Despesa[]>([]);
     const [totalFiltrado, setTotalFiltrado] = useState<number>(0);
-  
+    const [quantidadeProjetos, setQuantidadeProjetos] = useState<number>(0);
+
     useEffect(() => {
+
         const fetchDespesas = async () => {
+            
           try {
             const response = await api.get("/despesa");
             const todasDespesas: Despesa[] = response.data;
@@ -103,14 +106,11 @@ const Perfil = () => {
           } finally {
             console.log("Carregou as despesas");
           }
+
         };
-        fetchDespesas();
-      }, [user?.userId]);
 
-    const [quantidadeProjetos, setQuantidadeProjetos] = useState<number>(0);
-
-    useEffect(() => {
         const fetchProjectsCount = async () => {
+
             try {
                 const response = await api.get<Projeto[]>('/projeto');
                 const projetos = response.data;
@@ -125,9 +125,16 @@ const Perfil = () => {
             } catch (error) {
                 console.error('Erro ao buscar a quantidade de projetos:', error);
             }
+
         };
-    
-        fetchProjectsCount();
+
+        const interval = setInterval(() => {
+            fetchDespesas();
+            fetchProjectsCount();
+        }, 3000);
+
+        return () => clearInterval(interval)
+
     }, [user?.userId]);
 
     return (
