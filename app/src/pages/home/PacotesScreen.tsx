@@ -28,6 +28,7 @@ const PacotesScreen = ({ route }: any) => {
   const { projectId } = route.params;
   const [pacotes, setPacotes] = useState<Pacote[]>([]);
   const [despesasMap, setDespesasMap] = useState<Record<string, Despesa>>({});
+  const [nomeProjeto, setNomeProjeto] = useState('');
 
   useEffect(() => {
     const fetchPacotesDespesas = async () => {
@@ -50,6 +51,9 @@ const PacotesScreen = ({ route }: any) => {
           });
 
           setDespesasMap(map);
+
+          const projetoResponse = await api.get(`/projeto/${Number(projectId)}`);
+          setNomeProjeto(projetoResponse.data.nome);
         }
       } catch (err) {
         console.error('Erro ao buscar pacotes ou despesas:', err);
@@ -62,11 +66,11 @@ const PacotesScreen = ({ route }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <Text style={styles.title}>Meus pacotes</Text>
+        <Text style={styles.title}>{nomeProjeto || 'Carregando...'}</Text>
       </View>
 
       <View style={styles.pacotesList}>
-        <Text style={styles.pacotesTitle}>Pacotes</Text>
+        <Text style={styles.pacotesTitle}>Meus pacotes</Text>
         <FlatList
           data={pacotes}
           keyExtractor={(item) => item.pacoteId}
