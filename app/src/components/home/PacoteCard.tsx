@@ -16,14 +16,18 @@ export interface Despesa {
     nome: string;
     projetoId: string;
     userId: string;
-    status: string[];
     status: string;
     despesas?: Despesa[];
   }
 
-  const PacoteCard: React.FC<Pacote> = ({ nome, despesas }) => {
-    // Agrupando despesas por categoria
-    const despesasAgrupadas = despesas?.reduce((acc: any[], despesa) => {
+  const PacoteCard: React.FC<Pacote> = ({ nome, despesas, status }) => {
+    
+      const despesasOrdenadas = [...(despesas || [])].sort(
+        (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
+      );
+
+      // Agrupando despesas por categoria
+      const despesasAgrupadas = despesasOrdenadas?.reduce((acc: any[], despesa) => {
       const categoriaExistente = acc.find((c) => c.categoria === despesa.categoria);
       const itemFormatado = {
         descricao: despesa.descricao,

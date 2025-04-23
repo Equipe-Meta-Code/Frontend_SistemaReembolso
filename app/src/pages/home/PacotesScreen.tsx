@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import api from '../../services/api';
 import PacoteCard from '../../components/home/PacoteCard';
