@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import api from '../../api';
 export interface Despesa {
     categoria: string;
     valor_gasto: number;
@@ -20,8 +20,25 @@ export interface Despesa {
     despesas?: Despesa[];
   }
 
-  const PacoteCard: React.FC<Pacote> = ({ nome, despesas, status }) => {
+  const PacoteCard: React.FC<Pacote> = ({ nome, despesas, status: initialStatus, pacoteId }) => {
     
+      const [status, setStatus] = useState(initialStatus);
+      const [isSolicitando, setIsSolicitando] = useState(false);
+
+      const handleSolicitarReembolso = async () => {
+        try {
+          setIsSolicitando(true);
+
+          const response = await api.post(`/pacotes/${pacoteId}/enviar`);
+
+          setStatus('aguardando_aprovacao');
+          Alert.alert('Sucesso', 'Reembolso solicitado com sucesso!');
+        } catch (error: any) {
+          console.error(error?.response?.data || error);
+          Alert.alert('Erro', error?.response?.data?.erro || 'Não foi possível solicitar o reembolso.');
+        }        
+      };
+
       const despesasOrdenadas = [...(despesas || [])].sort(
         (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
       );
@@ -92,6 +109,19 @@ export interface Despesa {
         ) : (
           <Text style={styles.semDespesa}>Nenhuma despesa cadastrada.</Text>
         )}
+
+        {status === 'rascunho' && (
+        <TouchableOpacity
+          style={[styles.botaoReembolso, , (despesas?.length === 0 || isSolicitando) && { backgroundColor: '#9CA3AF' }]}
+          onPress={handleSolicitarReembolso}
+          disabled={isSolicitando || despesas?.length === 0}
+        >
+          <Text style={styles.textoBotao}>
+            {isSolicitando ? 'Solicitando...' : 'Solicitar Reembolso'}
+          </Text>
+        </TouchableOpacity>
+      )}
+
       </View>
     );
   };
@@ -100,19 +130,19 @@ export interface Despesa {
     card: {
       backgroundColor: '#FBFBFB',
       padding: 10,
-      borderRadius: 16,
+      borderRadius: 14,
       marginVertical: 12,
-      elevation: 2,
+      elevation: 3,
     },
     cardTitle: {
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: '700',
       color: '#1A1A1A',
       marginBottom: 4,
     },
     cardSubtitle: {
       marginTop: 16,
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: '600',
       color: '#374151', 
     },
@@ -131,7 +161,7 @@ export interface Despesa {
     },
     statusContainer: {
       flexDirection: 'row',
-      marginBottom: 8,
+      marginBottom: 10,
     },
     statusText: {
       backgroundColor: '#E5E7EB', 
@@ -147,6 +177,18 @@ export interface Despesa {
       padding: 16,
       borderRadius: 12,
       marginTop: 12,
+    },
+    botaoReembolso: {
+      marginTop: 16,
+      backgroundColor: '#2563EB',
+      paddingVertical: 10,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    textoBotao: {
+      color: '#FFFFFF',
+      fontSize: 16,
+      fontWeight: '600',
     },
   });
   
