@@ -1,6 +1,5 @@
-// src/screens/InfosPessoais.tsx
 import React from 'react';
-import { View, Text, Image, ScrollView, Button } from 'react-native';
+import { View, Text, Image, ScrollView, Button, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
 import { style } from "./styles";
@@ -17,17 +16,38 @@ const InfosPessoais = () => {
         
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+    const handleImagePress = () => {
+        // Exibe um alerta com a opção de editar a imagem
+        Alert.alert("Editar Imagem", "Escolha uma nova imagem de perfil.");
+    };
+
+    const handleEditName = () => {
+        // Alerta para edição do nome
+        Alert.alert("Editar Nome", `Você está prestes a editar o nome: ${user?.name}`);
+    };
+
+    const handleEditEmail = () => {
+        // Alerta para edição do email
+        Alert.alert("Editar Email", `Você está prestes a editar o email: ${user?.email}`);
+    };
+
     return (
         <ScrollView contentContainerStyle={style.container}>
             <View style={style.containerBotoesTopo}>
                 <BotaoInfoPessoal 
                     titulo="Cancelar"
-                    onPress={() => navigation.navigate('Perfil')}
+                    onPress={() => {
+                        Alert.alert('Atenção', 'As alterações não foram salvas!');
+                        navigation.navigate('Perfil');
+                    }}
                 />
                 <Text style={style.titulo}>Editar</Text>
                 <BotaoInfoPessoal 
                     titulo="OK"
-                    onPress={() => navigation.navigate('Perfil')}
+                    onPress={() => {
+                        Alert.alert('Atenção', 'Alterações salvas com sucesso!');
+                        navigation.navigate('Perfil');
+                    }}
                 />
             </View>
 
@@ -40,30 +60,29 @@ const InfosPessoais = () => {
                 </View>
 
                 <CustomButton
-                        titulo={`Editar imagem de perfil`}
-                        onPress={() => alert("Selecionar Imagem")}
-                        iconName="chevron-forward"
-                        iconColor="#000"
+                    titulo={`Editar imagem de perfil`}
+                    onPress={handleImagePress}
+                    iconName="chevron-forward"
+                    iconColor="#000"
                 />
             </View>
 
             <View style={style.subtituloContainer}>
-
                 <Text style={style.subtitulo}>Sobre</Text>
             </View>
             <View style={style.containerBotoes}>
                 
                 <CustomButton
-                        titulo={`Nome: ${user?.name}`}
-                        onPress={() => alert(`Editar nome: ${user?.name}`)}
-                        iconName="chevron-forward"
-                        iconColor="#000"
+                    titulo={`Nome: ${user?.name}`}
+                    onPress={handleEditName}
+                    iconName="chevron-forward"
+                    iconColor="#000"
                 />
                 <CustomButton
-                        titulo={`Email: ${user?.email}`}
-                        onPress={() => alert(`Editar email: ${user?.name}`)}
-                        iconName="chevron-forward"
-                        iconColor="#000"
+                    titulo={`Email: ${user?.email}`}
+                    onPress={handleEditEmail}
+                    iconName="chevron-forward"
+                    iconColor="#000"
                 />
                 
             </View>

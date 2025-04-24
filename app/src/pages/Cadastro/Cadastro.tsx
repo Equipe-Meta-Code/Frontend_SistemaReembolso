@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { style } from "./styles";
-import { Text, View, Image, Alert, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
@@ -16,6 +16,7 @@ export default function Cadastro() {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+    const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
     // Função para validar a senha com expressões regulares
     const validatePassword = (password: string): boolean => {
@@ -24,46 +25,62 @@ export default function Cadastro() {
     };
 
     async function getCadastro() {
+        setErrorMessages([]); // Limpar mensagens de erro anteriores
         try {
             setLoading(true);
-
+           
+            const validateEmail = (email: string): boolean => {
+                const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return regex.test(email);
+              };
+              
+            let errors: string[] = [];
+    
             // Verificar se os campos obrigatórios estão preenchidos
             if (!name || !email || !password || !passwordConfirm) {
-                return Alert.alert('Atenção', 'Informe todos os campos obrigatórios!');
+                errors.push('Informe todos os campos obrigatórios!');
             }
 
+            // Verificar se o email é válido
+            if (!validateEmail(email)) {
+                errors.push('Digite um e-mail válido!');
+            }
+            
+    
             // Verificar se as senhas coincidem
             if (password !== passwordConfirm) {
-                return Alert.alert('Erro', 'As senhas não coincidem!');
+                errors.push('As senhas não coincidem!');
             }
-
-            // Validar a senha
-            if (!validatePassword(password)) {
-                return Alert.alert('Erro', 'A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial!');
-            }
-
+    
             // Verificar se os termos foram aceitos
             if (!acceptTerms) {
-                return Alert.alert('Erro', 'Você precisa aceitar os termos e condições para se cadastrar!');
+                errors.push('Você precisa aceitar os termos e condições para se cadastrar!');
             }
-
+    
+            if (errors.length > 0) {
+                setErrorMessages(errors);
+                setLoading(false); // Garantir que loading seja desativado após mostrar os erros
+                return;
+            }
+    
             const response = await api.post('/register', {
                 name,
                 email,
                 password
             });
             const user = response.data;
-
+    
             // Lógica para cadastro (exemplo simples)
             setTimeout(() => {
                 Alert.alert('Cadastro realizado com sucesso!');
                 navigation.navigate("Login"); // Redireciona para a tela de login após cadastro
                 setLoading(false);
             }, 1500);
-
+    
         } catch (error) {
             console.log(error);
-            setLoading(false);
+            setLoading(false); // Garantir que loading seja desativado em caso de erro
+            Alert.alert('Erro', 'Ocorreu um erro ao tentar realizar o cadastro. Por favor, tente novamente.');
         }
     }
 
@@ -147,6 +164,17 @@ export default function Cadastro() {
                         </TouchableOpacity>
                         <Text style={style.checkboxText}>Eu aceito todos os termos e condições</Text>
                     </View>
+
+                    {/* Exibição dos erros */}
+                    {errorMessages.length > 0 && (
+                        <View style={style.errorContainer}>
+                            {errorMessages.map((msg, index) => (
+                                <Text key={index} style={style.errorMessage}>
+                                    {msg}
+                                </Text>
+                            ))}
+                        </View>
+                    )}
 
                     {/* Botão Cadastro */}
                     <TouchableOpacity style={style.signupButton} onPress={() => getCadastro()}>

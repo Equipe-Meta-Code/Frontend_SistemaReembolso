@@ -4,10 +4,10 @@ import { useRoute } from "@react-navigation/native";
 import Header from "../../components/historico/Header";
 import ExpenseSection from "../../components/historico/ExpenseSection";
 import { styles } from "../../styles/historico.styles";
-import api2 from "../../services/api2";
-import api from "../../services/api";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
+import api from "../../api";
+import api2 from "../../services/api";
 
 
 interface Despesa {
@@ -147,6 +147,11 @@ const despesasFiltradas = projectId
   return (
     <View style={styles.container}>
       <Header />
+      {despesasFiltradas.length === 0 && (
+        <Text style={{ textAlign: 'center', marginTop: 20, color: 'gray' }}>
+          Nenhuma despesa encontrada.
+        </Text>
+        )}
       <FlatList
         data={despesasFiltradas}
         keyExtractor={(item) => item.categoria}
