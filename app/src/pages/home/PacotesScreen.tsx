@@ -6,6 +6,7 @@ import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useSelector } from 'react-redux';
 
 interface Despesa {
   despesaId: string;
@@ -40,14 +41,19 @@ const PacotesScreen = ({ route }: any) => {
   const [pacotes, setPacotes] = useState<Pacote[]>([]);
   const [despesasMap, setDespesasMap] = useState<Record<string, Despesa>>({});
   const [nomeProjeto, setNomeProjeto] = useState('');
+  const userId = useSelector((state: RootState) => state.auth.user?.userId);
 
   useEffect(() => {
     const fetchPacotesDespesas = async () => {
       try {
         const response = await api.get<Pacote[]>('/pacote');
-        const pacotesDoProjeto = response.data.filter((p) => p.projetoId === projectId);
+        const pacotesDoProjeto = response.data.filter((p) => p.projetoId === projectId && String(p.userId) === String(userId));
+        console.log('user:', userId, pacotesDoProjeto)
 
         setPacotes(pacotesDoProjeto);
+
+        const projetoResponse = await api.get(`/projeto/${Number(projectId)}`);
+        setNomeProjeto(projetoResponse.data.nome);
 
         // Juntar todos os IDs de despesas
         const allDespesaIds = pacotesDoProjeto.flatMap(p => p.despesas || []);
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
   },
   pacotesList: {
     flex: 1,
-    padding: 30,
+    padding: 25,
   },
   arrow: {
     fontSize: 24,
