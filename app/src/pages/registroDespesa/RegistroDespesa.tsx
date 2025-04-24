@@ -14,6 +14,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 
 const RegistroDespesa = () => {
     const [error, setError] = useState("");
+    const [pacoteError, setPacoteError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [category, setCategory] = useState("");
     const [categoriesByProject, setCategoriesByProject] = useState<{ [key: string]: { label: string; value: string }[] }>({});
@@ -158,6 +159,15 @@ const RegistroDespesa = () => {
 
         if (!newPacoteName || !selectedProject) {
           setError("Informe o nome do pacote.");
+          return;
+        }
+
+        const pacoteExistente = pacotes.find(
+          (p) => p.label.trim().toLowerCase() === newPacoteName.trim().toLowerCase()
+        );
+
+        if (pacoteExistente) {
+          setPacoteError("Já existe um pacote com esse nome neste projeto.");
           return;
         }
       
@@ -338,7 +348,10 @@ const RegistroDespesa = () => {
 
         {/* Se o usuário quiser criar um novo pacote */}
         {!creatingPacote ? (
-          <TouchableOpacity onPress={() => setCreatingPacote(true)}>
+          <TouchableOpacity onPress={() => {
+              setCreatingPacote(true);
+              setPacoteError("");
+          }}>
             <Text style={styles.link}> + Criar novo pacote </Text>
           </TouchableOpacity>
         ) : (
@@ -353,6 +366,10 @@ const RegistroDespesa = () => {
             <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
               <Text style={styles.buttonText}> Criar Pacote </Text>
             </TouchableOpacity>
+            {pacoteError && (
+              <Text style={[styles.pacoteErrorMessage, { marginTop: 4 }]}>
+                {pacoteError}
+              </Text>)}
             
             <TouchableOpacity onPress={() => setCreatingPacote(false)}>
               <Text style={styles.link}> Cancelar </Text>

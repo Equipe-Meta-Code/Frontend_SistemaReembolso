@@ -129,6 +129,13 @@ export const styles = StyleSheet.create({
         borderColor: '#f5c6cb',
         margin: 'auto',
       },
+      pacoteErrorMessage: {
+        marginTop: 16,
+        padding: 10,
+        borderRadius: 8,
+        color: 'red',
+        margin: 'auto',
+      },
       successMessage: {
         color: '#155724',
         backgroundColor: '#d4edda',
