@@ -24,19 +24,35 @@ export interface Despesa {
     
       const [status, setStatus] = useState(initialStatus);
       const [isSolicitando, setIsSolicitando] = useState(false);
+      const [expandido, setExpandido] = useState(false);
 
       const handleSolicitarReembolso = async () => {
-        try {
-          setIsSolicitando(true);
-
-          const response = await api.post(`/pacotes/${pacoteId}/enviar`);
-
-          setStatus('aguardando_aprovacao');
-          Alert.alert('Sucesso', 'Reembolso solicitado com sucesso!');
-        } catch (error: any) {
-          console.error(error?.response?.data || error);
-          Alert.alert('Erro', error?.response?.data?.erro || 'Não foi possível solicitar o reembolso.');
-        }        
+        Alert.alert(
+          'Solicitar Reembolso do Pacote',
+          'Após essa ação, não será possível adicionar novas despesas ao pacote ou desfazer a solicitação. Deseja continuar?',
+          [
+            {
+              text: 'Cancelar',
+              style: 'cancel',
+            },
+            {
+              text: 'Confirmar',
+              onPress: async () => {
+                try {
+                  setIsSolicitando(true);
+                  const response = await api.post(`/pacotes/${pacoteId}/enviar`);
+                  setStatus('aguardando_aprovacao');
+                  Alert.alert('Sucesso', 'Reembolso solicitado com sucesso!');
+                } catch (error: any) {
+                  console.error(error?.response?.data || error);
+                  Alert.alert('Erro', error?.response?.data?.erro || 'Não foi possível solicitar o reembolso.');
+                } finally {
+                  setIsSolicitando(false);
+                }
+              },
+            },
+          ]
+        );
       };
 
       const despesasOrdenadas = [...(despesas || [])].sort(
@@ -65,8 +81,8 @@ export interface Despesa {
     }, []);
 
     const cardCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(16, 185, 129, 0.11)',
-      'Hospedagem': 'rgba(255, 194, 38, 0.15)',
+      'Alimentação': 'rgba(250, 164, 107, 0.1)',
+      'Hospedagem': 'rgba(3, 46, 31, 0.07)',
       'Transporte': 'rgba(52, 123, 238, 0.1)',
       'Serviços Terceirizados': 'rgba(90, 128, 19, 0.1)',
       'Materiais': 'rgba(245, 94, 132, 0.1)',
@@ -74,55 +90,73 @@ export interface Despesa {
     };    
 
     const tituloCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(12, 78, 56, 0.5)',
-      'Hospedagem': 'rgba(121, 97, 39, 0.5)',
+      'Alimentação': 'rgba(145, 58, 0, 0.5)',
+      'Hospedagem': 'rgba(6, 58, 40, 0.5)',
       'Transporte': 'rgba(19, 54, 110, 0.5)',
       'Serviços Terceirizados': 'rgba(50, 70, 13, 0.5)',
       'Materiais': 'rgba(102, 22, 42, 0.5)',
       'Outros': 'rgba(54, 52, 52, 0.5)',
     };    
+
+    const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
+      rascunho: { backgroundColor: '#E5E7EB', color: '#374151' },
+      aguardando_aprovacao: { backgroundColor: 'rgba(255, 194, 38, 0.15)', color: '#92400E' },
+      rejeitado: { backgroundColor: '#FECACA', color: '#991B1B' },
+      aprovado: { backgroundColor: '#D1FAE5', color: '#065F46' },
+    };    
+
+    const totalGasto = despesas?.reduce((acc, curr) => acc + curr.valor_gasto, 0) || 0;
   
     return (
-      <View style={styles.card}>
-        <View style={styles.statusContainer}>
-          <Text style={[styles.statusText, { backgroundColor: '#F2F3F4' }]}>{status}</Text>
-        </View>
-        <Text style={styles.cardTitle}>{nome}</Text>
-        <Text style={styles.cardSubtitle}>Histórico de Despesas:</Text>
-  
-        {despesas && despesas.length > 0 ? (
-          despesasAgrupadas?.map((grupo) => (
-            <View 
-              key={grupo.categoria} 
-              style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || '#F9FAFB' },]}>
-
-              <Text style={[styles.cardSubtitle, { color: tituloCategoriaCores[grupo.categoria] || '#F9FAFB' },]}>{grupo.categoria}</Text>
-              {grupo.itens.map((item: any, index: number) => (
-                <Text 
-                  key={index} 
-                  style={styles.despesaItem}>
-                  • {item.data} - {item.descricao} - {item.valor}
+      <TouchableOpacity onPress={() => setExpandido(!expandido)}>
+        <View style={styles.card}>
+            <View style={styles.statusContainer}>
+                <Text style={[styles.statusText, {backgroundColor: statusStyles[status]?.backgroundColor, color: statusStyles[status]?.color}]}>
+                  {status}
                 </Text>
-              ))}
             </View>
-          ))
-        ) : (
-          <Text style={styles.semDespesa}>Nenhuma despesa cadastrada.</Text>
-        )}
+            <Text style={styles.cardTitle}>{nome}</Text>
+            <Text style={styles.totalGasto}>Total gasto: R$ {totalGasto.toFixed(2).replace('.', ',')}</Text>
+          
+            <Text style={{ color: '#6B7280', marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
 
-        {status === 'rascunho' && (
-        <TouchableOpacity
-          style={[styles.botaoReembolso, , (despesas?.length === 0 || isSolicitando) && { backgroundColor: '#9CA3AF' }]}
-          onPress={handleSolicitarReembolso}
-          disabled={isSolicitando || despesas?.length === 0}
-        >
-          <Text style={styles.textoBotao}>
-            {isSolicitando ? 'Solicitando...' : 'Solicitar Reembolso'}
-          </Text>
-        </TouchableOpacity>
-      )}
+            {/* Histórico de despesas só aparece se estiver expandido */}
+            {expandido && (
+            <>
+              <Text style={styles.cardSubtitle}>Histórico de Despesas:</Text>
+              {despesas && despesas.length > 0 ? (
+                despesasAgrupadas?.map((grupo) => (
+                  <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || '#F9FAFB' }]}>
+                    <Text style={[styles.cardSubtitle, { color: tituloCategoriaCores[grupo.categoria] || '#F9FAFB' }]}>{grupo.categoria}</Text>
+                    {grupo.itens.map((item: any, index: number) => (
+                      <Text key={index} style={styles.despesaItem}>
+                        • {item.data} - {item.descricao} - {item.valor}
+                      </Text>
+                    ))}
+                  </View>
+                ))
+              ) : (
+                <Text style={styles.semDespesa}>Nenhuma despesa cadastrada.</Text>
+              )}
 
-      </View>
+              {/* Botão de solicitar reembolso */}
+              {status === 'rascunho' && (
+                <TouchableOpacity
+                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: '#9CA3AF' }]}
+                  onPress={handleSolicitarReembolso}
+                  disabled={isSolicitando || despesas?.length === 0}
+                >
+                  <Text style={styles.textoBotao}>
+                    {isSolicitando ? 'Solicitando...' : 'Solicitar Reembolso'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </>
+          )}
+
+        </View>
+      </TouchableOpacity>
+
     );
   };
 
@@ -161,13 +195,13 @@ export interface Despesa {
     },
     statusContainer: {
       flexDirection: 'row',
-      marginBottom: 10,
+      marginBottom: 15,
     },
     statusText: {
       backgroundColor: '#E5E7EB', 
       color: '#374151',
       fontSize: 12,
-      paddingHorizontal: 10,
+      paddingHorizontal: 16,
       paddingVertical: 4,
       borderRadius: 8,
       textTransform: 'uppercase',
@@ -190,6 +224,13 @@ export interface Despesa {
       fontSize: 16,
       fontWeight: '600',
     },
+    totalGasto: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: '#4B5563',
+      marginBottom: 6,
+      marginLeft: 2,
+    },    
   });
   
 
