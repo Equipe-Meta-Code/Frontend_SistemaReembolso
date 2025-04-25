@@ -6,7 +6,7 @@ import CustomDatePicker from '../../components/customDate/index';
 import { TextInputMask } from 'react-native-masked-text';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import api from '../../services/api';
+import api from '../../api';
 import {  useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +14,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 
 const RegistroDespesa = () => {
     const [error, setError] = useState("");
+    const [pacoteError, setPacoteError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [category, setCategory] = useState("");
     const [categoriesByProject, setCategoriesByProject] = useState<{ [key: string]: { label: string; value: string }[] }>({});
@@ -58,6 +59,7 @@ const RegistroDespesa = () => {
       nome: string;
       projetoId: string;
       userId: string;
+      status: string;
     };
 
     const fetchData = async () => {
@@ -65,10 +67,15 @@ const RegistroDespesa = () => {
           let response = await api.get('/projeto');
 
           const projetos = response.data;
-          setAllProjects(projetos);
+          const userId = Number(user?.userId);
+          const userProjects = projetos.filter((project: any) =>
+            project.funcionarios?.includes(userId) 
+          );
+
+          setAllProjects(userProjects);
 
           // Transforma a lista de projetos para o dropdown
-          const formattedProjects = projetos.map((projeto: Project) => ({
+          const formattedProjects = userProjects.map((projeto: Project) => ({
             label: projeto.nome,
             value: projeto.projetoId.toString(), // Certifique-se de que é string
           }));
@@ -97,14 +104,12 @@ const RegistroDespesa = () => {
           const pacotes: Pacote[] = response.data;
           console.log(pacotes)
 
-          // Filtra os pacotes que pertencem ao usuário
-          const pacotesByUser = pacotes.filter(
-            (pacote) => pacote.userId.toString() === user?.userId.toString()
-          );
-      
-          // Filtra os pacotes que pertencem ao projeto selecionado
-          const pacotesFiltrados = pacotesByUser.filter(
-            (pacote) => pacote.projetoId.toString() === projetoId
+          // Filtra os pacotes
+          const pacotesFiltrados = pacotes.filter(
+            (pacote) =>
+              pacote.userId.toString() === user?.userId.toString() &&
+              pacote.projetoId.toString() === projetoId &&
+              pacote.status === "rascunho"
           );
       
           // Formata os pacotes filtrados para o dropdown
@@ -154,6 +159,15 @@ const RegistroDespesa = () => {
 
         if (!newPacoteName || !selectedProject) {
           setError("Informe o nome do pacote.");
+          return;
+        }
+
+        const pacoteExistente = pacotes.find(
+          (p) => p.label.trim().toLowerCase() === newPacoteName.trim().toLowerCase()
+        );
+
+        if (pacoteExistente) {
+          setPacoteError("Já existe um pacote com esse nome neste projeto.");
           return;
         }
       
@@ -334,7 +348,10 @@ const RegistroDespesa = () => {
 
         {/* Se o usuário quiser criar um novo pacote */}
         {!creatingPacote ? (
-          <TouchableOpacity onPress={() => setCreatingPacote(true)}>
+          <TouchableOpacity onPress={() => {
+              setCreatingPacote(true);
+              setPacoteError("");
+          }}>
             <Text style={styles.link}> + Criar novo pacote </Text>
           </TouchableOpacity>
         ) : (
@@ -349,6 +366,10 @@ const RegistroDespesa = () => {
             <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
               <Text style={styles.buttonText}> Criar Pacote </Text>
             </TouchableOpacity>
+            {pacoteError && (
+              <Text style={[styles.pacoteErrorMessage, { marginTop: 4 }]}>
+                {pacoteError}
+              </Text>)}
             
             <TouchableOpacity onPress={() => setCreatingPacote(false)}>
               <Text style={styles.link}> Cancelar </Text>
