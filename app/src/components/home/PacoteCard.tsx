@@ -108,7 +108,7 @@ export interface Despesa {
     const totalGasto = despesas?.reduce((acc, curr) => acc + curr.valor_gasto, 0) || 0;
   
     return (
-      <TouchableOpacity onPress={() => setExpandido(!expandido)}>
+      <TouchableOpacity onPress={() => setExpandido(!expandido)} activeOpacity={1}>
         <View style={styles.card}>
             <View style={styles.statusContainer}>
                 <Text style={[styles.statusText, {backgroundColor: statusStyles[status]?.backgroundColor, color: statusStyles[status]?.color}]}>
@@ -126,12 +126,12 @@ export interface Despesa {
               <Text style={styles.cardSubtitle}>Histórico de Despesas:</Text>
               {despesas && despesas.length > 0 ? (
                 despesasAgrupadas?.map((grupo) => (
-                  <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || '#F9FAFB' }]}>
-                    <Text style={[styles.cardSubtitle, { color: tituloCategoriaCores[grupo.categoria] || '#F9FAFB' }]}>{grupo.categoria}</Text>
+                  <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || cardCategoriaCores['Outros'] }]}>
+                    <Text style={[styles.cardSubtitle, { color: tituloCategoriaCores[grupo.categoria] || tituloCategoriaCores['Outros'] }]}>{grupo.categoria}</Text>
+                    
                     {grupo.itens.map((item: any, index: number) => (
-                      <Text key={index} style={styles.despesaItem}>
-                        • {item.data} - {item.descricao} - {item.valor}
-                      </Text>
+                    <Text key={index} style={styles.despesaItem}> • {item.data} - {item.descricao} - {item.valor}</Text>                      
+                    
                     ))}
                   </View>
                 ))
@@ -214,7 +214,7 @@ export interface Despesa {
     },
     botaoReembolso: {
       marginTop: 16,
-      backgroundColor: '#2563EB',
+      backgroundColor: '#1F48AA',
       paddingVertical: 10,
       borderRadius: 10,
       alignItems: 'center',
