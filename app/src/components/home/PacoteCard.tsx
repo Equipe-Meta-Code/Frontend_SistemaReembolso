@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import api from '../../api';
+import api from '../../services/api';
 export interface Despesa {
     categoria: string;
     valor_gasto: number;

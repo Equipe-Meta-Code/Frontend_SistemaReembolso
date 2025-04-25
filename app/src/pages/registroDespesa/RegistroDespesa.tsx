@@ -6,7 +6,7 @@ import CustomDatePicker from '../../components/customDate/index';
 import { TextInputMask } from 'react-native-masked-text';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import api from '../../api';
+import api from '../../services/api';
 import {  useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
@@ -69,8 +69,10 @@ const RegistroDespesa = () => {
           const projetos = response.data;
           const userId = Number(user?.userId);
           const userProjects = projetos.filter((project: any) =>
-            project.funcionarios?.includes(userId) 
-          );
+            project.funcionarios?.some((func: any) => func.userId === userId)
+          );          
+          console.log('projetos', projetos)
+          console.log('user projetos', userProjects)
 
           setAllProjects(userProjects);
 
