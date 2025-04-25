@@ -28,7 +28,7 @@ export interface Despesa {
 
       const handleSolicitarReembolso = async () => {
         Alert.alert(
-          'Solicitar Reembolso do Pacote',
+          'Solicitar reembolso do pacote',
           'Após essa ação, não será possível adicionar novas despesas ao pacote ou desfazer a solicitação. Deseja continuar?',
           [
             {
