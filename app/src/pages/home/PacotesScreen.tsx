@@ -90,9 +90,9 @@ const PacotesScreen = ({ route }: any) => {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchPacotesDespesas();
-    }, 3000); // atualiza a cada 3 segundos
+    }, 3000); // atualiza os dados a cada 3 segundos
   
-    return () => clearInterval(interval); // limpa ao desmontar o componente
+    return () => clearInterval(interval); 
   }, [projectId, userId]);  
 
   const pacotesFiltrados = statusFiltro
@@ -152,6 +152,13 @@ const PacotesScreen = ({ route }: any) => {
               </View>
             );
           }}
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>
+                Nenhum pacote encontrado.
+              </Text>
+            </View>
+          )}
           
         />
       </View>
@@ -220,6 +227,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E7EB',
     marginVertical: 12,
   },
+  emptyContainer: {
+    marginTop: 20,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyText: {
+    fontSize: 18,
+    color: '#9CA3AF',
+    textAlign: 'center',
+  },  
   
 });
 
