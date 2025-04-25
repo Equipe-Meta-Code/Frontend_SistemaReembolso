@@ -38,6 +38,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
           mode="date"
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
+          themeVariant="light"
         />
       </>
   );

@@ -1,13 +1,16 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import ExpenseItem from "./ExpenseItem";
-import { styles } from "../../styles/historico.styles";
+import { styles, COLUMN_WIDTHS } from "../../styles/historico.styles";
+import { ScrollView } from "react-native";
 
 
 interface Expense {
   data: string;
   projeto: string;
   valor: string;
+  descricao: string;
+  status: string;
 }
 
 interface ExpenseSectionProps {
@@ -26,18 +29,22 @@ const ExpenseSection: React.FC<ExpenseSectionProps> = ({ categoria, icone, itens
         <Text style={styles.sectionTitle}>{categoria}</Text>
       </View>
 
-      {/* Cabeçalho das colunas */}
-      <View style={styles.tableHeader}>
-        <Text style={styles.headerText}>Data</Text>
-        <Text style={styles.headerText}>Projeto</Text>
-        <Text style={styles.headerText}>Valor</Text>
-        {/* <Text style={styles.headerText}>Status</Text> */}
-      </View>
-      
-      {itens.map((despesa, index) => (
-        <ExpenseItem key={index} {...despesa} index={index} />
-      ))}
+      <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+        <View>
+          {/* Cabeçalho das colunas */}
+          <View style={styles.tableHeader}>
+            <Text style={[styles.headerText, { width: COLUMN_WIDTHS.data }]}>Data</Text>
+            <Text style={[styles.headerText, { width: COLUMN_WIDTHS.projeto }]}>Projeto</Text>
+            <Text style={[styles.headerText, { width: COLUMN_WIDTHS.descricao }]}>Descrição</Text>
+            <Text style={[styles.headerText, { width: COLUMN_WIDTHS.valor }]}>Valor</Text>
+            <Text style={[styles.headerText, { width: COLUMN_WIDTHS.status }]}>Status</Text>
+          </View>
 
+          {itens.map((despesa, index) => (
+            <ExpenseItem key={index} {...despesa} index={index} />
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 };
