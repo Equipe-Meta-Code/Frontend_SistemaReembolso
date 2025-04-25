@@ -46,53 +46,54 @@ const PacotesScreen = ({ route }: any) => {
   const userId = useSelector((state: RootState) => state.auth.user?.userId);
   const [statusFiltro, setStatusFiltro] = useState('');
 
-  useEffect(() => {
-    const fetchPacotesDespesas = async () => {
-      try {
-        const response = await api.get<Pacote[]>('/pacote');
-        const pacotesDoProjeto = response.data.filter((p) => p.projetoId === projectId && String(p.userId) === String(userId));
-        console.log('user:', userId, pacotesDoProjeto)
-
-        // Ordena a visualização dos pacotes por status
-        const statusOrder = {
-          'rascunho': 1,
-          'aguardando_aprovacao': 2,
-          'rejeitado': 3,
-          'aprovado': 4,
-        };
-        const pacotesOrdenados = pacotesDoProjeto.sort((a, b) => {
-          return statusOrder[a.status as keyof typeof statusOrder] - statusOrder[b.status as keyof typeof statusOrder];
-        });        
-        
-        setPacotes(pacotesOrdenados);
-
-        const projetoResponse = await api.get(`/projeto/${Number(projectId)}`);
-        setNomeProjeto(projetoResponse.data.nome);
-
-        // Juntar todos os IDs de despesas
-        const allDespesaIds = pacotesDoProjeto.flatMap(p => p.despesas || []);
-
-        if (allDespesaIds.length > 0) {
-          const despesasResponse = await api.post('/despesas/by-ids', { ids: allDespesaIds });
-          const despesasDetalhadas = despesasResponse.data;
-
-          const map: Record<string, Despesa> = {};
-          despesasDetalhadas.forEach((d: Despesa) => {
-            map[d.despesaId] = d;
-          });
-
-          setDespesasMap(map);
-
-          const projetoResponse = await api.get(`/projeto/${Number(projectId)}`);
-          setNomeProjeto(projetoResponse.data.nome);
-        }
-      } catch (err) {
-        console.error('Erro ao buscar pacotes ou despesas:', err);
+  const fetchPacotesDespesas = async () => {
+    try {
+      const response = await api.get<Pacote[]>('/pacote');
+      const pacotesDoProjeto = response.data.filter((p) => p.projetoId === projectId && String(p.userId) === String(userId));
+  
+      const statusOrder = {
+        'rascunho': 1,
+        'aguardando_aprovacao': 2,
+        'rejeitado': 3,
+        'aprovado': 4,
+      };
+      const pacotesOrdenados = pacotesDoProjeto.sort((a, b) => {
+        return statusOrder[a.status as keyof typeof statusOrder] - statusOrder[b.status as keyof typeof statusOrder];
+      });        
+  
+      setPacotes(pacotesOrdenados);
+  
+      const projetoResponse = await api.get(`/projeto/${Number(projectId)}`);
+      setNomeProjeto(projetoResponse.data.nome);
+  
+      const allDespesaIds = pacotesDoProjeto.flatMap(p => p.despesas || []);
+      if (allDespesaIds.length > 0) {
+        const despesasResponse = await api.post('/despesas/by-ids', { ids: allDespesaIds });
+        const despesasDetalhadas = despesasResponse.data;
+  
+        const map: Record<string, Despesa> = {};
+        despesasDetalhadas.forEach((d: Despesa) => {
+          map[d.despesaId] = d;
+        });
+  
+        setDespesasMap(map);
       }
-    };
-
+    } catch (err) {
+      console.error('Erro ao buscar pacotes ou despesas:', err);
+    }
+  };
+  
+  useEffect(() => {
     fetchPacotesDespesas();
-  }, [projectId]);
+  }, [projectId, userId]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchPacotesDespesas();
+    }, 3000); // atualiza a cada 3 segundos
+  
+    return () => clearInterval(interval); // limpa ao desmontar o componente
+  }, [projectId, userId]);  
 
   const pacotesFiltrados = statusFiltro
   ? pacotes.filter(p => p.status === statusFiltro)
