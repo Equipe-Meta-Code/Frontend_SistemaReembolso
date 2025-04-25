@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
+import { Picker } from '@react-native-picker/picker';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface Despesa {
   despesaId: string;
@@ -42,6 +44,7 @@ const PacotesScreen = ({ route }: any) => {
   const [despesasMap, setDespesasMap] = useState<Record<string, Despesa>>({});
   const [nomeProjeto, setNomeProjeto] = useState('');
   const userId = useSelector((state: RootState) => state.auth.user?.userId);
+  const [statusFiltro, setStatusFiltro] = useState('');
 
   useEffect(() => {
     const fetchPacotesDespesas = async () => {
@@ -50,7 +53,18 @@ const PacotesScreen = ({ route }: any) => {
         const pacotesDoProjeto = response.data.filter((p) => p.projetoId === projectId && String(p.userId) === String(userId));
         console.log('user:', userId, pacotesDoProjeto)
 
-        setPacotes(pacotesDoProjeto);
+        // Ordena a visualização dos pacotes por status
+        const statusOrder = {
+          'rascunho': 1,
+          'aguardando_aprovacao': 2,
+          'rejeitado': 3,
+          'aprovado': 4,
+        };
+        const pacotesOrdenados = pacotesDoProjeto.sort((a, b) => {
+          return statusOrder[a.status as keyof typeof statusOrder] - statusOrder[b.status as keyof typeof statusOrder];
+        });        
+        
+        setPacotes(pacotesOrdenados);
 
         const projetoResponse = await api.get(`/projeto/${Number(projectId)}`);
         setNomeProjeto(projetoResponse.data.nome);
@@ -80,6 +94,10 @@ const PacotesScreen = ({ route }: any) => {
     fetchPacotesDespesas();
   }, [projectId]);
 
+  const pacotesFiltrados = statusFiltro
+  ? pacotes.filter(p => p.status === statusFiltro)
+  : pacotes;
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -89,22 +107,51 @@ const PacotesScreen = ({ route }: any) => {
         <Text style={styles.title}>{nomeProjeto || 'Carregando...'}</Text>
       </View>
 
+      {/*<View style={styles.filtroContainer}>
+        <View style={styles.filtroRow}>
+        <Ionicons name="filter" size={20} color="#374151" style={styles.filtroIcon} />
+          <Picker
+            selectedValue={statusFiltro}
+            onValueChange={(itemValue) => setStatusFiltro(itemValue)}
+            style={styles.picker}>
+              
+            <Picker.Item label="Todos" value="" />
+            <Picker.Item label="Rascunho" value="rascunho" />
+            <Picker.Item label="Aguardando Aprovação" value="aguardando_aprovacao" />
+            <Picker.Item label="Aprovado" value="aprovado" />
+            <Picker.Item label="Rejeitado" value="rejeitado" />
+          </Picker>
+        </View>
+      </View>*/}
+
+
       <View style={styles.pacotesList}>
         <Text style={styles.pacotesTitle}>Meus pacotes</Text>
         <FlatList
-          data={pacotes}
+          data={pacotesFiltrados}
           keyExtractor={(item) => item.pacoteId}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             const despesasDetalhadas = item.despesas?.map(id => despesasMap[id])?.filter(Boolean);
-            return <PacoteCard 
-                nome={item.nome} 
-                despesas={despesasDetalhadas} 
-                pacoteId={item.pacoteId} 
-                projetoId={item.projetoId} 
-                userId={item.userId} 
-                status={item.status} 
-            />;
+            const pacoteAtualStatus = item.status;
+            const pacoteAnteriorStatus = index > 0 ? pacotesFiltrados[index - 1].status : null;
+          
+            return (
+              <View>
+                {index > 0 && pacoteAtualStatus !== pacoteAnteriorStatus && (
+                  <View style={styles.divisor} />
+                )}
+                <PacoteCard 
+                  nome={item.nome} 
+                  despesas={despesasDetalhadas} 
+                  pacoteId={item.pacoteId} 
+                  projetoId={item.projetoId} 
+                  userId={item.userId} 
+                  status={item.status} 
+                />
+              </View>
+            );
           }}
+          
         />
       </View>
       
@@ -148,6 +195,31 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#FFFFFF',
   },
+  filtroContainer: {
+    paddingHorizontal: 50,
+    marginTop: 10,
+  },
+  picker: {
+    flex: 1,
+    color: '#111827',
+  },  
+  filtroRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F3F4F6',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  filtroIcon: {
+    marginRight: 5,
+    marginLeft: 15,
+  },
+  divisor: {
+    height: 2,
+    backgroundColor: '#E5E7EB',
+    marginVertical: 12,
+  },
+  
 });
 
 export default PacotesScreen;
