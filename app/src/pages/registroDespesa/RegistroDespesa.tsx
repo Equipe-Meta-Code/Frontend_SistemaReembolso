@@ -115,7 +115,7 @@ const RegistroDespesa = () => {
         (pacote) =>
           pacote.userId.toString() === user?.userId.toString() &&
           pacote.projetoId.toString() === projetoId &&
-          pacote.status === "rascunho"
+          pacote.status === "Rascunho"
       );
   
       // Formata os pacotes filtrados para o dropdown

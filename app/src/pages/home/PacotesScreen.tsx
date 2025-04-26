@@ -52,10 +52,11 @@ const PacotesScreen = ({ route }: any) => {
       const pacotesDoProjeto = response.data.filter((p) => p.projetoId === projectId && String(p.userId) === String(userId));
   
       const statusOrder = {
-        'rascunho': 1,
-        'aguardando_aprovacao': 2,
-        'rejeitado': 3,
-        'aprovado': 4,
+        'Rascunho': 1,
+        'Aguardando Aprovação': 2,
+        'Aprovado Parcialmente': 3,
+        'Recusado': 4,
+        'Aprovado': 5
       };
       const pacotesOrdenados = pacotesDoProjeto.sort((a, b) => {
         return statusOrder[a.status as keyof typeof statusOrder] - statusOrder[b.status as keyof typeof statusOrder];
@@ -85,14 +86,8 @@ const PacotesScreen = ({ route }: any) => {
   
   useEffect(() => {
     fetchPacotesDespesas();
-  }, [projectId, userId]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchPacotesDespesas();
-    }, 3000); // atualiza os dados a cada 3 segundos
-  
-    return () => clearInterval(interval); 
+    const interval = setInterval(fetchPacotesDespesas, 3000);
+    return () => clearInterval(interval);
   }, [projectId, userId]);  
 
   const pacotesFiltrados = statusFiltro
@@ -148,6 +143,7 @@ const PacotesScreen = ({ route }: any) => {
                   projetoId={item.projetoId} 
                   userId={item.userId} 
                   status={item.status} 
+                  fetchPacotesDespesas={fetchPacotesDespesas}
                 />
               </View>
             );
