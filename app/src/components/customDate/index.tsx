@@ -23,9 +23,11 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   };
 
   const handleConfirm = (date: Date) => {
-    onValueChange(date.toLocaleDateString()); // Atualiza a data no formato desejado
+    const formattedDate = date.toLocaleDateString('pt-BR');
+    onValueChange(formattedDate);
     hideDatePicker();
   };
+  
 
   return (
       <>
