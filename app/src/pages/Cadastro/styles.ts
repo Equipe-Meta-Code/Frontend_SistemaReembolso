@@ -143,5 +143,18 @@ export const style = StyleSheet.create({
     eyeIcon: {
         marginLeft: -30, 
     },
-    
+    errorContainer: {
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 10,
+        backgroundColor: "#FFCCCC", // Fundo vermelho claro
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: "#FF0000", // Borda vermelha
+      },
+      errorMessage: {
+        color: "#FF0000", // Cor do texto vermelho
+        fontSize: 14,
+        fontWeight: 'bold',
+      }
 })
