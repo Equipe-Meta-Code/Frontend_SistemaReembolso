@@ -86,8 +86,6 @@ const Historico: React.FC = () => {
     return projeto ? projeto.nome : `Projeto ${id}`;
   };
 
-  console.log("projetos:", projetos);
-
   const iconesCategorias: Record<string, string> = {
     Transporte: "🚖",
     Hospedagem: "🏨",
@@ -148,8 +146,6 @@ const Historico: React.FC = () => {
       return acc;
     }, []);
     
-  
-
   const calcularTotal = () => {
     return despesasAgrupadas
       .flatMap((categoria) => categoria.itens)
@@ -172,7 +168,6 @@ const Historico: React.FC = () => {
         renderItem={({ item }) => <ExpenseSection {...item} />}
         contentContainerStyle={styles.listContainer}
       />
-
 
       <TouchableOpacity style={styles.fixedButton}>
         <View style={styles.circleButton}>
