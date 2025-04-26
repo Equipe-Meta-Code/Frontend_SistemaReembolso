@@ -7,6 +7,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserAction } from "../../(redux)/authSlice";
 import api from "../../services/api";
+import{Input} from "../../components/Input/index"
 
 export default function Login() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -79,17 +80,43 @@ export default function Login() {
                     <Text style={style.welcomeTitle}>Bem-Vindo novamente👋</Text>
                     <Text style={style.instruction}>Para acessar sua conta você deve fazer o login primeiro.</Text>
                     {/* Email */}
-                    <Text style={style.inputTitle}>Email</Text>
+                    <Input
+                        value={email}
+                        onChangeText={(text) => {
+                            setEmail(text);
+                            console.log("Email digitado:", text);
+                          }}
+                          
+                        title="Email"
+                        iconRightName="email"
+                        IconRigth={MaterialIcons}
+                        placeholder="Digite seu e-mail"
+                    />
+                    {/* <Text style={style.inputTitle}>Email</Text>
                     <TextInput
                         style={style.input}
                         placeholder="Digite seu e-mail"
                         placeholderTextColor="gray"
                         value={email}
                         onChangeText={setEmail}
-                    />
+                    /> */}
 
                     {/* Senha */}
-                    <Text style={style.inputTitle}>Senha</Text>
+                    <Input
+                        value={password}
+                        onChangeText={(text) => {
+                            setPassword(text);
+                            console.log("Senha digitada:", text);
+                          }}
+                          
+                        title="Senha"
+                        secureTextEntry={showPassword}
+                        iconRightName={showPassword?"visibility-off":"visibility"}
+                        IconRigth={MaterialIcons}
+                        onIconRigthPress={() => setShowPassword(!showPassword)}
+                        placeholder="Digite seu e-mail"
+                    />
+                    {/* <Text style={style.inputTitle}>Senha</Text>
                     <View style={style.passwordContainer}>
                         <TextInput
                             style={style.input}
@@ -109,7 +136,7 @@ export default function Login() {
                                 style={style.eyeIcon}
                             />
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
 
                     <Text style={style.forgotPassword}>Esqueceu a senha?</Text>
 
