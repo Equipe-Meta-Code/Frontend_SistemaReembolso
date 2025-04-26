@@ -7,6 +7,7 @@ import { Input } from "../../components/Input";
 
 import api from "../../services/api";
 import { themas } from "../../global/themes";
+import { ButtonCustom } from "../../components/customButton";
 
 export default function Cadastro() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -156,13 +157,11 @@ export default function Cadastro() {
                     </View>
 
                     {/* Botão Cadastro */}
-                    <TouchableOpacity style={style.signupButton} onPress={() => getCadastro()}>
-                        {loading ? (
-                            <ActivityIndicator color={"white"} size={"small"} />
-                        ) : (
-                            <Text style={style.signupButtonText}>Cadastre-se</Text>
-                        )}
-                    </TouchableOpacity>
+                    <ButtonCustom 
+                        title="Cadastre-se" 
+                        onPress={() => getCadastro()} 
+                        loading={loading}
+                    />
 
                     {/* Texto "Já possui uma conta?" com "Login" em azul */}
                     <View style={style.lineContainer}>

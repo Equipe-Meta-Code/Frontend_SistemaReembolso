@@ -7,6 +7,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import api from '../../services/api';
 import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
+import { themas } from '../../global/themes';
 
 interface Project {
   id: string;
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 20,
     paddingTop: 50,
-    backgroundColor: '#1F48AA',
+    backgroundColor: themas.colors.primary,
     width: '100%',
   },
   title: {

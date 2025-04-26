@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUserAction } from "../../(redux)/authSlice";
 import api from "../../services/api";
 import{Input} from "../../components/Input/index"
+import { ButtonCustom } from "../../components/customButton";
 
 export default function Login() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -140,21 +141,23 @@ export default function Login() {
 
                     <Text style={style.forgotPassword}>Esqueceu a senha?</Text>
 
-                    <TouchableOpacity style={style.loginButton} onPress={() => getLogin()}>
-                        {
-                            loading ? 
-                                <ActivityIndicator color={'white'} size={"small"} /> : <Text style={style.loginButtonText}>Login</Text>
-                        }
-                    </TouchableOpacity>
+                    <ButtonCustom 
+                        title="Login" 
+                        onPress={() => getLogin()} 
+                        loading={loading}
+                    />
+
                                         {/* Texto "Ainda não possuo uma conta" no meio da linha */}
                                         <View style={style.lineContainer}>
                         <Text style={style.noAccountText}>Ainda não possuo uma conta</Text>
                     </View>
 
                     {/* Botão "Cadastre-se" */}
-                    <TouchableOpacity style={style.signupButton} onPress={() => navigation.navigate("Cadastro")}>
-                        <Text style={style.signupButtonText}>Cadastre-se</Text>
-                    </TouchableOpacity>
+                    <ButtonCustom 
+                        title="Cadastre-se" 
+                        onPress={() => navigation.navigate("Cadastro")}
+                    />
+
                 </View>
             </View>
         </KeyboardAvoidingView>
