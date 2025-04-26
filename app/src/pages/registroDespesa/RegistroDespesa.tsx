@@ -11,6 +11,7 @@ import {  useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { themas } from '../../global/themes';
 
 const RegistroDespesa = () => {
     const [error, setError] = useState("");
@@ -272,7 +273,7 @@ const RegistroDespesa = () => {
             <View style={styles.progressBar}>
               <View style={[styles.progressBarFill, { width: `${(totalGastoCategoria / valor_maximo) * 100}%` },
                {
-                backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : '#1f4baa',
+                backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : themas.colors.primary,
               },]} />
               <Text style={styles.progressBarText}>
                 {`R$ ${totalGastoCategoria} / R$ ${valor_maximo}`}

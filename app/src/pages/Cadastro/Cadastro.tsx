@@ -6,6 +6,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { Input } from "../../components/Input";
 
 import api from "../../services/api";
+import { themas } from "../../global/themes";
 
 export default function Cadastro() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -167,7 +168,7 @@ export default function Cadastro() {
                     <View style={style.lineContainer}>
                         <Text style={style.noAccountText}>Já possui uma conta?
                             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                                <Text style={{ color: '#1F48AA' }}> Login</Text>
+                                <Text style={{ color: themas.colors.primary }}> Login</Text>
                             </TouchableOpacity>
                         </Text>
                     </View>
