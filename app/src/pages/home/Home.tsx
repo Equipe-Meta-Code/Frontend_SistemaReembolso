@@ -8,6 +8,8 @@ import api from '../../services/api';
 import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
 import { themas } from '../../global/themes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Foto from '../../com../../components/foto/Foto';
 
 interface Project {
   id: string;
@@ -27,6 +29,7 @@ type RootStackParamList = {
 };
 
 const Home: React.FC = () => {
+  const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [projects, setProjects] = useState<Project[]>([]);
   const [despesas, setDespesas] = useState<any[]>([]);
@@ -92,7 +95,24 @@ const Home: React.FC = () => {
       <View style={styles.top}>
         <Text style={styles.title}>Bem vindo(a)!</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-          <Image source={require('../../assets/perfil.png')} style={styles.image} />
+          {user ? (
+            <Foto
+                tipo="user"
+                tipoId={+user.userId}
+                width={50}
+                height={50}
+                borderRadius={25}
+                borderWidth={3}
+                borderColor="#fff"
+                refreshKey={user.profileImage}
+                fallbackSource={require('../../assets/perfil.png')}
+            />
+            ) : (
+            <Image
+                source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
+                style={styles.image}
+            />
+          )}
         </TouchableOpacity>
       </View>        
       

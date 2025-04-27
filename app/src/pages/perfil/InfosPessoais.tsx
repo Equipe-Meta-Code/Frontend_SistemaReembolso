@@ -10,6 +10,7 @@ import BotaoInfoPessoal from '../../components/perfil/BotaoInfoPessoal';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import api from "../../services/api"
+import Foto from '../../com../../components/foto/Foto';
 
 const InfosPessoais = () => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -137,12 +138,29 @@ const InfosPessoais = () => {
             </View>
 
             <View style={style.containerBotoes}>
+            <TouchableOpacity onPress={handleImageUpload} style={style.imagemPerfil}>
                 <View style={style.imagemPerfil}>
-                    <Image
-                        source={require('../../assets/perfil.png')}
-                        style={style.fotoPerfil}
-                    />
+                {user ? (
+                  <Foto
+                    tipo="user"
+                    tipoId={+user.userId}
+                    width={150}
+                    height={150}
+                    borderRadius={100}
+                    borderWidth={3}
+                    borderColor="#fff"
+                    refreshKey={user.profileImage}
+                    fallbackSource={require('../../assets/perfil.png')}
+                  />
+                ) : (
+                  <Image
+                    source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
+                    style={style.fotoPerfil}
+                  />
+                )}
                 </View>
+
+        </TouchableOpacity>
 
                 <CustomButton
                     titulo={`Editar imagem de perfil`}
