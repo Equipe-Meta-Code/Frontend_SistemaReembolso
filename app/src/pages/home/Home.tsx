@@ -33,77 +33,59 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const user = useSelector((state: RootState) => state.auth.user);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
+  //buscar projetos e despesas do usuário
+  const fetchProjectsAndDespesas = async () => {
+    try {
       setLoading(true);
-      try {
-        const response = await api.get('/projeto'); 
-        const data = response.data;
-        const userId = Number(user?.userId);
-    
-        const userProjects = data.filter((project: any) =>
-          project.funcionarios?.some((func: any) => String(func.userId) === String(userId))
-        );
-    
-        const formattedProjects: Project[] = userProjects.map((project: any) => ({
-          id: project.projetoId,
-          name: project.nome,
-          descricao: project.descricao,
-          department: project.departamentos?.map((dep: any) => dep.nome).join(', ') || '',
-          category: project.categorias?.map((cat: any) => cat.nome) || [],
-          total: project.categorias?.reduce((acc: number, cat: any) => acc + (cat.valor_maximo || 0), 0) || 0,
-          spent: 0,
-        }));
-        setProjects(formattedProjects);
-      } catch (error) {
-        console.error('Erro ao buscar projetos:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-        
-    fetchProjects();
-  }, []);
+      const [projectRes, despesaRes] = await Promise.all([
+        api.get('/projeto'),
+        api.get('/despesa')
+      ]);
+
+      const allProjects = projectRes.data;
+      const allDespesas = despesaRes.data;
+      const userId = Number(user?.userId);
+
+      const userProjects = allProjects.filter((project: any) =>
+        project.funcionarios?.some((func: any) => String(func.userId) === String(userId))
+      );
+
+      const formattedProjects: Project[] = userProjects.map((project: any) => ({
+        id: project.projetoId,
+        name: project.nome,
+        descricao: project.descricao,
+        department: project.departamentos?.map((dep: any) => dep.nome).join(', ') || '',
+        category: project.categorias?.map((cat: any) => cat.nome) || [],
+        total: project.categorias?.reduce((acc: number, cat: any) => acc + (cat.valor_maximo || 0), 0) || 0,
+        spent: 0,
+      }));
+
+      const projetoIds = formattedProjects.map(p => p.id);
+
+      const totalPorProjeto = allDespesas
+        .filter((d: any) => projetoIds.includes(d.projetoId))
+        .reduce((acc: { [key: number]: number }, d: any) => {
+          if (!acc[d.projetoId]) acc[d.projetoId] = 0;
+          acc[d.projetoId] += d.valor_gasto;
+          return acc;
+        }, {});
+
+      const projetosAtualizados = formattedProjects.map(p => ({
+        ...p,
+        spent: Number((totalPorProjeto[p.id] || 0).toFixed(2))
+      }));
+
+      setProjects(projetosAtualizados);
+    } catch (error) {
+      console.error('Erro ao buscar projetos e despesas:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (projects.length > 0) {
-    const fetchDespesas = async () => {
-      setLoading(true);
-      try {
-        const response = await api.get('/despesa'); 
-        const data = response.data;
-  
-        const projetoIds = projects.map(p => p.id);
-  
-        const totalPorProjeto = data
-          .filter((d: any) => projetoIds.includes(d.projetoId))
-          .reduce((acc: { [key: number]: number }, d: any) => {
-            if (!acc[d.projetoId]) acc[d.projetoId] = 0;
-            acc[d.projetoId] += d.valor_gasto;
-            return acc;
-          }, {});
-  
-        const resultado = projects.map(p => ({
-          projetoId: p.id,
-          nomeProjeto: p.name,
-          total_despesas: Number((totalPorProjeto[p.id] || 0).toFixed(2))
-        }));
-  
-        setDespesas(resultado);
-        const projetosAtualizados = projects.map(p => ({
-          ...p,
-          spent: Number((totalPorProjeto[p.id] || 0).toFixed(2))
-        }));
-        setProjects(projetosAtualizados);
-      } catch (error) {
-        console.error('Erro ao buscar despesas:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-      fetchDespesas();
-    } 
-  }, [projects.length]);
+    fetchProjectsAndDespesas();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -123,6 +105,10 @@ const Home: React.FC = () => {
             data={projects}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <ProjectCard project={item} />}
+            
+            //pull-to-refresh
+            refreshing={loading}
+            onRefresh={fetchProjectsAndDespesas}
           />
         )}
       </View>

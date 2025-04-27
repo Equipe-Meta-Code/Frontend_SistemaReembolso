@@ -16,7 +16,7 @@ export interface Project {
 }
 
 type RootStackParamList = {
-  Historico: { projectId: string };
+  Pacotes: { projectId: string };
 };
 
 const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
@@ -25,7 +25,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const valueLeft = project.total - project.spent;
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Historico', { projectId: project.id })}>
+    <TouchableOpacity onPress={() => navigation.navigate('Pacotes', { projectId: project.id })}>
       <View style={styles.card}>
         
         {project.department && (
