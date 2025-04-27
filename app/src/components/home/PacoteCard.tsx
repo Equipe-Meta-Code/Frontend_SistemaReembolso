@@ -86,20 +86,20 @@ export interface Despesa {
     }, []);
 
     const cardCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(250, 164, 107, 0.1)',
+      'Alimentação': 'rgba(234, 234, 255, 0.8)',
       'Hospedagem': 'rgba(3, 46, 31, 0.07)',
-      'Transporte': 'rgba(52, 123, 238, 0.1)',
+      'Transporte': 'rgba(52, 163, 238, 0.1)',
       'Serviços Terceirizados': 'rgba(90, 128, 19, 0.1)',
-      'Materiais': 'rgba(245, 94, 132, 0.1)',
+      'Materiais': 'rgba(255, 109, 211, 0.06)',
       'Outros': 'rgba(97, 97, 97, 0.1)',
     };    
 
     const tituloCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(145, 58, 0, 0.5)',
-      'Hospedagem': 'rgba(6, 58, 40, 0.5)',
-      'Transporte': 'rgba(19, 54, 110, 0.5)',
+      'Alimentação': 'rgba(58, 8, 196, 0.63)',
+      'Hospedagem': 'rgba(6, 58, 40, 0.65)',
+      'Transporte': 'rgba(19, 75, 165, 0.67)',
       'Serviços Terceirizados': 'rgba(50, 70, 13, 0.5)',
-      'Materiais': 'rgba(102, 22, 42, 0.5)',
+      'Materiais': 'rgba(160, 3, 95, 0.69)',
       'Outros': 'rgba(54, 52, 52, 0.5)',
     };    
 

@@ -119,7 +119,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
-    color: "rgba(9, 121, 14, 0.7)",
+    color: "#2C3E50",
   },
   status: {
     fontSize: 16,
