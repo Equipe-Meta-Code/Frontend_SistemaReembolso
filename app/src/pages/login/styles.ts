@@ -77,4 +77,16 @@ export const style = StyleSheet.create({
     eyeIcon: {
         marginLeft: -30, 
     },
+    erroInput: {
+        borderColor: 'red',
+        borderWidth: 1,
+      },
+      
+      erroTexto: {
+        color: 'red',
+        fontSize: 12,
+        marginTop: 4,
+        marginBottom: 8,
+      },
+      
 })
