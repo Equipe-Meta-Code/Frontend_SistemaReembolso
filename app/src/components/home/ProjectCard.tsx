@@ -26,7 +26,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Pacotes', { projectId: project.id })}>
       <View style={styles.card}>
-        
+
         {project.department && (
           <View style={styles.departmentContainer}>
             {project.department.split(',').map((department, index) => (
@@ -41,12 +41,20 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
         {project.descricao && <Text style={styles.cardDescription}>{project.descricao}</Text>}
 
-        <Text>Limite de Gastos: R${project.total?.toFixed(2) ?? '0.00'}</Text>
+        <Text>Limite de Gastos: R${project.total?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
 
         <ProgressBar progress={progress} color="#1F48AA" style={styles.progressBar} />
 
         <Text>
-          Gasto: R${project.spent?.toFixed(2) ?? '0.00'} / Restante: R${valueLeft?.toFixed(2) ?? '0.00'}
+          Gasto: R$
+          {project.spent?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) ?? '0,00'}
+          {valueLeft >= 0 ? (
+            <> / Restante: R${valueLeft.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</>
+          ) : (
+            <> / <Text style={{ color: 'red' }}>
+              Limite Ultrapassado: R${Math.abs(valueLeft).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            </Text></>
+          )}
         </Text>
 
         <Text style={styles.category}>
