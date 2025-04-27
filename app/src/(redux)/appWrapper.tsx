@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState  } from "react";
 import { useDispatch } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 import { loadUser } from "./authSlice"; // Ação para carregar o usuário
+import { View, ActivityIndicator } from "react-native";
 
 // Telas
 import Home from "../pages/home/Home";
@@ -16,11 +17,23 @@ const Stack = createStackNavigator();
 
 function AppWrapper() {
     const dispatch = useDispatch<AppDispatch>(); // Tipar o dispatch com AppDispatch
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Quando a aplicação for carregada, tenta carregar o usuário do AsyncStorage
-        dispatch(loadUser());
+        const init = async () => {
+            await dispatch(loadUser());
+            setLoading(false);
+        };
+        init();
     }, [dispatch]);
+    
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator size="large" color="#2A2F4F" />
+            </View>
+        );
+    }
 
     return (
         <Stack.Navigator>
