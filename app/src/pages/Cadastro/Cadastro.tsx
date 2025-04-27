@@ -31,14 +31,14 @@ export default function Cadastro() {
         setErrorMessages([]); // Limpar mensagens de erro anteriores
         try {
             setLoading(true);
-           
+
             const validateEmail = (email: string): boolean => {
                 const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return regex.test(email);
-              };
-              
+            };
+
             let errors: string[] = [];
-    
+
             // Verificar se os campos obrigatórios estão preenchidos
             if (!name || !email || !password || !passwordConfirm) {
                 errors.push('Informe todos os campos obrigatórios!');
@@ -48,38 +48,42 @@ export default function Cadastro() {
             if (!validateEmail(email)) {
                 errors.push('Digite um e-mail válido!');
             }
-            
-    
+
+            // Validar a senha
+            if (!validatePassword(password)) {
+                errors.push('A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial!');
+            }
+
             // Verificar se as senhas coincidem
             if (password !== passwordConfirm) {
                 errors.push('As senhas não coincidem!');
             }
-    
+
             // Verificar se os termos foram aceitos
             if (!acceptTerms) {
                 errors.push('Você precisa aceitar os termos e condições para se cadastrar!');
             }
-    
+
             if (errors.length > 0) {
                 setErrorMessages(errors);
                 setLoading(false); // Garantir que loading seja desativado após mostrar os erros
                 return;
             }
-    
+
             const response = await api.post('/register', {
                 name,
                 email,
                 password
             });
             const user = response.data;
-    
+
             // Lógica para cadastro (exemplo simples)
             setTimeout(() => {
                 Alert.alert('Cadastro realizado com sucesso!');
                 navigation.navigate("Login"); // Redireciona para a tela de login após cadastro
                 setLoading(false);
-            }, 1500);
-    
+            }, 1000);
+
         } catch (error) {
             console.log(error);
             setLoading(false); // Garantir que loading seja desativado em caso de erro
@@ -103,15 +107,14 @@ export default function Cadastro() {
                     <Text style={style.welcomeTitle}>Bem-Vindo 👋</Text>
                     <Text style={style.instruction}>Preencha o formulário abaixo para criar sua conta.</Text>
 
-                     {/* Nome Completo */}
+                    {/* Nome Completo */}
                     <Input
                         title="Nome Completo"
                         placeholder="Digite seu nome completo"
                         value={name}
                         onChangeText={(text) => {
                             setName(text);
-                            console.log("Nome digitada:", text);
-                          }}
+                        }}
                         iconRightName="person"
                         IconRigth={MaterialIcons}
                     />
@@ -123,8 +126,7 @@ export default function Cadastro() {
                         value={email}
                         onChangeText={(text) => {
                             setEmail(text);
-                            console.log("Email digitada:", text);
-                          }}
+                        }}
                         iconRightName="email"
                         IconRigth={MaterialIcons}
                     />
@@ -137,8 +139,7 @@ export default function Cadastro() {
                         value={password}
                         onChangeText={(text) => {
                             setPassword(text);
-                            console.log("Senha digitada:", text);
-                          }}
+                        }}
                         iconRightName={showPassword ? "visibility-off" : "visibility"}
                         IconRigth={MaterialIcons}
                         onIconRigthPress={() => setShowPassword(!showPassword)}
@@ -152,8 +153,7 @@ export default function Cadastro() {
                         value={passwordConfirm}
                         onChangeText={(text) => {
                             setPasswordConfirm(text);
-                            console.log("Senha digitada:", text);
-                          }}
+                        }}
                         iconRightName={showPasswordConfirm ? "visibility-off" : "visibility"}
                         IconRigth={MaterialIcons}
                         onIconRigthPress={() => setShowPasswordConfirm(!showPasswordConfirm)}
@@ -185,9 +185,9 @@ export default function Cadastro() {
                     )}
 
                     {/* Botão Cadastro */}
-                    <ButtonCustom 
-                        title="Cadastre-se" 
-                        onPress={() => getCadastro()} 
+                    <ButtonCustom
+                        title="Cadastre-se"
+                        onPress={() => getCadastro()}
                         loading={loading}
                     />
 
