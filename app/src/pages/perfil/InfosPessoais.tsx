@@ -164,7 +164,7 @@ const InfosPessoais = () => {
 
                 <CustomButton
                     titulo={`Editar imagem de perfil`}
-                    onPress={handleImagePress}
+                    onPress={handleImageUpload}
                     iconName="chevron-forward"
                     iconColor="#000"
                 />
