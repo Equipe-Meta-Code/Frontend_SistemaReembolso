@@ -76,8 +76,8 @@ const RegistroDespesa = () => {
           const userProjects = projetos.filter((project: any) =>
             project.funcionarios?.some((func: any) => func.userId === userId)
           );          
-          console.log('projetos', projetos)
-          console.log('user projetos', userProjects)
+          /* console.log('projetos', projetos)
+          console.log('user projetos', userProjects) */
 
           setAllProjects(userProjects);
 
@@ -109,7 +109,7 @@ const RegistroDespesa = () => {
         try {
           const response = await api.get('/pacote');
           const pacotes: Pacote[] = response.data;
-          console.log(pacotes)
+          /* console.log(pacotes) */
 
           // Filtra os pacotes
           const pacotesFiltrados = pacotes.filter(
@@ -343,7 +343,7 @@ const RegistroDespesa = () => {
         aprovacao: "Pendente",
         km: categoryName === 'Transporte' ? parseFloat(km.replace(',', '.')) : undefined,
       });
-      console.log(response.data);
+      /* console.log(response.data); */
       setSuccessMessage("Despesa cadastrada com sucesso!");
 
       setTimeout(() => {
