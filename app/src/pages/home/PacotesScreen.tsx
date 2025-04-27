@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
-import { Picker } from '@react-native-picker/picker';
+import { useFocusEffect } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface Despesa {
@@ -44,7 +44,8 @@ const PacotesScreen = ({ route }: any) => {
   const [despesasMap, setDespesasMap] = useState<Record<string, Despesa>>({});
   const [nomeProjeto, setNomeProjeto] = useState('');
   const userId = useSelector((state: RootState) => state.auth.user?.userId);
-  const [statusFiltro, setStatusFiltro] = useState('');
+  const [statusSelecionado, setStatusSelecionado] = useState<string | null>(null);
+  const [resetarExpandido, setResetarExpandido] = useState(false);
 
   const fetchPacotesDespesas = async () => {
     try {
@@ -52,10 +53,11 @@ const PacotesScreen = ({ route }: any) => {
       const pacotesDoProjeto = response.data.filter((p) => p.projetoId === projectId && String(p.userId) === String(userId));
   
       const statusOrder = {
-        'rascunho': 1,
-        'aguardando_aprovacao': 2,
-        'rejeitado': 3,
-        'aprovado': 4,
+        'Rascunho': 1,
+        'Aguardando Aprovação': 2,
+        'Aprovado Parcialmente': 3,
+        'Recusado': 4,
+        'Aprovado': 5
       };
       const pacotesOrdenados = pacotesDoProjeto.sort((a, b) => {
         return statusOrder[a.status as keyof typeof statusOrder] - statusOrder[b.status as keyof typeof statusOrder];
@@ -85,19 +87,39 @@ const PacotesScreen = ({ route }: any) => {
   
   useEffect(() => {
     fetchPacotesDespesas();
-  }, [projectId, userId]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchPacotesDespesas();
-    }, 3000); // atualiza os dados a cada 3 segundos
-  
-    return () => clearInterval(interval); 
+    const interval = setInterval(fetchPacotesDespesas, 3000);
+    return () => clearInterval(interval);
   }, [projectId, userId]);  
 
-  const pacotesFiltrados = statusFiltro
-  ? pacotes.filter(p => p.status === statusFiltro)
+  // filtro no topo da tela
+  const pacotesFiltrados = statusSelecionado
+  ? pacotes.filter(p => p.status === statusSelecionado)
   : pacotes;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // quando entra na tela, zera o filtro
+      setStatusSelecionado(null);
+  
+      return () => {
+        // quando sai da tela, também zera 
+        setStatusSelecionado(null);
+      };
+    }, [])
+  );  
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // quando entra na tela, os cards estão fechados
+      setResetarExpandido(true);
+      setTimeout(() => setResetarExpandido(false), 0);
+  
+      return () => {
+        // quando sai da tela, os cards fecham
+        setResetarExpandido(true);
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -108,26 +130,38 @@ const PacotesScreen = ({ route }: any) => {
         <Text style={styles.title}>{nomeProjeto || 'Carregando...'}</Text>
       </View>
 
-      {/*<View style={styles.filtroContainer}>
-        <View style={styles.filtroRow}>
-        <Ionicons name="filter" size={20} color="#374151" style={styles.filtroIcon} />
-          <Picker
-            selectedValue={statusFiltro}
-            onValueChange={(itemValue) => setStatusFiltro(itemValue)}
-            style={styles.picker}>
-              
-            <Picker.Item label="Todos" value="" />
-            <Picker.Item label="Rascunho" value="rascunho" />
-            <Picker.Item label="Aguardando Aprovação" value="aguardando_aprovacao" />
-            <Picker.Item label="Aprovado" value="aprovado" />
-            <Picker.Item label="Rejeitado" value="rejeitado" />
-          </Picker>
+      {/* o filtro no topo da tela */}
+      {!statusSelecionado && (
+        <View style={styles.filtrosRow}>
+          {['Rascunho', 'Aguardando Aprovação', 'Aprovado Parcialmente', 'Recusado', 'Aprovado'].map((status) => (
+          <TouchableOpacity
+            key={status}
+            style={styles.filtroChip}
+            onPress={() => setStatusSelecionado(status)}
+          >
+            <Text style={styles.filtroChipText}>{status}</Text>
+          </TouchableOpacity>
+          ))}
         </View>
-      </View>*/}
+      )}
 
+      {statusSelecionado && (
+        <View style={styles.filtrosRow}>
+        
+          <TouchableOpacity style={styles.filtroChipSelecionado}>
+            <Text style={styles.filtroChipSelecionadoText}>{statusSelecionado}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.filtroChipLimpar} onPress={() => setStatusSelecionado(null)}>
+            <Ionicons name="close" size={20} color="#374151" />
+          </TouchableOpacity>
+
+        </View>
+      )}
 
       <View style={styles.pacotesList}>
+
         <Text style={styles.pacotesTitle}>Meus pacotes</Text>
+
         <FlatList
           data={pacotesFiltrados}
           keyExtractor={(item) => item.pacoteId}
@@ -148,6 +182,8 @@ const PacotesScreen = ({ route }: any) => {
                   projetoId={item.projetoId} 
                   userId={item.userId} 
                   status={item.status} 
+                  fetchPacotesDespesas={fetchPacotesDespesas}
+                  resetarExpandido={resetarExpandido}
                 />
               </View>
             );
@@ -238,7 +274,42 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
     textAlign: 'center',
   },  
-  
+  filtrosRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 20,
+    marginTop: 10,
+    gap: 8,
+  },
+  filtroChip: {
+    backgroundColor: '#E5E7EB',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+  },
+  filtroChipText: {
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  filtroChipSelecionado: {
+    backgroundColor: '#1F48AA',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+  }, 
+  filtroChipSelecionadoText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  filtroChipLimpar: {
+    backgroundColor: '#F3F4F6',
+    borderRadius: 20,
+    padding: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },  
 });
 
 export default PacotesScreen;

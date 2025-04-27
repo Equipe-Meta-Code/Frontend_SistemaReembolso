@@ -23,12 +23,12 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ data, projeto, descricao, val
           styles.status,
           {
             color:
-              status === "Reprovada"
-                ? "red"
-                : status === "Aprovada"
-                ? "green"
+              status === "Recusado"
+                ? "rgba(224, 7, 7, 0.8)"
+                : status === "Aprovado"
+                ? "rgba(10, 138, 16, 0.87)"
                 : status === "Pendente"
-                ? "orange"
+                ? "rgba(255, 188, 20, 0.87)"
                 : "#000000"
           }
         ]}

@@ -7,6 +7,8 @@ import { styles } from "../../styles/historico.styles";
 import api from "../../services/api";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
+import api from "../../api";
+import api2 from "../../services/api";
 
 interface Despesa {
   _id: string;
@@ -168,6 +170,11 @@ const Historico: React.FC = () => {
   return (
     <View style={styles.container}>
       <Header />
+      {despesasFiltradas.length === 0 && (
+        <Text style={{ textAlign: 'center', marginTop: 20, color: 'gray' }}>
+          Nenhuma despesa encontrada.
+        </Text>
+        )}
       <FlatList
         data={despesasAgrupadas}
         keyExtractor={(item) => `${item.categoria}`}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import api from '../../services/api';
 export interface Despesa {
@@ -20,11 +20,15 @@ export interface Despesa {
     despesas?: Despesa[];
   }
 
-  const PacoteCard: React.FC<Pacote> = ({ nome, despesas, status: initialStatus, pacoteId }) => {
+  interface PacoteCardProps extends Pacote {
+    fetchPacotesDespesas: () => void;
+    resetarExpandido: boolean;
+  }  
+
+  const PacoteCard: React.FC<PacoteCardProps> = ({ nome, despesas, status, pacoteId, fetchPacotesDespesas, resetarExpandido }) => {
     
-      const [status, setStatus] = useState(initialStatus);
       const [isSolicitando, setIsSolicitando] = useState(false);
-      const [expandido, setExpandido] = useState(false);
+      const [expandido, setExpandido] = useState(false);  
 
       const handleSolicitarReembolso = async () => {
         Alert.alert(
@@ -41,8 +45,8 @@ export interface Despesa {
                 try {
                   setIsSolicitando(true);
                   const response = await api.post(`/pacotes/${pacoteId}/enviar`);
-                  setStatus('aguardando_aprovacao');
                   Alert.alert('Sucesso', 'Reembolso solicitado com sucesso!');
+                  fetchPacotesDespesas();
                 } catch (error: any) {
                   console.error(error?.response?.data || error);
                   Alert.alert('Erro', error?.response?.data?.erro || 'Não foi possível solicitar o reembolso.');
@@ -60,12 +64,14 @@ export interface Despesa {
       );
 
       // Agrupando despesas por categoria
-      const despesasAgrupadas = despesasOrdenadas?.reduce((acc: any[], despesa) => {
+      type GrupoDespesas = { categoria: string; itens: { descricao?: string; valor: string; data: string; }[] };
+      const despesasAgrupadas = despesasOrdenadas?.reduce((acc: GrupoDespesas[], despesa) => {
       const categoriaExistente = acc.find((c) => c.categoria === despesa.categoria);
       const itemFormatado = {
         descricao: despesa.descricao,
         valor: `R$ ${despesa.valor_gasto.toFixed(2).replace('.', ',')}`,
         data: new Date(despesa.data).toLocaleDateString('pt-BR'),
+        aprovacao: despesa.aprovacao,
       };
   
       if (categoriaExistente) {
@@ -81,32 +87,49 @@ export interface Despesa {
     }, []);
 
     const cardCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(250, 164, 107, 0.1)',
+      'Alimentação': 'rgba(234, 234, 255, 0.8)',
       'Hospedagem': 'rgba(3, 46, 31, 0.07)',
-      'Transporte': 'rgba(52, 123, 238, 0.1)',
+      'Transporte': 'rgba(52, 163, 238, 0.1)',
       'Serviços Terceirizados': 'rgba(90, 128, 19, 0.1)',
-      'Materiais': 'rgba(245, 94, 132, 0.1)',
+      'Materiais': 'rgba(255, 109, 211, 0.06)',
       'Outros': 'rgba(97, 97, 97, 0.1)',
     };    
 
     const tituloCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(145, 58, 0, 0.5)',
-      'Hospedagem': 'rgba(6, 58, 40, 0.5)',
-      'Transporte': 'rgba(19, 54, 110, 0.5)',
+      'Alimentação': 'rgba(58, 8, 196, 0.63)',
+      'Hospedagem': 'rgba(6, 58, 40, 0.65)',
+      'Transporte': 'rgba(19, 75, 165, 0.67)',
       'Serviços Terceirizados': 'rgba(50, 70, 13, 0.5)',
-      'Materiais': 'rgba(102, 22, 42, 0.5)',
+      'Materiais': 'rgba(160, 3, 95, 0.69)',
       'Outros': 'rgba(54, 52, 52, 0.5)',
     };    
 
     const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
-      rascunho: { backgroundColor: '#E5E7EB', color: '#374151' },
-      aguardando_aprovacao: { backgroundColor: 'rgba(255, 194, 38, 0.15)', color: '#92400E' },
-      rejeitado: { backgroundColor: '#FECACA', color: '#991B1B' },
-      aprovado: { backgroundColor: '#D1FAE5', color: '#065F46' },
+      'Rascunho': { backgroundColor: '#E5E7EB', color: '#374151' },
+      'Aguardando Aprovação': { backgroundColor: 'rgba(255, 188, 20, 0.21)', color: 'rgba(214, 154, 1, 0.96)' },
+      'Recusado': { backgroundColor: 'rgba(209, 53, 53, 0.15)', color: 'rgba(185, 14, 14, 0.70)' },
+      'Aprovado': { backgroundColor: 'rgba(27, 143, 37, 0.15)', color: 'rgba(4, 155, 12, 0.83)' },
+      'Aprovado Parcialmente': { backgroundColor: 'rgba(255, 139, 62, 0.21)', color: 'rgba(248, 103, 7, 0.69)' },
     };    
+
+    const aprovacaoDespesaCores: Record<string, string> = {
+      'Aprovado': 'rgba(10, 138, 16, 0.87)',
+      'Recusado': 'rgba(224, 7, 7, 0.8)',
+    };    
+
+    //mostra legenda apenas se o pacote for aprovado parcialmente
+    const temAprovado = despesas?.some((d) => d.aprovacao === 'Aprovado');
+    const temRejeitado = despesas?.some((d) => d.aprovacao === 'Recusado');
+    const mistoAprovacao = temAprovado || temRejeitado;
 
     const totalGasto = despesas?.reduce((acc, curr) => acc + curr.valor_gasto, 0) || 0;
   
+    useEffect(() => {
+      if (resetarExpandido) {
+        setExpandido(false);
+      }
+    }, [resetarExpandido]);
+    
     return (
       <TouchableOpacity onPress={() => setExpandido(!expandido)} activeOpacity={1}>
         <View style={styles.card}>
@@ -127,10 +150,18 @@ export interface Despesa {
               {despesas && despesas.length > 0 ? (
                 despesasAgrupadas?.map((grupo) => (
                   <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || cardCategoriaCores['Outros'] }]}>
-                    <Text style={[styles.cardSubtitle, { color: tituloCategoriaCores[grupo.categoria] || tituloCategoriaCores['Outros'] }]}>{grupo.categoria}</Text>
+                    <Text style={[styles.cardSubSubtitle, { color: tituloCategoriaCores[grupo.categoria] || tituloCategoriaCores['Outros'] }]}>{grupo.categoria}</Text>
                     
                     {grupo.itens.map((item: any, index: number) => (
-                    <Text key={index} style={styles.despesaItem}> • {item.data} - {item.descricao} - {item.valor}</Text>                      
+                    <Text key={index} style={styles.despesaItem}>
+                    {mistoAprovacao && (
+                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || '#4B5563', fontWeight: 'bold' }}>
+                        [{item.aprovacao}]
+                      </Text>
+                    )}
+                    {' '}
+                    {item.data} - {item.descricao} - {item.valor}
+                  </Text>                                  
                     
                     ))}
                   </View>
@@ -140,7 +171,7 @@ export interface Despesa {
               )}
 
               {/* Botão de solicitar reembolso */}
-              {status === 'rascunho' && (
+              {status === 'Rascunho' && (
                 <TouchableOpacity
                   style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: '#9CA3AF' }]}
                   onPress={handleSolicitarReembolso}
@@ -176,6 +207,12 @@ export interface Despesa {
     },
     cardSubtitle: {
       marginTop: 16,
+      fontSize: 15,
+      fontWeight: '600',
+      color: '#374151', 
+    },
+    cardSubSubtitle: {
+      marginTop: 12,
       fontSize: 15,
       fontWeight: '600',
       color: '#374151', 

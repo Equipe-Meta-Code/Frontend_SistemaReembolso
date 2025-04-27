@@ -11,29 +11,32 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { themas } from '../../global/themes';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 
 const RegistroDespesa = () => {
-    const [error, setError] = useState("");
-    const [pacoteError, setPacoteError] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-    const [category, setCategory] = useState("");
-    const [categoriesByProject, setCategoriesByProject] = useState<{ [key: string]: { label: string; value: string }[] }>({});
-    const [selectedProject, setSelectedProject] = useState("");
-    const [projects, setProjects] = useState([]);
-    const [date, setDate] = useState("");
-    const [amount, setAmount] = useState("");
-    const [amountFormatted, setAmountFormatted] = useState(0);
-    const [description, setDescription] = useState('');
-    const [allProjects, setAllProjects] = useState<Project[]>([]);
-    const [totalGastoCategoria, setTotalGastoCategoria] = useState(0);
-    const [categoryName, setCategoryName] = useState('');
-    const user = useSelector((state: RootState) => state.auth.user);
-    const [pacotes, setPacotes] = useState<{ label: string; value: string }[]>([]);
-    const [selectedPacote, setSelectedPacote] = useState("");
-    const [creatingPacote, setCreatingPacote] = useState(false);
-    const [newPacoteName, setNewPacoteName] = useState("");
+  const [error, setError] = useState("");
+  const [pacoteError, setPacoteError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [category, setCategory] = useState("");
+  const [selectedProject, setSelectedProject] = useState("");
+  const [categoriesByProject, setCategoriesByProject] = useState<{ [key: string]: { label: string; value: string }[] }>({});
+  const [date, setDate] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState('');
+  const [amountFormatted, setAmountFormatted] = useState(0);
+  const [allProjects, setAllProjects] = useState<Project[]>([]);
+  const [categoryName, setCategoryName] = useState('');
+  const [totalGastoCategoria, setTotalGastoCategoria] = useState(0);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const [selectedPacote, setSelectedPacote] = useState("");
+  const [pacotes, setPacotes] = useState<{ label: string; value: string }[]>([]);
+  const [creatingPacote, setCreatingPacote] = useState(false);
+  const [newPacoteName, setNewPacoteName] = useState("");
+  const [kmCost, setKmCost] = useState(0);
+  const [km, setKm] = useState('');
 
     type RootStackParamList = {
       Home: undefined;
@@ -270,6 +273,7 @@ const RegistroDespesa = () => {
     nome: string;
     projetoId: string;
     userId: string;
+    status: string;
   };
 
   const fetchData = async () => {
@@ -277,17 +281,24 @@ const RegistroDespesa = () => {
       let response = await api.get('/projeto');
 
       const projetos = response.data;
-      setAllProjects(projetos);
+      const userId = Number(user?.userId);
+      const userProjects = projetos.filter((project: any) =>
+        project.funcionarios?.some((func: any) => func.userId === userId)
+      );          
+      console.log('projetos', projetos)
+      console.log('user projetos', userProjects)
+
+      setAllProjects(userProjects);
 
       // Transforma a lista de projetos para o dropdown
-      const formattedProjects = projetos.map((projeto: Project) => ({
+      const formattedProjects = userProjects.map((projeto: Project) => ({
         label: projeto.nome,
         value: projeto.projetoId.toString(), // Certifique-se de que é string
       }));
 
       // Cria um objeto com categorias agrupadas por projeto
       const categoriasPorProjeto: { [key: string]: { label: string; value: string }[] } = {};
-
+      
       projetos.forEach((projeto: any) => {
         const categoriasFormatadas = projeto.categorias.map((cat: Category) => ({
           label: cat.nome,
@@ -295,7 +306,7 @@ const RegistroDespesa = () => {
         }));
         categoriasPorProjeto[projeto.projetoId.toString()] = categoriasFormatadas;
       });
-
+   
       setProjects(formattedProjects);
       setCategoriesByProject(categoriasPorProjeto);
     } catch (error) {
@@ -309,52 +320,50 @@ const RegistroDespesa = () => {
       const pacotes: Pacote[] = response.data;
       console.log(pacotes)
 
-      // Filtra os pacotes que pertencem ao usuário
-      const pacotesByUser = pacotes.filter(
-        (pacote) => pacote.userId.toString() === user?.userId.toString()
+      // Filtra os pacotes
+      const pacotesFiltrados = pacotes.filter(
+        (pacote) =>
+          pacote.userId.toString() === user?.userId.toString() &&
+          pacote.projetoId.toString() === projetoId &&
+          pacote.status === "Rascunho"
       );
-
-      // Filtra os pacotes que pertencem ao projeto selecionado
-      const pacotesFiltrados = pacotesByUser.filter(
-        (pacote) => pacote.projetoId.toString() === projetoId
-      );
-
+  
       // Formata os pacotes filtrados para o dropdown
       const pacotesFormatados = pacotesFiltrados.map((pacote) => ({
         label: pacote.nome,
         value: pacote.pacoteId.toString(),
       }));
-
-      setPacotes(pacotesFormatados);
-      console.log('formatados:', pacotesFormatados)
+  
+      setPacotes(pacotesFormatados); 
+      console.log('formatados:',pacotesFormatados)
     } catch (error) {
       console.error("Erro ao buscar pacotes:", error);
     }
-  };
-
+  };  
+  
   useEffect(() => {
     if (selectedProject && category) {
       const fetchDataDespesas = async () => {
         try {
           let response = await api.get('/despesa');
-
+  
           const despesas = response.data;
-
+  
           const despesasFiltradas = despesas.filter(
             (despesa: any) =>
               despesa.projetoId.toString() === selectedProject &&
               despesa.categoria.toString() === category
           );
-
+  
           const total = despesasFiltradas.reduce((acc: number, curr: any) => {
             return acc + parseFloat(curr.valor_gasto);
           }, 0);
-
+  
           setTotalGastoCategoria(total);
         } catch (error) {
           console.error("Erro ao buscar despesas por categoria:", error);
         }
-      };
+      };     
       fetchDataDespesas();
     }
   }, [selectedProject, category]);
@@ -366,6 +375,15 @@ const RegistroDespesa = () => {
 
     if (!newPacoteName || !selectedProject) {
       setError("Informe o nome do pacote.");
+      return;
+    }
+
+    const pacoteExistente = pacotes.find(
+      (p) => p.label.trim().toLowerCase() === newPacoteName.trim().toLowerCase()
+    );
+
+    if (pacoteExistente) {
+      setPacoteError("Já existe um pacote com esse nome neste projeto.");
       return;
     }
 
@@ -573,36 +591,36 @@ const RegistroDespesa = () => {
             onValueChange={handlePacoteChange}
           />
 
-        {/* Se o usuário quiser criar um novo pacote */}
-        {!creatingPacote ? (
-          <TouchableOpacity onPress={() => {
-              setCreatingPacote(true);
-              setPacoteError("");
-          }}>
-            <Text style={styles.link}> + Criar novo pacote </Text>
-          </TouchableOpacity>
-        ) : (
-          <>
-            <TextInput
-              placeholder="Nome do novo pacote"
-              value={newPacoteName}
-              onChangeText={setNewPacoteName}
-              style={styles.inputNome}
-            />
-            
-            <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
-              <Text style={styles.buttonText}> Criar Pacote </Text>
+          {/* Se o usuário quiser criar um novo pacote */}
+          {!creatingPacote ? (
+            <TouchableOpacity onPress={() => {
+                setCreatingPacote(true);
+                setPacoteError("");
+            }}>
+              <Text style={styles.link}> + Criar novo pacote </Text>
             </TouchableOpacity>
-            {pacoteError && (
-              <Text style={[styles.pacoteErrorMessage, { marginTop: 4 }]}>
-                {pacoteError}
-              </Text>)}
-            
-            <TouchableOpacity onPress={() => setCreatingPacote(false)}>
-              <Text style={styles.link}> Cancelar </Text>
-            </TouchableOpacity>
-          </>
-        )}
+          ) : (
+            <>
+              <TextInput
+                placeholder="Nome do novo pacote"
+                value={newPacoteName}
+                onChangeText={setNewPacoteName}
+                style={styles.inputNome}
+              />
+              
+              <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
+                <Text style={styles.buttonText}> Criar Pacote </Text>
+              </TouchableOpacity>
+              {pacoteError && (
+                <Text style={[styles.pacoteErrorMessage, { marginTop: 4 }]}>
+                  {pacoteError}
+                </Text>)}
+              
+              <TouchableOpacity onPress={() => setCreatingPacote(false)}>
+                <Text style={styles.link}> Cancelar </Text>
+              </TouchableOpacity>
+            </>
+          )}
 
           <Text style={styles.textBottom}>Categoria</Text>
           <CustomDropdown
@@ -652,24 +670,24 @@ const RegistroDespesa = () => {
             <Text style={styles.limit}>O valor máximo já foi atingido. Caso deseje continuar,
               por favor insira uma descrição justificando a despesa.</Text> : null}
 
-          {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
-            <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar,
-              por favor insira uma descrição justificando a despesa.</Text>}
-
-          {selectedProject && category &&
-            <>
-              <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
-              <View style={styles.progressBar}>
-                <View style={[styles.progressBarFill, { width: `${(totalGastoCategoria / valor_maximo) * 100}%` },
-                {
-                  backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : '#1f4baa',
-                },]} />
-                <Text style={styles.progressBarText}>
-                  {`R$ ${totalGastoCategoria} / R$ ${valor_maximo}`}
-                </Text>
-              </View>
-              <Text style={styles.progressBarPorcentent}>
-                {totalGastoCategoria > valor_maximo ? "Limite excedido!" :
+            {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
+              <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar, 
+                por favor insira uma descrição justificando a despesa.</Text>}
+  
+          {selectedProject && category && 
+          <>
+            <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressBarFill, { width: `${(totalGastoCategoria / valor_maximo) * 100}%` },
+               {
+                backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : themas.colors.primary,
+              },]} />
+              <Text style={styles.progressBarText}>
+                {`R$ ${totalGastoCategoria} / R$ ${valor_maximo}`}
+              </Text>
+            </View>
+            <Text style={styles.progressBarPorcentent}>
+                {totalGastoCategoria > valor_maximo ? "Limite excedido!" : 
                   `Você já gastou ${((totalGastoCategoria / valor_maximo) * 100).toFixed(0)}% do valor permitido.`}
               </Text>
             </>}
