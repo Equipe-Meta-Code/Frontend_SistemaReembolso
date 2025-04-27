@@ -79,6 +79,12 @@ const Historico: React.FC = () => {
     const dia = hoje.getDate().toString().padStart(2, "0");
     const mes = (hoje.getMonth() + 1).toString().padStart(2, "0");
     setDataAtual(`${dia}/${mes}`);
+
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000);
+  
+    return () => clearInterval(interval);
   }, [user]);
 
   const getNomeProjeto = (id: string) => {
