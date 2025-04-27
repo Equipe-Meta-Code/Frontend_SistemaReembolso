@@ -1,8 +1,9 @@
 import { StyleSheet} from "react-native";
+import { themas } from "../../global/themes";
 
 export const styles = StyleSheet.create({
     boxTop: {
-        backgroundColor: '#1f4baa',
+        backgroundColor: themas.colors.primary,
         height: '35%',
     },
     boxTopTwo: {
@@ -22,16 +23,16 @@ export const styles = StyleSheet.create({
         margin: 'auto',
     },
     title: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 32,
       },
     subTitle: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 16,
         marginTop: 12,
     },
     textTop: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 16,
     },
     textBottom: {
@@ -46,7 +47,7 @@ export const styles = StyleSheet.create({
         borderRadius: 8,
         paddingHorizontal: 8,
         marginTop: 12,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: themas.colors.secondary,
       },
       placeholderStyle: {
         fontSize: 16,

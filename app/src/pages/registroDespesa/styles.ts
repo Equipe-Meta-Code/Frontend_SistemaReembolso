@@ -1,11 +1,12 @@
 import { StyleSheet} from "react-native";
+import { themas } from "../../global/themes";
 
 export const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: themas.colors.secondary,
     },
     boxTop: {
-        backgroundColor: '#1f4baa',
+        backgroundColor: themas.colors.primary,
         height: '28%',
     },
     boxTitle: {
@@ -24,22 +25,22 @@ export const styles = StyleSheet.create({
     },
     arrow: {
       fontSize: 24,
-      color: '#FFFFFF',
+      color: themas.colors.secondary,
       paddingLeft: '7%',
       paddingTop: '12%',
     },
     title: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 32,
         fontWeight: 'bold', 
       },
     subTitle: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 16,
         marginTop: 12,
     },
     textTop: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 16,
     },
     textBottom: {
@@ -100,7 +101,7 @@ export const styles = StyleSheet.create({
       image: {
         marginTop: 12,
         fontSize: 140,
-        color: '#1f4baa',
+        color: themas.colors.primary,
         margin: 'auto',
       },
       teste: {
@@ -108,14 +109,14 @@ export const styles = StyleSheet.create({
         
       },
       button: {
-        backgroundColor: '#1f4baa',
+        backgroundColor: themas.colors.primary,
         paddingVertical: 18,
         borderRadius: 25,
         alignItems: 'center',
         marginTop: 20,           
       },
       buttonText: {
-        color: '#fff',
+        color: themas.colors.secondary,
         fontSize: 16,
         fontWeight: 'bold',
       },

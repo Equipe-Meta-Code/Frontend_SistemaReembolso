@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { themas } from "../../global/themes";
 
 export const style = StyleSheet.create({
     container: {
@@ -21,7 +22,7 @@ export const style = StyleSheet.create({
         width: "100%",
         height: 50,
         borderRadius: 8,
-        backgroundColor: "#ffffff",
+        backgroundColor: themas.colors.secondary,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",

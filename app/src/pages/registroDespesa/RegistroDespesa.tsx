@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { themas } from '../../global/themes';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 
@@ -437,24 +438,24 @@ const RegistroDespesa = () => {
             <Text style={styles.limit}>O valor máximo já foi atingido. Caso deseje continuar,
               por favor insira uma descrição justificando a despesa.</Text> : null}
 
-          {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
-            <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar,
-              por favor insira uma descrição justificando a despesa.</Text>}
-
-          {selectedProject && category &&
-            <>
-              <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
-              <View style={styles.progressBar}>
-                <View style={[styles.progressBarFill, { width: `${(totalGastoCategoria / valor_maximo) * 100}%` },
-                {
-                  backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : '#1f4baa',
-                },]} />
-                <Text style={styles.progressBarText}>
-                  {`R$ ${totalGastoCategoria} / R$ ${valor_maximo}`}
-                </Text>
-              </View>
-              <Text style={styles.progressBarPorcentent}>
-                {totalGastoCategoria > valor_maximo ? "Limite excedido!" :
+            {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
+              <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar, 
+                por favor insira uma descrição justificando a despesa.</Text>}
+  
+          {selectedProject && category && 
+          <>
+            <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressBarFill, { width: `${(totalGastoCategoria / valor_maximo) * 100}%` },
+               {
+                backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : themas.colors.primary,
+              },]} />
+              <Text style={styles.progressBarText}>
+                {`R$ ${totalGastoCategoria} / R$ ${valor_maximo}`}
+              </Text>
+            </View>
+            <Text style={styles.progressBarPorcentent}>
+                {totalGastoCategoria > valor_maximo ? "Limite excedido!" : 
                   `Você já gastou ${((totalGastoCategoria / valor_maximo) * 100).toFixed(0)}% do valor permitido.`}
               </Text>
             </>}
