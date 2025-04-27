@@ -9,22 +9,24 @@ export const style = StyleSheet.create({
     height: height * 0.09,
     alignItems:'center',
     paddingHorizontal: width * 0.05,
+    backgroundColor: themas.colors.secondary,
     shadowColor: "#000",
     shadowOffset:{
         width:0,
         height:3,
     },
+    elevation: 8,
  },
 
  tabItem:{
     justifyContent: 'center',
     alignItems: 'center',
-    width:50,
  },
 
  tabItemHome:{
     flexDirection:'row',
     alignItems:'center',
+    justifyContent: 'center',
     position:'absolute',
     backgroundColor:themas.colors.primary,
     height: height * 0.065,
@@ -60,6 +62,12 @@ export const style = StyleSheet.create({
     color: "black",
  },
 
+ textCenter: {
+   fontSize: width * 0.03,
+   color: "black",
+   marginTop: 4,
+ },
+
  tabItemRight: {
     flexDirection: "row",
     position: "absolute",
@@ -67,12 +75,21 @@ export const style = StyleSheet.create({
     gap: width * 0.06,
     width: 110,
     height: 80,
+    justifyContent: 'space-between',
+    alignItems: 'center',
     zIndex:9999,
  },
 
  iconRight: {
-    fontSize: width * 0.07,
+    fontSize: width * 0.055,
     color: "black",
+ },
+
+ textRight: {
+   fontSize: width * 0.03,
+   color: "black",
+   marginTop: 4,
+   textAlign: 'center',
  },
 
 })

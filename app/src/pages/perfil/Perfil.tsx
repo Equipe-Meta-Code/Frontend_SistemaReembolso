@@ -68,7 +68,7 @@ const Perfil = () => {
 
     const user = useSelector((state: RootState) => state.auth.user);
     const dispatch = useDispatch();
-    console.log("Usuário do Redux:", user?.userId);
+    /* console.log("Usuário do Redux:", user?.userId); */
     
     const handleLogout = () => {
         dispatch(logoutAction());
@@ -99,6 +99,9 @@ const Perfil = () => {
 
             setDespesas(despesasFiltradas);
             setTotalFiltrado(total);
+            /* console.log('Despesas sem filtro:', response.data)
+            console.log('Despesas filtradas:', despesas)
+            console.log('Despesas Somadas:', total) */
           } catch (err) {
             console.error("Erro ao carregar despesas", err);
           } finally {

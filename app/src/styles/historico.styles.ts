@@ -27,6 +27,25 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  //inicio do card pra desenvolver
+  cardInformacoes:{
+    display: "flex",
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'flex-start',
+    textAlign: 'left',
+    width: 200,
+
+  },
+  cardTitulo : {
+    
+  },
+  cardDescricoes : {
+
+  },
+  //final do card
+  
   backButton: {
     marginRight: 15,
   },
@@ -68,7 +87,7 @@ export const styles = StyleSheet.create({
     color: "#2C3E50",
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "bold",
     color: "#FFF",
   },
@@ -82,7 +101,7 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
   },
   headerText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
     color: "#2C3E50",
@@ -103,13 +122,13 @@ export const styles = StyleSheet.create({
   
   data: {
     width: COLUMN_WIDTHS.data,
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
     textAlign: "center",
   },
   tipoDespesa: {
     width: COLUMN_WIDTHS.projeto,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
     color: "#2C3E50",
@@ -117,12 +136,12 @@ export const styles = StyleSheet.create({
   valor: {
     width: COLUMN_WIDTHS.valor,
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#2C3E50",
   },
   status: {
-    fontSize: 16,
+    fontSize: 14,
     width: COLUMN_WIDTHS.status,
     fontWeight: "bold",
     textAlign: "center",
@@ -158,7 +177,7 @@ export const styles = StyleSheet.create({
   },
   circleText: {
     color: "#1E4DB7",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "bold",
   },
   textContainer: {
@@ -168,16 +187,18 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#FFF",
     textAlign: "center", 
     flex: 1, 
+    marginLeft: 15,
   },
   buttonValue: {
-    fontSize: 18, 
+    fontSize: 16, 
     fontWeight: "bold",
     color: "#FFF",
+    marginRight: 5,
   },
   
 });

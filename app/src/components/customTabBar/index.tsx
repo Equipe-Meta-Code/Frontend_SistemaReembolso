@@ -2,6 +2,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { style } from "./styles";
+import { themas } from "../../global/themes";
 import {
   FontAwesome5,
   MaterialCommunityIcons,
@@ -20,6 +21,8 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
 
   return (
     <View style={style.tabArea}>
+
+      {/* botão home */}
       <TouchableOpacity
         style={style.tabItemHome}
         onPress={() => go("Home")}
@@ -33,29 +36,38 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
         </Text>
       </TouchableOpacity>
 
+      {/* botão registrar */}
       <TouchableOpacity
         style={style.tabItemCenter}
         onPress={() => go("Registrar")}
       >
         <SimpleLineIcons
           name="plus"
-          style={[style.iconCenter, isFocused("Registrar") && { color: "blue" }]}
+          style={[style.iconCenter, isFocused("Registrar") && { color: themas.colors.primary }]}
         />
       </TouchableOpacity>
 
+      {/* botão histórico */}
       <View style={style.tabItemRight}>
         <TouchableOpacity style={style.tabItem} onPress={() => go("Historico")}>
           <MaterialCommunityIcons
             name="file-document-edit"
-            style={[style.iconRight, isFocused("Historico") && { color: "blue" }]}
+            style={[style.iconRight, isFocused("Historico") && { color: themas.colors.primary }]}
           />
+          <Text style={[style.textRight, isFocused("Historico") && { color: themas.colors.primary }]}>
+            Histórico
+          </Text>
         </TouchableOpacity>
 
+        {/* botão perfil */}
         <TouchableOpacity style={style.tabItem} onPress={() => go("Perfil")}>
           <FontAwesome5
             name="user"
-            style={[style.iconRight, isFocused("Perfil") && { color: "blue" }]}
+            style={[style.iconRight, isFocused("Perfil") && { color: themas.colors.primary }]}
           />
+          <Text style={[style.textRight, isFocused("Perfil") && { color: themas.colors.primary }]}>
+            Perfil
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
