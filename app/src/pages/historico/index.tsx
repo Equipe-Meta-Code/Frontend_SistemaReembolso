@@ -169,7 +169,7 @@ const Historico: React.FC = () => {
   return (
     <View style={styles.container}>
       <Header />
-      {despesasFiltradas.length === 0 && (
+      {despesasFiltradasUsuario.length === 0 && (
         <Text style={{ textAlign: 'center', marginTop: 20, color: 'gray' }}>
           Nenhuma despesa encontrada.
         </Text>
