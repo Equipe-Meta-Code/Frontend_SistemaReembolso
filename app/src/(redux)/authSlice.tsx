@@ -8,6 +8,7 @@ interface User {
     name: string;
     email: string;
     password: string;
+    profileImage?: string;
 }
 
 // Definindo o tipo do estado de autenticação
@@ -49,11 +50,26 @@ const authSlice = createSlice({
         setUserAction: (state, action: PayloadAction<User | null>) => {
             state.user = action.payload;
         },
+        setProfileImage: (state, action: PayloadAction<string>) => {
+            if (state.user) {
+              state.user = { ...state.user, profileImage: action.payload };
+              AsyncStorage.setItem("userInfo", JSON.stringify(state.user)).catch((error) =>
+                console.error("Erro ao salvar imagem no AsyncStorage", error)
+              );
+            }
+        },
     },
+    extraReducers: (builder) => {
+        builder.addCase(loadUser.fulfilled, (state, action: PayloadAction<User | null>) => {
+          if (action.payload) {
+            state.user = action.payload;
+          }
+        });
+    }
 });
 
 // Gerando as ações a partir do slice
-export const { loginUserAction, logoutAction, setUserAction } = authSlice.actions;
+export const { loginUserAction, logoutAction, setUserAction, setProfileImage } = authSlice.actions;
 
 // Exportando o reducer
 export const authReducer = authSlice.reducer;
