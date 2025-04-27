@@ -7,7 +7,6 @@ import { styles } from "../../styles/historico.styles";
 import api from "../../services/api";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
-import api from "../../api";
 import api2 from "../../services/api";
 
 interface Despesa {

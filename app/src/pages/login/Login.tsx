@@ -46,7 +46,7 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await api2.post('/login', { email, password });
+            const response = await api.post('/login', { email, password });
             const user = response.data;
 
             dispatch(loginUserAction(user));
