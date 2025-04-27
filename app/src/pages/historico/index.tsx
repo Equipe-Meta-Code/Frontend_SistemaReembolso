@@ -169,6 +169,32 @@ const Historico: React.FC = () => {
   return (
     <View style={styles.container}>
       <Header />
+      <View style={styles.cardInformacoes}>
+        <View>
+          <Text style={{ fontWeight: 'bold' }}>Informações</Text>
+        </View>
+        <View>
+          <View>
+            <Text>Despesas totais: 8</Text>
+          </View>
+          <View>
+            <Text>Valor das despesas: 800</Text>
+          </View>
+          <View>
+            <Text>Despesas Pendentes: 3</Text>
+          </View>
+          <View>
+            <Text>Valor das despesas pendentes: 300</Text>
+          </View>
+          <View>
+            <Text>Despesas despesas recusadas: 4</Text>
+          </View>
+          <View>
+            <Text>Valor das despesas recusadas: 500</Text>
+          </View>
+        </View>
+      </View>
+
       {despesasFiltradasUsuario.length === 0 && (
         <Text style={{ textAlign: 'center', marginTop: 20, color: 'gray' }}>
           Nenhuma despesa encontrada.

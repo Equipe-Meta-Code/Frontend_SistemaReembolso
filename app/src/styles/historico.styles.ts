@@ -27,6 +27,25 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  //inicio do card pra desenvolver
+  cardInformacoes:{
+    display: "flex",
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'flex-start',
+    textAlign: 'left',
+    width: 200,
+
+  },
+  cardTitulo : {
+    
+  },
+  cardDescricoes : {
+
+  },
+  //final do card
+  
   backButton: {
     marginRight: 15,
   },
