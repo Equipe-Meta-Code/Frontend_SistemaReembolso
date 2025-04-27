@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const COLUMN_WIDTHS = {
-  data: 90,
+  data: 78,
   projeto: 100,
   descricao: 120,
   valor: 90,
@@ -22,30 +22,69 @@ export const styles = StyleSheet.create({
   header: {
     backgroundColor: "#1E4DB7",
     padding: 20,
-    paddingTop: 50,
+    paddingTop: 60,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
-  //inicio do card pra desenvolver
-  cardInformacoes:{
-    display: "flex",
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'flex-start',
-    textAlign: 'left',
-    width: 200,
 
+  // card de resumo no topo da tela
+  cardInformacoes: {
+    backgroundColor: "rgb(247, 247, 247)", 
+    borderRadius: 10,            
+    padding: 12,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    elevation: 3,
+  },  
+  totalTitle: {
+    fontSize: 14,
+    color: "#7F8C8D",
+    marginBottom: 4,
   },
-  cardTitulo : {
-    
+  totalValue: {
+    fontSize: 26,
+    color: "rgb(43, 66, 143)",
+    marginBottom: 4,
+    fontWeight: "bold",
   },
-  cardDescricoes : {
+  pendingValue: {
+    color: "rgb(179, 129, 3)", 
+    fontSize: 15,
+  },
+  approvedValue: {
+    color: "rgb(20, 148, 49)", 
+    fontSize: 15,
+  },  
+  rejectedValue: {
+    color: "rgb(185, 0, 0)",
+    fontSize: 15,
+  },
+  subText: {
+    fontSize: 13,
+    color: "#7F8C8D",
+  },
+  cardRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  rightColumn: {
+    justifyContent: "center",
+    marginRight: 10,
+  }, 
+  statusItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  statusLabel: {
+    fontSize: 12,
+    color: "#2C3E50", 
+  },
 
-  },
-  //final do card
-  
+
   backButton: {
     marginRight: 15,
   },
@@ -60,7 +99,7 @@ export const styles = StyleSheet.create({
 
   // Seção de Despesas
   section: {
-    marginVertical: 10,
+    marginVertical: 5,
     paddingHorizontal: 15,
   },
   sectionHeader: {
