@@ -45,6 +45,7 @@ const PacotesScreen = ({ route }: any) => {
   const [nomeProjeto, setNomeProjeto] = useState('');
   const userId = useSelector((state: RootState) => state.auth.user?.userId);
   const [statusSelecionado, setStatusSelecionado] = useState<string | null>(null);
+  const [resetarExpandido, setResetarExpandido] = useState(false);
 
   const fetchPacotesDespesas = async () => {
     try {
@@ -106,6 +107,19 @@ const PacotesScreen = ({ route }: any) => {
       };
     }, [])
   );  
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // quando entra na tela, os cards estão fechados
+      setResetarExpandido(true);
+      setTimeout(() => setResetarExpandido(false), 0);
+  
+      return () => {
+        // quando sai da tela, os cards fecham
+        setResetarExpandido(true);
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -169,6 +183,7 @@ const PacotesScreen = ({ route }: any) => {
                   userId={item.userId} 
                   status={item.status} 
                   fetchPacotesDespesas={fetchPacotesDespesas}
+                  resetarExpandido={resetarExpandido}
                 />
               </View>
             );

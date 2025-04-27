@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import api from '../../services/api';
 export interface Despesa {
@@ -22,9 +22,10 @@ export interface Despesa {
 
   interface PacoteCardProps extends Pacote {
     fetchPacotesDespesas: () => void;
-  }
+    resetarExpandido: boolean;
+  }  
 
-  const PacoteCard: React.FC<PacoteCardProps> = ({ nome, despesas, status, pacoteId, fetchPacotesDespesas }) => { 
+  const PacoteCard: React.FC<PacoteCardProps> = ({ nome, despesas, status, pacoteId, fetchPacotesDespesas, resetarExpandido }) => {
     
       const [isSolicitando, setIsSolicitando] = useState(false);
       const [expandido, setExpandido] = useState(false);  
@@ -123,6 +124,12 @@ export interface Despesa {
 
     const totalGasto = despesas?.reduce((acc, curr) => acc + curr.valor_gasto, 0) || 0;
   
+    useEffect(() => {
+      if (resetarExpandido) {
+        setExpandido(false);
+      }
+    }, [resetarExpandido]);
+    
     return (
       <TouchableOpacity onPress={() => setExpandido(!expandido)} activeOpacity={1}>
         <View style={styles.card}>
