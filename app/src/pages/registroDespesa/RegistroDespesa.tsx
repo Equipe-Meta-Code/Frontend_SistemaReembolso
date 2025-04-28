@@ -14,6 +14,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { themas } from '../../global/themes';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
+const KM_PER_LITER = 10; // litro fixo para exemplos
 
 const RegistroDespesa = () => {
   const [error, setError] = useState("");
@@ -256,6 +257,8 @@ const RegistroDespesa = () => {
 
   useEffect(() => {
     fetchData();
+    const interval = setInterval(fetchData, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -281,7 +284,11 @@ const RegistroDespesa = () => {
   const handleKmChange = (value: string) => {
     setKm(value);
     const parsed = parseFloat(value.replace(',', '.')) || 0;
-    setKmCost(parsed * GAS_PRICE);
+    
+    const litersConsumed = parsed / KM_PER_LITER;
+    const cost = litersConsumed * GAS_PRICE;
+  
+    setKmCost(cost);
   };
 
   const handleSubmit = async () => {
