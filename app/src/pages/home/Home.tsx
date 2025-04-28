@@ -4,9 +4,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ProjectCard from '../../components/home/ProjectCard';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import api from '../../api'; 
+import api from '../../services/api';
 import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
+import { themas } from '../../global/themes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Foto from '../../com../../components/foto/Foto';
 
 interface Project {
   id: string;
@@ -26,49 +29,90 @@ type RootStackParamList = {
 };
 
 const Home: React.FC = () => {
+  const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [despesas, setDespesas] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const user = useSelector((state: RootState) => state.auth.user);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
+  //buscar projetos e despesas do usuário
+  const fetchProjectsAndDespesas = async () => {
+    try {
       setLoading(true);
-      try {
-        const response = await api.get('/projetos'); 
-        const data = response.data;
-        const userId = user?.userId?.toString();
-        const userProjects = data[0].projects.filter((project: { funcionarios: { id: string }[] }) => 
-          project.funcionarios.some((funcionario) => funcionario.id === userId)
-        );
+      const [projectRes, despesaRes] = await Promise.all([
+        api.get('/projeto'),
+        api.get('/despesa')
+      ]);
 
-        const formattedProjects: Project[] = userProjects.map((project: any) => ({
-          id: project.id,
-          name: project.name,
-          descricao: project.descricao,
-          department: project.departamentos?.map((dep: any) => dep.nome).join(', ') || '',
-          category: project.categorias?.map((cat: any) => cat.nome) || [],
-          total: project.categorias?.reduce((acc: number, cat: any) => acc + (cat.valor_maximo || 0), 0) || 0,
-          spent: 0,
-        }));
+      const allProjects = projectRes.data;
+      const allDespesas = despesaRes.data;
+      const userId = Number(user?.userId);
 
-        setProjects(formattedProjects);
-      } catch (error) {
-        console.error('Erro ao buscar projetos:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const userProjects = allProjects.filter((project: any) =>
+        project.funcionarios?.some((func: any) => String(func.userId) === String(userId))
+      );
 
-    fetchProjects();
+      const formattedProjects: Project[] = userProjects.map((project: any) => ({
+        id: project.projetoId,
+        name: project.nome,
+        descricao: project.descricao,
+        department: project.departamentos?.map((dep: any) => dep.nome).join(', ') || '',
+        category: project.categorias?.map((cat: any) => cat.nome) || [],
+        total: project.categorias?.reduce((acc: number, cat: any) => acc + (cat.valor_maximo || 0), 0) || 0,
+        spent: 0,
+      }));
+
+      const projetoIds = formattedProjects.map(p => p.id);
+
+      const totalPorProjeto = allDespesas
+        .filter((d: any) => projetoIds.includes(d.projetoId))
+        .reduce((acc: { [key: number]: number }, d: any) => {
+          if (!acc[d.projetoId]) acc[d.projetoId] = 0;
+          acc[d.projetoId] += d.valor_gasto;
+          return acc;
+        }, {});
+
+      const projetosAtualizados = formattedProjects.map(p => ({
+        ...p,
+        spent: Number((totalPorProjeto[p.id] || 0).toFixed(2))
+      }));
+
+      setProjects(projetosAtualizados);
+    } catch (error) {
+      console.error('Erro ao buscar projetos e despesas:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectsAndDespesas();
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <Text style={styles.title}>Welcome!</Text>
+        <Text style={styles.title}>Bem vindo(a)!</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-          <Image source={require('../../assets/perfil.png')} style={styles.image} />
+          {user ? (
+            <Foto
+                tipo="user"
+                tipoId={+user.userId}
+                width={50}
+                height={50}
+                borderRadius={25}
+                borderWidth={3}
+                borderColor="#fff"
+                refreshKey={user.profileImage}
+                fallbackSource={require('../../assets/perfil.png')}
+            />
+            ) : (
+            <Image
+                source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
+                style={styles.image}
+            />
+          )}
         </TouchableOpacity>
       </View>        
       
@@ -81,6 +125,10 @@ const Home: React.FC = () => {
             data={projects}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <ProjectCard project={item} />}
+            
+            //pull-to-refresh
+            refreshing={loading}
+            onRefresh={fetchProjectsAndDespesas}
           />
         )}
       </View>
@@ -99,7 +147,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-    backgroundColor: '#1F48AA',
+    paddingTop: 50,
+    backgroundColor: themas.colors.primary,
     width: '100%',
   },
   title: {

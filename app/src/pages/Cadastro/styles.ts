@@ -1,4 +1,5 @@
 import { StyleSheet,Dimensions} from "react-native";
+import { themas } from "../../global/themes";
 
 
 export const style = StyleSheet.create({
@@ -10,7 +11,7 @@ export const style = StyleSheet.create({
     boxTop:{
         height:Dimensions.get('window').height/5,
         width:'100%',
-        backgroundColor:'#1F48AA',
+        backgroundColor:themas.colors.primary,
         alignItems:'flex-start',
         justifyContent:'center',
         borderBottomLeftRadius: 20,
@@ -58,44 +59,13 @@ export const style = StyleSheet.create({
         textAlign: 'left',  
         marginTop: 10, 
     },
-    inputTitle: {
-        paddingTop:5,
-        fontSize: 16,
-        color: 'black',
-        marginTop: 20, 
-        alignSelf: 'flex-start', 
-        marginLeft: 0, 
-    },
-    input: {
-        width: '100%',
-        height: 40, 
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingLeft: 10,
-        marginTop: 5,
-        borderColor: '#D3D3D3',
-    },
     forgotPassword: {
         paddingTop:10,
-        color: '#1F48AA', 
+        color: themas.colors.primary, 
         fontSize: 14,
         marginTop: 10,
         textAlign: 'center',
         textDecorationLine: 'underline', 
-    },
-    loginButton: {
-        marginTop: 20,
-        backgroundColor: '#1F48AA', 
-        paddingVertical: 16,
-        paddingHorizontal: 50,
-        borderRadius: 25, 
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    loginButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
     },
     lineContainer: {
         flexDirection: 'row',
@@ -106,21 +76,8 @@ export const style = StyleSheet.create({
     noAccountText: {
         paddingTop:20,
         fontSize: 16,
-        color: '#D3D3D3', 
+        color: themas.colors.grey,    
         textAlign: 'center', 
-    },
-    signupButton: {
-        backgroundColor: '#1F48AA', 
-        paddingVertical: 19,
-        paddingHorizontal: 126,
-        borderRadius: 25, 
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    signupButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
     },
     checkboxContainer: {
         flexDirection: 'row',
@@ -143,5 +100,18 @@ export const style = StyleSheet.create({
     eyeIcon: {
         marginLeft: -30, 
     },
-    
+    errorContainer: {
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 10,
+        backgroundColor: "#FFCCCC", // Fundo vermelho claro
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: "#FF0000", // Borda vermelha
+      },
+      errorMessage: {
+        color: "#FF0000", // Cor do texto vermelho
+        fontSize: 14,
+        fontWeight: 'bold',
+      }
 })

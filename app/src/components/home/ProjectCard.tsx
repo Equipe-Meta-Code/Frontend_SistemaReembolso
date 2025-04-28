@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { themas } from "../../global/themes";
 
 export interface Project {
   id: string;
@@ -15,7 +16,7 @@ export interface Project {
 }
 
 type RootStackParamList = {
-  Historico: { projectId: string };
+  Pacotes: { projectId: string };
 };
 
 const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
@@ -24,9 +25,9 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const valueLeft = project.total - project.spent;
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Historico', { projectId: project.name })}>
+    <TouchableOpacity onPress={() => navigation.navigate('Pacotes', { projectId: project.id })}>
       <View style={styles.card}>
-        
+
         {project.department && (
           <View style={styles.departmentContainer}>
             {project.department.split(',').map((department, index) => (
@@ -41,12 +42,25 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
         {project.descricao && <Text style={styles.cardDescription}>{project.descricao}</Text>}
 
-        <Text>Limite de Gastos: R${project.total?.toFixed(2) ?? '0.00'}</Text>
+        <Text>Limite de Gastos: R${project.total?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
 
-        <ProgressBar progress={progress} color="#1F48AA" style={styles.progressBar} />
+        <ProgressBar 
+          progress={progress} 
+          color={valueLeft >= 0 ? "#1F48AA" : "rgba(224, 7, 7, 0.8)"} 
+          style={styles.progressBar} 
+        />
+
 
         <Text>
-          Gasto: R${project.spent?.toFixed(2) ?? '0.00'} / Restante: R${valueLeft?.toFixed(2) ?? '0.00'}
+          Gasto: R$
+          {project.spent?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) ?? '0,00'}
+          {valueLeft >= 0 ? (
+            <> / Restante: R${valueLeft.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</>
+          ) : (
+            <> / <Text style={{ color: 'rgb(206, 4, 4)' }}>
+              Limite Ultrapassado: R${Math.abs(valueLeft).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            </Text></>
+          )}
         </Text>
 
         <Text style={styles.category}>

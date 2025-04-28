@@ -1,10 +1,11 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { themas } from "../../global/themes";
 
 export const style = StyleSheet.create({
     container: {
         width: "100%",
         height: "100%",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: themas.colors.secondary,
         padding: 0,
         display: "flex",
         flexDirection: "column",
@@ -13,7 +14,7 @@ export const style = StyleSheet.create({
     corTopo:{
         width: "100%",
         height: 140,
-        backgroundColor: "#1F48AA",
+        backgroundColor: themas.colors.primary,
         position: "absolute",
         borderRadius: 20,
     },
@@ -37,7 +38,7 @@ export const style = StyleSheet.create({
         height: 150,
         borderRadius: 100,
         borderWidth: 3,
-        borderColor: "#FFFFFF",
+        borderColor: themas.colors.secondary,
     },
     nomeFuncionario: {
         fontSize: 28,
@@ -71,7 +72,7 @@ export const style = StyleSheet.create({
     containerBotoes: {
         marginTop: 10,
         width: "90%",
-        backgroundColor: "#ffffff",
+        backgroundColor: themas.colors.secondary,
         borderRadius: 12,
         padding: 5,
         shadowColor: "#000",
@@ -86,7 +87,7 @@ export const style = StyleSheet.create({
         width: "100%",
         height: 50,
         borderRadius: 8,
-        backgroundColor: "#ffffff",
+        backgroundColor: themas.colors.secondary,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",

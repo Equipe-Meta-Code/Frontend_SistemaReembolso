@@ -1,4 +1,5 @@
 import { StyleSheet} from "react-native";
+import { themas } from "../../global/themes";
 
 export const styles = StyleSheet.create({
     datePickerButton: {
@@ -6,7 +7,7 @@ export const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: 'gray',
         borderRadius: 8,
-        backgroundColor: '#FFFFFF',
+        backgroundColor:themas.colors.secondary,
         height: 50,
         marginTop: 12,
       },

@@ -1,12 +1,13 @@
 import { StyleSheet} from "react-native";
+import { themas } from "../../global/themes";
 
 export const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: themas.colors.secondary,
     },
     boxTop: {
-        backgroundColor: '#1f4baa',
-        height: '30%',
+        backgroundColor: themas.colors.primary,
+        height: '28%',
     },
     boxTitle: {
         alignItems: 'center',
@@ -24,22 +25,22 @@ export const styles = StyleSheet.create({
     },
     arrow: {
       fontSize: 24,
-      color: '#FFFFFF',
+      color: themas.colors.secondary,
       paddingLeft: '7%',
       paddingTop: '12%',
     },
     title: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 32,
         fontWeight: 'bold', 
       },
     subTitle: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 16,
         marginTop: 12,
     },
     textTop: {
-        color: '#FFFFFF',
+        color: themas.colors.secondary,
         fontSize: 16,
     },
     textBottom: {
@@ -100,7 +101,7 @@ export const styles = StyleSheet.create({
       image: {
         marginTop: 12,
         fontSize: 140,
-        color: '#1f4baa',
+        color: themas.colors.primary,
         margin: 'auto',
       },
       teste: {
@@ -108,14 +109,14 @@ export const styles = StyleSheet.create({
         
       },
       button: {
-        backgroundColor: '#1f4baa',
+        backgroundColor: themas.colors.primary,
         paddingVertical: 18,
         borderRadius: 25,
         alignItems: 'center',
         marginTop: 20,           
       },
       buttonText: {
-        color: '#fff',
+        color: themas.colors.secondary,
         fontSize: 16,
         fontWeight: 'bold',
       },
@@ -129,6 +130,13 @@ export const styles = StyleSheet.create({
         borderColor: '#f5c6cb',
         margin: 'auto',
       },
+      pacoteErrorMessage: {
+        marginTop: 16,
+        padding: 10,
+        borderRadius: 8,
+        color: 'red',
+        margin: 'auto',
+      },
       successMessage: {
         color: '#155724',
         backgroundColor: '#d4edda',
@@ -138,5 +146,60 @@ export const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 8,
         margin: 'auto',
+      },
+      progressBar: {
+        marginTop: 12,
+        height: 18,
+        borderRadius: 5,
+        backgroundColor: '#e0e0e0',
+        overflow: 'hidden',
+      },
+      progressBarFill: {
+        height: '100%',
+      },
+      progressBarText: {
+        position: 'absolute',
+        width: '100%',
+        textAlign: 'center',
+        fontWeight: 'bold',
+      },
+      progressBarPorcentent: {
+        textAlign: 'center',
+        justifyContent: 'center',
+        marginTop: 6,
+        fontSize: 16,
+      },
+      limit: {
+        color: 'red',
+        fontSize: 16,
+        marginTop: 6,
+      },
+      aviso: {
+        color: 'gray',
+        fontSize: 16,
+        marginTop: 6,
+      },
+
+      link: {
+        color: '#1f4baa',
+        marginTop: 8,
+        textDecorationLine: 'underline',
+      },
+      
+      smallButton: {
+        backgroundColor: '#1f4baa',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginTop: 8,
+      },
+      
+      inputNome: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        marginTop: 8,
       }
+      
 });
