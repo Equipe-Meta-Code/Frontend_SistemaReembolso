@@ -123,7 +123,11 @@ const Historico: React.FC = () => {
     ? despesasFiltradasUsuario.filter((d) => String(d.projetoId) === String(projectId))
     : despesasFiltradasUsuario
 
-    const despesasAgrupadas = despesasDoProjeto.reduce((acc: any[], despesa) => {
+  const despesasOrdenadas = [...despesasDoProjeto].sort((a, b) => {
+    return new Date(b.data).getTime() - new Date(a.data).getTime();
+  });
+
+    const despesasAgrupadas = despesasOrdenadas.reduce((acc: any[], despesa) => {
       const nomeProjeto = getNomeProjeto(String(despesa.projetoId));
       const nomeCategoria = getNomeCategoria(despesa.categoria); // 👈 Pega o nome correto aqui
       
