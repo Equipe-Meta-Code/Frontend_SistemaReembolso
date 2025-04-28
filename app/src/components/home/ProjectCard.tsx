@@ -44,7 +44,12 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
         <Text>Limite de Gastos: R${project.total?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
 
-        <ProgressBar progress={progress} color="#1F48AA" style={styles.progressBar} />
+        <ProgressBar 
+          progress={progress} 
+          color={valueLeft >= 0 ? "#1F48AA" : "rgba(224, 7, 7, 0.8)"} 
+          style={styles.progressBar} 
+        />
+
 
         <Text>
           Gasto: R$
@@ -52,7 +57,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           {valueLeft >= 0 ? (
             <> / Restante: R${valueLeft.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</>
           ) : (
-            <> / <Text style={{ color: 'red' }}>
+            <> / <Text style={{ color: 'rgb(206, 4, 4)' }}>
               Limite Ultrapassado: R${Math.abs(valueLeft).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </Text></>
           )}

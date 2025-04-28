@@ -19,6 +19,7 @@ const RegistroDespesa = () => {
   const [error, setError] = useState("");
   const [pacoteError, setPacoteError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showLimitMessage, setShowLimitMessage] = useState(false);
   const [category, setCategory] = useState("");
   const [selectedProject, setSelectedProject] = useState("");
   const [categoriesByProject, setCategoriesByProject] = useState<{ [key: string]: { label: string; value: string }[] }>({});
@@ -76,8 +77,8 @@ const RegistroDespesa = () => {
           const userProjects = projetos.filter((project: any) =>
             project.funcionarios?.some((func: any) => func.userId === userId)
           );          
-          console.log('projetos', projetos)
-          console.log('user projetos', userProjects)
+          /* console.log('projetos', projetos)
+          console.log('user projetos', userProjects) */
 
           setAllProjects(userProjects);
 
@@ -109,14 +110,14 @@ const RegistroDespesa = () => {
         try {
           const response = await api.get('/pacote');
           const pacotes: Pacote[] = response.data;
-          console.log(pacotes)
+          /* console.log(pacotes) */
 
           // Filtra os pacotes
           const pacotesFiltrados = pacotes.filter(
             (pacote) =>
               pacote.userId.toString() === user?.userId.toString() &&
               pacote.projetoId.toString() === projetoId &&
-              pacote.status === "rascunho"
+              pacote.status === "Rascunho"
           );
       
           // Formata os pacotes filtrados para o dropdown
@@ -248,13 +249,10 @@ const RegistroDespesa = () => {
         setAmount("");
         setAmountFormatted(0);
     };
+    
     const handlePacoteChange = (value: string) => {
       setSelectedPacote(value);
-  const [kmCost, setKmCost] = useState(0);
-  const [km, setKm] = useState('');
-  };
-  
-  // Para criar um novo pacote de despesas
+    };
 
   useEffect(() => {
     fetchData();
@@ -343,7 +341,7 @@ const RegistroDespesa = () => {
         aprovacao: "Pendente",
         km: categoryName === 'Transporte' ? parseFloat(km.replace(',', '.')) : undefined,
       });
-      console.log(response.data);
+      /* console.log(response.data); */
       setSuccessMessage("Despesa cadastrada com sucesso!");
 
       setTimeout(() => {
@@ -356,6 +354,7 @@ const RegistroDespesa = () => {
         setSuccessMessage("");
         setKm("");
         setCategoryName("");
+        setTotalGastoCategoria(0);
       }, 1500);
     } catch (error) {
       console.error("Erro ao cadastrar despesa:", error);
@@ -363,6 +362,24 @@ const RegistroDespesa = () => {
     }
   };
 
+  const newAmount = categoryName === 'Transporte'
+  ? kmCost
+  : amountFormatted;
+  const projectedTotal = totalGastoCategoria + newAmount;
+  const fillPercent = Math.min((projectedTotal / valor_maximo) * 100, 100);
+
+  useEffect(() => {
+    if (totalGastoCategoria > valor_maximo) {
+      setShowLimitMessage(true);
+  
+      const timer = setTimeout(() => {
+        setShowLimitMessage(false);
+      }, 20000); 
+  
+      return () => clearTimeout(timer); 
+    }
+  }, [totalGastoCategoria, valor_maximo]);
+  
   return (
     <>
       <ScrollView
@@ -473,31 +490,42 @@ const RegistroDespesa = () => {
             onValueChange={handleDateChange}
           />
 
-          {totalGastoCategoria > valor_maximo ?
+          {totalGastoCategoria > valor_maximo && showLimitMessage && (
             <Text style={styles.limit}>O valor máximo já foi atingido. Caso deseje continuar,
-              por favor insira uma descrição justificando a despesa.</Text> : null}
+              por favor insira uma descrição justificando a despesa.</Text>
+          )}
 
             {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
               <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar, 
                 por favor insira uma descrição justificando a despesa.</Text>}
   
           {selectedProject && category && 
-          <>
-            <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
-            <View style={styles.progressBar}>
-              <View style={[styles.progressBarFill, { width: `${(totalGastoCategoria / valor_maximo) * 100}%` },
-               {
-                backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : themas.colors.primary,
-              },]} />
-              <Text style={styles.progressBarText}>
-                {`R$ ${totalGastoCategoria} / R$ ${valor_maximo}`}
+            <>
+              <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
+              <View style={styles.progressBar}>
+                <View
+                  style={[
+                    styles.progressBarFill,
+                    { width: `${fillPercent}%` },
+                    {
+                      backgroundColor:
+                        projectedTotal > valor_maximo
+                          ? '#E55451'
+                          : themas.colors.primary,
+                    },
+                  ]}
+                />
+                <Text style={styles.progressBarText}>
+                  {`R$ ${projectedTotal.toFixed(2)} / R$ ${valor_maximo}`}
+                </Text>
+              </View>
+              <Text style={styles.progressBarPorcentent}>
+                {projectedTotal > valor_maximo
+                  ? 'Limite excedido!'
+                  : `Você está em ${((projectedTotal / valor_maximo) * 100).toFixed(0)}% do limite.`}
               </Text>
-            </View>
-            <Text style={styles.progressBarPorcentent}>
-                {totalGastoCategoria > valor_maximo ? "Limite excedido!" : 
-                  `Você já gastou ${((totalGastoCategoria / valor_maximo) * 100).toFixed(0)}% do valor permitido.`}
-              </Text>
-            </>}
+            </>
+          }
 
           <Text style={styles.textBottom}>Descrição</Text>
           <TextInput

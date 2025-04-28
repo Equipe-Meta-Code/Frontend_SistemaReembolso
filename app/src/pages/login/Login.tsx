@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { style } from "./styles";
-import { Text, View, Image, Alert, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
+import { Text, View, Image, Alert, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserAction } from "../../(redux)/authSlice";
 import api from "../../services/api";
-import{Input} from "../../components/Input/index"
+import { Input } from "../../components/Input/index"
 import { ButtonCustom } from "../../components/customButton";
 
 export default function Login() {
@@ -15,7 +15,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); 
+    const [showPassword, setShowPassword] = useState(false);
     const [emailValido, setEmailValido] = useState(true);
     const [formInvalido, setFormInvalido] = useState(false);
 
@@ -53,7 +53,6 @@ export default function Login() {
 
             setTimeout(() => {
                 if (user.token) {
-                    Alert.alert('Sucesso', 'Logado com sucesso!');
                     navigation.navigate('BottomRoutes');
                 } else {
                     Alert.alert('Erro', 'Usuário não foi encontrado');
@@ -88,76 +87,48 @@ export default function Login() {
                     {/* Email */}
                     <Input
                         value={email}
-                        onChangeText={(text) => {
-                            setEmail(text);
-                            console.log("Email digitado:", text);
-                          }}
-                          
+                        onChangeText={text => {
+                            if (formInvalido) setFormInvalido(false);
+                            validarEmail(text);
+                        }}
+                        error={(formInvalido && !email) || (!emailValido && !!email)}
                         title="Email"
                         iconRightName="email"
                         IconRigth={MaterialIcons}
                         placeholder="Digite seu e-mail"
                     />
-                    {/* <Text style={style.inputTitle}>Email</Text>
-                    <TextInput
-                        style={[style.input, (!emailValido || (formInvalido && !email)) && style.erroInput]}
-                        placeholder="Digite seu e-mail"
-                        placeholderTextColor="gray"
-                        value={email}
-                        onChangeText={setEmail}
-                    /> */}
-
                     {/* Senha */}
                     <Input
                         value={password}
                         onChangeText={(text) => {
+                            if (formInvalido) setFormInvalido(false);
                             setPassword(text);
-                            console.log("Senha digitada:", text);
-                          }}
-                          
+                        }}
+                        error={formInvalido && !password}
                         title="Senha"
-                        secureTextEntry={showPassword}
-                        iconRightName={showPassword?"visibility-off":"visibility"}
+                        secureTextEntry={!showPassword}
+                        iconRightName={showPassword ? "visibility-off" : "visibility"}
                         IconRigth={MaterialIcons}
                         onIconRigthPress={() => setShowPassword(!showPassword)}
-                        placeholder="Digite seu e-mail"
+                        placeholder="Digite sua senha"
                     />
-                    {/* <Text style={style.inputTitle}>Senha</Text>
-                    <View style={style.passwordContainer}>
-                        <TextInput
-                            style={[style.input, (formInvalido && !password) && style.erroInput]}
-                            placeholder="Digite sua senha"
-                            placeholderTextColor="gray"
-                            secureTextEntry={!showPassword}
-                            value={password}
-                            onChangeText={setPassword}
-                        />
-                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                            <MaterialIcons
-                                name={showPassword ? "visibility-off" : "visibility"}
-                                size={24}
-                                color="#888"
-                                style={style.eyeIcon}
-                            />
-                        </TouchableOpacity>
-                    </View> */}
 
                     <Text style={style.forgotPassword}>Esqueceu a senha?</Text>
 
-                    <ButtonCustom 
-                        title="Login" 
-                        onPress={() => getLogin()} 
+                    <ButtonCustom
+                        title="Login"
+                        onPress={() => getLogin()}
                         loading={loading}
                     />
 
-                                        {/* Texto "Ainda não possuo uma conta" no meio da linha */}
-                                        <View style={style.lineContainer}>
+                    {/* Texto "Ainda não possuo uma conta" no meio da linha */}
+                    <View style={style.lineContainer}>
                         <Text style={style.noAccountText}>Ainda não possuo uma conta</Text>
                     </View>
 
                     {/* Botão "Cadastre-se" */}
-                    <ButtonCustom 
-                        title="Cadastre-se" 
+                    <ButtonCustom
+                        title="Cadastre-se"
                         onPress={() => navigation.navigate("Cadastro")}
                     />
 

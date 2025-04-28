@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const COLUMN_WIDTHS = {
-  data: 90,
+  data: 78,
   projeto: 100,
   descricao: 120,
   valor: 90,
@@ -22,11 +22,69 @@ export const styles = StyleSheet.create({
   header: {
     backgroundColor: "#1E4DB7",
     padding: 20,
-    paddingTop: 50,
+    paddingTop: 60,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
+
+  // card de resumo no topo da tela
+  cardInformacoes: {
+    backgroundColor: "rgb(247, 247, 247)", 
+    borderRadius: 10,            
+    padding: 12,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    elevation: 3,
+  },  
+  totalTitle: {
+    fontSize: 14,
+    color: "#7F8C8D",
+    marginBottom: 4,
+  },
+  totalValue: {
+    fontSize: 26,
+    color: "rgb(43, 66, 143)",
+    marginBottom: 4,
+    fontWeight: "bold",
+  },
+  pendingValue: {
+    color: "rgb(179, 129, 3)", 
+    fontSize: 15,
+  },
+  approvedValue: {
+    color: "rgb(20, 148, 49)", 
+    fontSize: 15,
+  },  
+  rejectedValue: {
+    color: "rgb(185, 0, 0)",
+    fontSize: 15,
+  },
+  subText: {
+    fontSize: 13,
+    color: "#7F8C8D",
+  },
+  cardRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  rightColumn: {
+    justifyContent: "center",
+    marginRight: 10,
+  }, 
+  statusItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  statusLabel: {
+    fontSize: 12,
+    color: "#2C3E50", 
+  },
+
+
   backButton: {
     marginRight: 15,
   },
@@ -41,7 +99,7 @@ export const styles = StyleSheet.create({
 
   // Seção de Despesas
   section: {
-    marginVertical: 10,
+    marginVertical: 5,
     paddingHorizontal: 15,
   },
   sectionHeader: {
@@ -68,7 +126,7 @@ export const styles = StyleSheet.create({
     color: "#2C3E50",
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "bold",
     color: "#FFF",
   },
@@ -82,7 +140,7 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
   },
   headerText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
     color: "#2C3E50",
@@ -103,13 +161,13 @@ export const styles = StyleSheet.create({
   
   data: {
     width: COLUMN_WIDTHS.data,
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
     textAlign: "center",
   },
   tipoDespesa: {
     width: COLUMN_WIDTHS.projeto,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
     color: "#2C3E50",
@@ -117,12 +175,12 @@ export const styles = StyleSheet.create({
   valor: {
     width: COLUMN_WIDTHS.valor,
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#2C3E50",
   },
   status: {
-    fontSize: 16,
+    fontSize: 14,
     width: COLUMN_WIDTHS.status,
     fontWeight: "bold",
     textAlign: "center",
@@ -158,7 +216,7 @@ export const styles = StyleSheet.create({
   },
   circleText: {
     color: "#1E4DB7",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "bold",
   },
   textContainer: {
@@ -168,16 +226,18 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#FFF",
     textAlign: "center", 
     flex: 1, 
+    marginLeft: 15,
   },
   buttonValue: {
-    fontSize: 18, 
+    fontSize: 16, 
     fontWeight: "bold",
     color: "#FFF",
+    marginRight: 5,
   },
   
 });

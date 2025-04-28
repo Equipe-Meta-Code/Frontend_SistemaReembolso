@@ -7,7 +7,6 @@ import { styles } from "../../styles/historico.styles";
 import api from "../../services/api";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
-import api2 from "../../services/api";
 
 interface Despesa {
   _id: string;
@@ -124,7 +123,11 @@ const Historico: React.FC = () => {
     ? despesasFiltradasUsuario.filter((d) => String(d.projetoId) === String(projectId))
     : despesasFiltradasUsuario
 
-    const despesasAgrupadas = despesasDoProjeto.reduce((acc: any[], despesa) => {
+  const despesasOrdenadas = [...despesasDoProjeto].sort((a, b) => {
+    return new Date(b.data).getTime() - new Date(a.data).getTime();
+  });
+
+    const despesasAgrupadas = despesasOrdenadas.reduce((acc: any[], despesa) => {
       const nomeProjeto = getNomeProjeto(String(despesa.projetoId));
       const nomeCategoria = getNomeCategoria(despesa.categoria); // 👈 Pega o nome correto aqui
       
@@ -166,9 +169,65 @@ const Historico: React.FC = () => {
 
   const totalDespesas = calcularTotal();
 
+  const qtdTotalDespesas = despesasDoProjeto.length;
+  const despesasPendentes = despesasDoProjeto.filter((d) => d.aprovacao === "Pendente");
+  const despesasRecusadas = despesasDoProjeto.filter((d) => d.aprovacao === "Recusado");
+  const despesasAprovadas = despesasDoProjeto.filter((d) => d.aprovacao === "Aprovado");
+
+  const totalPendentesValor = despesasPendentes
+    .reduce((acc, despesa) => acc + despesa.valor_gasto, 0)
+    .toFixed(2)
+    .replace(".", ",");
+
+  const totalRecusadasValor = despesasRecusadas
+    .reduce((acc, despesa) => acc + despesa.valor_gasto, 0)
+    .toFixed(2)
+    .replace(".", ",");
+
+  const totalAprovadasValor = despesasAprovadas
+    .reduce((acc, despesa) => acc + despesa.valor_gasto, 0)
+    .toFixed(2)
+    .replace(".", ",");
+
+  const qtdPendentes = despesasPendentes.length;
+  const qtdRecusadas = despesasRecusadas.length;
+  const qtdAprovadas = despesasAprovadas.length;
+
   return (
     <View style={styles.container}>
       <Header />
+
+      <View style={styles.cardInformacoes}>
+        <View style={styles.cardRow}>
+          
+          {/* Coluna da Esquerda */}
+          <View>
+            <Text style={styles.totalTitle}>Despesas Totais</Text>
+            <Text style={styles.totalValue}>R$ {totalDespesas}</Text>
+            <Text style={styles.subText}>{qtdTotalDespesas} despesas</Text>
+          </View>
+
+          {/* Coluna da Direita */}
+          <View style={styles.rightColumn}>
+            <View style={styles.statusItem}>
+              <Text style={styles.statusLabel}>{qtdPendentes} Pendentes:    </Text>
+              <Text style={styles.pendingValue}>R$ {totalPendentesValor}</Text>
+            </View>
+
+            <View style={styles.statusItem}>
+              <Text style={styles.statusLabel}>{qtdAprovadas} Aprovadas:    </Text>
+              <Text style={styles.approvedValue}>R$ {totalAprovadasValor}</Text>
+            </View>
+
+            <View style={styles.statusItem}>
+              <Text style={styles.statusLabel}>{qtdRecusadas} Recusadas:    </Text>
+              <Text style={styles.rejectedValue}>R$ {totalRecusadasValor}</Text>
+            </View>
+
+          </View>
+        </View>
+      </View>
+
       {despesasFiltradasUsuario.length === 0 && (
         <Text style={{ textAlign: 'center', marginTop: 20, color: 'gray' }}>
           Nenhuma despesa encontrada.
@@ -180,16 +239,6 @@ const Historico: React.FC = () => {
         renderItem={({ item }) => <ExpenseSection {...item} />}
         contentContainerStyle={styles.listContainer}
       />
-
-      <TouchableOpacity style={styles.fixedButton}>
-        <View style={styles.circleButton}>
-          <Text style={styles.circleText}>{dataAtual}</Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.buttonText}>Total de Despesas</Text>
-          <Text style={styles.buttonValue}>R$ {totalDespesas}</Text>
-        </View>
-      </TouchableOpacity>
     </View>
   );
 };

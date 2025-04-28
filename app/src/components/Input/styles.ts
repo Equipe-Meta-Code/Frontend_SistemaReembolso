@@ -1,4 +1,4 @@
-import { StyleSheet,Dimensions} from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 
 export const style = StyleSheet.create({
@@ -6,9 +6,9 @@ export const style = StyleSheet.create({
         paddingTop: 5,
         fontSize: 16,
         color: 'black',
-        marginTop: 20, 
-        alignSelf: 'flex-start', 
-        marginLeft: 10, 
+        marginTop: 20,
+        alignSelf: 'flex-start',
+        marginLeft: 10,
     },
     inputContainer: {
         width: '100%',
@@ -29,5 +29,14 @@ export const style = StyleSheet.create({
     },
     iconRight: {
         marginLeft: 10,
+    },
+    erroInput: {
+        borderColor: 'red',
+    },
+    erroTexto: {
+        color: 'red',
+        fontSize: 12,
+        marginTop: 4,
+        marginBottom: 8,
     },
 });
