@@ -72,8 +72,8 @@ const Perfil = () => {
     
     const handleLogout = () => {
         dispatch(logoutAction());
-        navigation.navigate('Login');
-    };
+        // sem navegar manualmente
+      };
 
     const [despesas, setDespesas] = useState<Despesa[]>([]);
     const [totalFiltrado, setTotalFiltrado] = useState<number>(0);
@@ -142,7 +142,8 @@ const Perfil = () => {
     }, [user?.userId]);
 
     const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
-
+    // Removed duplicate RootStackParamList declaration
+      
     return (
         <View style={style.container}>
             <View style={style.corTopo}></View>
@@ -232,7 +233,7 @@ const Perfil = () => {
             <View style={style.containerBotoes}>
                 <CustomButton
                     titulo="Sair"
-                    onPress={() => handleLogout()}
+                    onPress={handleLogout}
                     iconName="log-out-outline"
                     iconColor="#ff0000"
                     iconSize={40}
