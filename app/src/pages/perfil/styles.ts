@@ -17,6 +17,8 @@ export const style = StyleSheet.create({
         backgroundColor: themas.colors.primary,
         position: "absolute",
         borderRadius: 20,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
     },
     topoPerfil: {
         marginTop: 60,
@@ -110,12 +112,13 @@ export const style = StyleSheet.create({
     },
     containerBotoesTopo: {
         marginTop: 40,
+        marginBottom: 20,
         display: "flex",
         flexDirection: "row",
-        width: "90%",
-        justifyContent: "space-between",
+        width: "100%",
+        justifyContent: "center",
         alignItems: "center",
-      /*   textAlign: "center", */
+        textAlign: "center",
         position: "relative",
     },
     titulo: {
@@ -123,7 +126,6 @@ export const style = StyleSheet.create({
         fontWeight: "bold",
         color: "#000000",
         position: "absolute",
-        left: "50%",
-        transform: [{translateX: -26}],
+        alignSelf: "center",
     },
 });
