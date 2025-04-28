@@ -248,13 +248,10 @@ const RegistroDespesa = () => {
         setAmount("");
         setAmountFormatted(0);
     };
+    
     const handlePacoteChange = (value: string) => {
       setSelectedPacote(value);
-  const [kmCost, setKmCost] = useState(0);
-  const [km, setKm] = useState('');
-  };
-  
-  // Para criar um novo pacote de despesas
+    };
 
   useEffect(() => {
     fetchData();
