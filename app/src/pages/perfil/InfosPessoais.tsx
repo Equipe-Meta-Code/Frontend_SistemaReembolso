@@ -120,21 +120,21 @@ const InfosPessoais = () => {
     return (
         <ScrollView contentContainerStyle={style.container}>
             <View style={style.containerBotoesTopo}>
-                <BotaoInfoPessoal 
+{/*                 <BotaoInfoPessoal 
                     titulo="Cancelar"
                     onPress={() => {
                         Alert.alert('Atenção', 'As alterações não foram salvas!');
                         navigation.navigate('Perfil');
                     }}
-                />
-                <Text style={style.titulo}>Editar</Text>
-                <BotaoInfoPessoal 
+                /> */}
+                <Text style={style.titulo}>Informações Pessoais</Text>
+{/*                 <BotaoInfoPessoal 
                     titulo="OK"
                     onPress={() => {
                         Alert.alert('Atenção', 'Alterações salvas com sucesso!');
                         navigation.navigate('Perfil');
                     }}
-                />
+                /> */}
             </View>
 
             <View style={style.containerBotoes}>
@@ -177,13 +177,13 @@ const InfosPessoais = () => {
                 
                 <CustomButton
                     titulo={`Nome: ${user?.name}`}
-                    onPress={handleEditName}
+                    onPress={() => console.log("Nome")}
                     iconName="chevron-forward"
                     iconColor="#000"
                 />
                 <CustomButton
                     titulo={`Email: ${user?.email}`}
-                    onPress={handleEditEmail}
+                    onPress={() => console.log("Email")}
                     iconName="chevron-forward"
                     iconColor="#000"
                 />
