@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice, PayloadAction, createAsyncThunk  } from "@reduxjs/toolkit";
+import { RootState } from "./store";
 
 // Definindo a estrutura do tipo User
 interface User {
@@ -73,6 +74,10 @@ export const { loginUserAction, logoutAction, setUserAction, setProfileImage } =
 
 // Exportando o reducer
 export const authReducer = authSlice.reducer;
+
+// Selector para saber se o usuário está autenticado
+export const selectIsAuthenticated = (state: RootState) =>
+    Boolean(state.auth.user);  
 
 // Função thunk para carregar o usuário do AsyncStorage
 /* export const loadUser = () => async (dispatch: any) => {

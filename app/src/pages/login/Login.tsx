@@ -53,7 +53,6 @@ export default function Login() {
 
             setTimeout(() => {
                 if (user.token) {
-                    Alert.alert('Sucesso', 'Logado com sucesso!');
                     navigation.navigate('BottomRoutes');
                 } else {
                     Alert.alert('Erro', 'Usuário não foi encontrado');
