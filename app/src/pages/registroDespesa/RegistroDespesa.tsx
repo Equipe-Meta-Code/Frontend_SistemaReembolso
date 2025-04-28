@@ -360,6 +360,12 @@ const RegistroDespesa = () => {
     }
   };
 
+  const newAmount = categoryName === 'Transporte'
+  ? kmCost
+  : amountFormatted;
+  const projectedTotal = totalGastoCategoria + newAmount;
+  const fillPercent = Math.min((projectedTotal / valor_maximo) * 100, 100);
+
   return (
     <>
       <ScrollView
@@ -479,22 +485,32 @@ const RegistroDespesa = () => {
                 por favor insira uma descrição justificando a despesa.</Text>}
   
           {selectedProject && category && 
-          <>
-            <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
-            <View style={styles.progressBar}>
-              <View style={[styles.progressBarFill, { width: `${(totalGastoCategoria / valor_maximo) * 100}%` },
-               {
-                backgroundColor: totalGastoCategoria > valor_maximo ? '#E55451' : themas.colors.primary,
-              },]} />
-              <Text style={styles.progressBarText}>
-                {`R$ ${totalGastoCategoria} / R$ ${valor_maximo}`}
+            <>
+              <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
+              <View style={styles.progressBar}>
+                <View
+                  style={[
+                    styles.progressBarFill,
+                    { width: `${fillPercent}%` },
+                    {
+                      backgroundColor:
+                        projectedTotal > valor_maximo
+                          ? '#E55451'
+                          : themas.colors.primary,
+                    },
+                  ]}
+                />
+                <Text style={styles.progressBarText}>
+                  {`R$ ${projectedTotal.toFixed(2)} / R$ ${valor_maximo}`}
+                </Text>
+              </View>
+              <Text style={styles.progressBarPorcentent}>
+                {projectedTotal > valor_maximo
+                  ? 'Limite excedido!'
+                  : `Você está em ${((projectedTotal / valor_maximo) * 100).toFixed(0)}% do limite.`}
               </Text>
-            </View>
-            <Text style={styles.progressBarPorcentent}>
-                {totalGastoCategoria > valor_maximo ? "Limite excedido!" : 
-                  `Você já gastou ${((totalGastoCategoria / valor_maximo) * 100).toFixed(0)}% do valor permitido.`}
-              </Text>
-            </>}
+            </>
+          }
 
           <Text style={styles.textBottom}>Descrição</Text>
           <TextInput
