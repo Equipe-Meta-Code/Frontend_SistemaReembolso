@@ -19,6 +19,7 @@ const RegistroDespesa = () => {
   const [error, setError] = useState("");
   const [pacoteError, setPacoteError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showLimitMessage, setShowLimitMessage] = useState(false);
   const [category, setCategory] = useState("");
   const [selectedProject, setSelectedProject] = useState("");
   const [categoriesByProject, setCategoriesByProject] = useState<{ [key: string]: { label: string; value: string }[] }>({});
@@ -353,6 +354,7 @@ const RegistroDespesa = () => {
         setSuccessMessage("");
         setKm("");
         setCategoryName("");
+        setTotalGastoCategoria(0);
       }, 1500);
     } catch (error) {
       console.error("Erro ao cadastrar despesa:", error);
@@ -366,6 +368,18 @@ const RegistroDespesa = () => {
   const projectedTotal = totalGastoCategoria + newAmount;
   const fillPercent = Math.min((projectedTotal / valor_maximo) * 100, 100);
 
+  useEffect(() => {
+    if (totalGastoCategoria > valor_maximo) {
+      setShowLimitMessage(true);
+  
+      const timer = setTimeout(() => {
+        setShowLimitMessage(false);
+      }, 20000); 
+  
+      return () => clearTimeout(timer); 
+    }
+  }, [totalGastoCategoria, valor_maximo]);
+  
   return (
     <>
       <ScrollView
@@ -476,9 +490,10 @@ const RegistroDespesa = () => {
             onValueChange={handleDateChange}
           />
 
-          {totalGastoCategoria > valor_maximo ?
+          {totalGastoCategoria > valor_maximo && showLimitMessage && (
             <Text style={styles.limit}>O valor máximo já foi atingido. Caso deseje continuar,
-              por favor insira uma descrição justificando a despesa.</Text> : null}
+              por favor insira uma descrição justificando a despesa.</Text>
+          )}
 
             {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
               <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar, 
