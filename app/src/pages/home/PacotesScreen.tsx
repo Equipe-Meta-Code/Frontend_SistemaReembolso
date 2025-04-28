@@ -37,6 +37,14 @@ type RootStackParamList = {
   Perfil: undefined;
 };
 
+const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
+  'Rascunho': { backgroundColor: '#E5E7EB', color: '#374151' },
+  'Aguardando Aprovação': { backgroundColor: 'rgba(255, 188, 20, 0.21)', color: 'rgba(214, 154, 1, 0.96)' },
+  'Recusado': { backgroundColor: 'rgba(209, 53, 53, 0.15)', color: 'rgba(185, 14, 14, 0.70)' },
+  'Aprovado': { backgroundColor: 'rgba(27, 143, 37, 0.15)', color: 'rgba(4, 155, 12, 0.83)' },
+  'Aprovado Parcialmente': { backgroundColor: 'rgba(255, 139, 62, 0.21)', color: 'rgba(248, 103, 7, 0.69)' },
+};
+
 const PacotesScreen = ({ route }: any) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { projectId } = route.params;
@@ -133,23 +141,44 @@ const PacotesScreen = ({ route }: any) => {
       {/* o filtro no topo da tela */}
       {!statusSelecionado && (
         <View style={styles.filtrosRow}>
-          {['Rascunho', 'Aguardando Aprovação', 'Aprovado Parcialmente', 'Recusado', 'Aprovado'].map((status) => (
-          <TouchableOpacity
-            key={status}
-            style={styles.filtroChip}
-            onPress={() => setStatusSelecionado(status)}
-          >
-            <Text style={styles.filtroChipText}>{status}</Text>
-          </TouchableOpacity>
+          {Object.keys(statusStyles).map(status => (
+            <TouchableOpacity
+              key={status}
+              style={[
+                styles.filtroChip,
+                { backgroundColor: statusStyles[status].backgroundColor }
+              ]}
+              onPress={() => setStatusSelecionado(status)}
+            >
+              <Text
+                style={[
+                  styles.filtroChipText,
+                  { color: statusStyles[status].color }
+                ]}
+              >
+                {status}
+              </Text>
+            </TouchableOpacity>
           ))}
         </View>
       )}
 
       {statusSelecionado && (
         <View style={styles.filtrosRow}>
-        
-          <TouchableOpacity style={styles.filtroChipSelecionado}>
-            <Text style={styles.filtroChipSelecionadoText}>{statusSelecionado}</Text>
+          <TouchableOpacity
+            style={[
+              styles.filtroChip,
+              { backgroundColor: statusStyles[statusSelecionado].backgroundColor }
+            ]}
+          >
+            <Text
+              style={[
+                styles.filtroChipText,
+                { color: statusStyles[statusSelecionado].color }
+              ]}
+            >
+              {statusSelecionado}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.filtroChipLimpar} onPress={() => setStatusSelecionado(null)}>
             <Ionicons name="close" size={20} color="#374151" />
@@ -159,7 +188,6 @@ const PacotesScreen = ({ route }: any) => {
       )}
 
       <View style={styles.pacotesList}>
-
         <Text style={styles.pacotesTitle}>Meus pacotes</Text>
 
         <FlatList
