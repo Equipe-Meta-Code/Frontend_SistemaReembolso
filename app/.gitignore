@@ -34,3 +34,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+app/src/services/api.ts
+app/package-lock.json
