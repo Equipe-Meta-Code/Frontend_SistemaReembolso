@@ -461,7 +461,7 @@ const RegistroDespesa = () => {
             onValueChange={handleCategoryChange}
           />
 
-          {categoryName === 'Transporte' ? (
+{categoryName === 'Transporte' ? (
             // SE for Transporte → mostra só KM e custo estimado
             <>
               <Text style={styles.textBottom}>Quilômetros (KM)</Text>
@@ -474,6 +474,30 @@ const RegistroDespesa = () => {
               />
               <Text style={styles.aviso}>
                 {`Custo estimado: R$ ${kmCost.toFixed(2).replace('.', ',')}`}
+              </Text>
+            </>
+          ) : categoryName === 'Materiais' ? (
+            <>
+              <Text style={styles.textBottom}>Valor unitário</Text>
+              <TextInputMask
+                type={'money'}
+                value={amount}
+                onChangeText={handleAmountChange}
+                style={styles.inputMask}
+                placeholder="R$ 0,00"
+              />
+
+              <Text style={styles.textBottom}>Quantidade</Text>
+              <TextInput
+                placeholder="0"
+/*                 value={quantidade}
+                onChangeText={handleQuantidade} */
+                keyboardType="numeric"
+                style={styles.inputMask}
+              />
+
+              <Text style={styles.aviso}>
+                {`Valor total: R$ `}{/* ${quantidadeTotal.toFixed(2).replace('.', ',')} */}
               </Text>
             </>
           ) : (
