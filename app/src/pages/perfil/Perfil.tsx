@@ -129,6 +129,9 @@ const Perfil = () => {
 
         };
 
+        fetchDespesas();
+        fetchProjectsCount();
+
         const interval = setInterval(() => {
             fetchDespesas();
             fetchProjectsCount();
