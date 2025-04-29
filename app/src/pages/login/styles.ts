@@ -53,9 +53,10 @@ export const style = StyleSheet.create({
         paddingTop:10,
         color: themas.colors.primary,
         fontSize: 16,
-        marginTop: 10,
+        marginTop: 30,
         textAlign: 'center',
         textDecorationLine: 'underline', 
+        marginBottom: 40,
     },
     lineContainer: {
         flexDirection: 'row', 
@@ -64,10 +65,11 @@ export const style = StyleSheet.create({
         marginBottom: 20, 
     },
     noAccountText: {
-        paddingTop:70,
+        paddingTop:60,
         fontSize: 16,
         color: '#D3D3D3',  
         textAlign: 'center', 
+        marginBottom: 40,
     },
     passwordContainer: {
         flexDirection: 'row',
