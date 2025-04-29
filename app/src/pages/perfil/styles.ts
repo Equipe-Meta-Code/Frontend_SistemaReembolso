@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { themas } from "../../global/themes";
 
 export const style = StyleSheet.create({
@@ -111,7 +111,7 @@ export const style = StyleSheet.create({
         gap: 60,
     },
     containerBotoesTopo: {
-        marginTop: 40,
+
         marginBottom: 20,
         display: "flex",
         flexDirection: "row",
@@ -120,6 +120,11 @@ export const style = StyleSheet.create({
         alignItems: "center",
         textAlign: "center",
         position: "relative",
+        ...Platform.select({
+            ios:   { marginTop: 60 },  // iOS
+            android: { marginTop: 40 }, // Android (ou outro valor que você queira)
+            default: { marginTop: 40 }  // fallback
+        }),
     },
     titulo: {
         fontSize: 22,
