@@ -15,17 +15,14 @@ interface Expense {
 
 interface ExpenseSectionProps {
   categoria: string;
-  icone: string;
+
   itens: Expense[];
 }
 
-const ExpenseSection: React.FC<ExpenseSectionProps> = ({ categoria, icone, itens }) => {
+const ExpenseSection: React.FC<ExpenseSectionProps> = ({ categoria, itens }) => {
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
-        <View style={styles.iconWrapper}>
-          <Text style={styles.icon}>{icone}</Text>
-        </View>
         <Text style={styles.sectionTitle}>{categoria}</Text>
       </View>
 
