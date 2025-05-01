@@ -92,24 +92,6 @@ const Historico: React.FC = () => {
     return projeto ? projeto.nome : `Projeto ${id}`;
   };
 
-  const iconesCategorias: Record<string, string> = {
-    Transporte: "🚖",
-    Hospedagem: "🏨",
-    Alimentação: "🍔",
-    Entretenimento: "🎬",
-    Educação: "📚",
-    Saúde: "⚕️",
-    Outros: "💼",
-  };
-
-  const getIconeCategoria = (categoriaId: string) => {
-    const categoria = categorias.find(c => String(c.categoriaId) === String(categoriaId));
-    if (categoria) {
-      return iconesCategorias[categoria.nome] || "💰";
-    }
-    return "💰";
-  };
-
   const getNomeCategoria = (categoriaId: string) => {
     const categoria = categorias.find(c => String(c.categoriaId) === String(categoriaId));
     return categoria ? categoria.nome : `Categoria ${categoriaId}`;
@@ -147,7 +129,6 @@ const Historico: React.FC = () => {
       } else {
         const novaCategoria = {
           categoria: nomeCategoria,
-          icone: getIconeCategoria(despesa.categoria), 
           itens: [itemFormatado],
         };
         acc.push(novaCategoria);

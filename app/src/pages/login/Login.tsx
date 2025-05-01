@@ -9,6 +9,7 @@ import { loginUserAction } from "../../(redux)/authSlice";
 import api from "../../services/api";
 import { Input } from "../../components/Input/index"
 import { ButtonCustom } from "../../components/customButton";
+import { Divider } from "react-native-paper";
 
 export default function Login() {
     const navigation = useNavigation<NavigationProp<any>>();
