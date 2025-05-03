@@ -311,8 +311,22 @@ const RegistroDespesa = () => {
     setError(""); // Limpar mensagem de erro anterior
     setSuccessMessage(""); // Limpar mensagem de sucesso anterior
 
-    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount) || !description) {
+    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount)) {
       setError("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    const newAmount =
+      categoryName === 'Transporte'
+        ? kmCost
+        : categoryName === 'Materiais'
+          ? quantidadeTotal
+          : parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+
+    const projectedTotal = totalGastoCategoria + newAmount;
+
+    if (projectedTotal > valor_maximo && description.trim() === "") {
+      setError("Justifique o motivo da despesa.");
       return;
     }
 
