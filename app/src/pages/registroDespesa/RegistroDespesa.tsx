@@ -311,12 +311,31 @@ const RegistroDespesa = () => {
     setError(""); // Limpar mensagem de erro anterior
     setSuccessMessage(""); // Limpar mensagem de sucesso anterior
 
-    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount) || !description) {
+    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount)) {
       setError("Por favor, preencha todos os campos.");
       return;
     }
 
+    const newAmount =
+      categoryName === 'Transporte'
+        ? kmCost
+        : categoryName === 'Materiais'
+          ? quantidadeTotal
+          : parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+
+    const projectedTotal = totalGastoCategoria + newAmount;
+
+    if (projectedTotal > valor_maximo && description.trim() === "") {
+      setError("Justifique o motivo da despesa.");
+      return;
+    }
+
     // Converte antes:
+    const descriptionToSend =
+      description.trim() === ""
+        ? "Sem Descrição"
+        : description;
+
     const parsedKm = parseFloat(km.replace(',', '.'));
     const parsedAmount = parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.'));
 
@@ -333,16 +352,10 @@ const RegistroDespesa = () => {
       }
     }
 
-    let dateSplitted = date.split("/");
-    let day = dateSplitted[0]
-    let month = dateSplitted[1]
-    let year = dateSplitted[2]
+    const [day, month, year] = date.split("/");
+    const finalDate = new Date(`${year}-${month}-${day}`);
 
-    let dateFormated = year + '-' + month + '-' + day;
-
-    let finalDate = new Date(dateFormated)
-
-    let finalValue = 0;
+    let finalValue: number;
     if (categoryName === 'Transporte') {
       finalValue = kmCost;
     } else if (categoryName === 'Materiais') {
@@ -359,10 +372,16 @@ const RegistroDespesa = () => {
         categoria: category,
         data: finalDate,
         valor_gasto: finalValue,
-        descricao: description,
+        descricao: descriptionToSend,   // ← use aqui a variável default
         aprovacao: "Pendente",
-        km: categoryName === 'Transporte' ? parseFloat(km.replace(',', '.')) : undefined,
-        quantidade: categoryName === 'Materiais' ? parseFloat(quantidade.replace(',', '.')) : undefined,
+        km:
+          categoryName === "Transporte"
+            ? parseFloat(km.replace(",", "."))
+            : undefined,
+        quantidade:
+          categoryName === "Materiais"
+            ? parseFloat(quantidade.replace(",", "."))
+            : undefined,
       });
       /* console.log(response.data); */
       setSuccessMessage("Despesa cadastrada com sucesso!");
@@ -409,6 +428,13 @@ const RegistroDespesa = () => {
       return () => clearTimeout(timer);
     }
   }, [totalGastoCategoria, valor_maximo]);
+
+  useEffect(() => {
+    if (selectedProject) {
+      fetchPacotes(selectedProject);
+      fetchData();
+    }
+  }, [selectedProject]);
 
   const formatCurrency = (value: number) =>
     value.toLocaleString('pt-BR', {
