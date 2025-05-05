@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { style } from "./styles";
-import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { Input } from "../../components/Input";
-
 import api from "../../services/api";
 import { themas } from "../../global/themes";
 import { ButtonCustom } from "../../components/customButton";
+import { Asset } from 'expo-asset';
 
 export default function Cadastro() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -25,6 +25,35 @@ export default function Cadastro() {
     const validatePassword = (password: string): boolean => {
         const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'|\\,.<>\/?]).+$/;
         return regex.test(password);
+    };
+
+
+    const salvarImagemPadrao = async (userId: number) => {
+        try {
+            const imagem = Asset.fromModule(require('../../assets/perfil.png'));
+            await imagem.downloadAsync();
+            const uri = imagem.localUri || imagem.uri;
+            if (!uri) throw new Error('URI da imagem não disponível');
+
+            const nomeArquivo = uri.split('/').pop()!;
+            const match = /\.(\w+)$/.exec(nomeArquivo);
+            const mimeType = match ? `image/${match[1]}` : 'image/png';
+
+            const formData = new FormData();
+            formData.append('profileImage', { uri, name: nomeArquivo, type: mimeType } as any);
+            formData.append('tipo', 'user');
+            formData.append('tipoId', String(userId));
+
+            const res = await api.post('/imagem', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            if (!res.data.success) {
+                console.warn('Upload da imagem padrão falhou:', res.data);
+            }
+        } catch (err) {
+            console.error('Erro no upload da imagem padrão:', err);
+        }
     };
 
     async function getCadastro() {
@@ -75,19 +104,17 @@ export default function Cadastro() {
                 email,
                 password
             });
-            const user = response.data;
+            const newUser = response.data as { id: number };
 
-            // Lógica para cadastro (exemplo simples)
-            setTimeout(() => {
-                Alert.alert('Cadastro realizado com sucesso!');
-                navigation.navigate("Login"); // Redireciona para a tela de login após cadastro
-                setLoading(false);
-            }, 1000);
+            await salvarImagemPadrao(newUser.id);
+            Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+            navigation.navigate("Login");
 
         } catch (error) {
-            console.log(error);
-            setLoading(false); // Garantir que loading seja desativado em caso de erro
+            console.log('Erro no cadastro:', error);
             Alert.alert('Erro', 'Ocorreu um erro ao tentar realizar o cadastro. Por favor, tente novamente.');
+        } finally {
+            setLoading(false);
         }
     }
 
