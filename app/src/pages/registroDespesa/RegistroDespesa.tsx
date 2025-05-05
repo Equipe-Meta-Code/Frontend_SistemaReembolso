@@ -331,6 +331,11 @@ const RegistroDespesa = () => {
     }
 
     // Converte antes:
+    const descriptionToSend =
+      description.trim() === ""
+        ? "Sem Descrição"
+        : description;
+
     const parsedKm = parseFloat(km.replace(',', '.'));
     const parsedAmount = parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.'));
 
@@ -347,16 +352,10 @@ const RegistroDespesa = () => {
       }
     }
 
-    let dateSplitted = date.split("/");
-    let day = dateSplitted[0]
-    let month = dateSplitted[1]
-    let year = dateSplitted[2]
+    const [day, month, year] = date.split("/");
+    const finalDate = new Date(`${year}-${month}-${day}`);
 
-    let dateFormated = year + '-' + month + '-' + day;
-
-    let finalDate = new Date(dateFormated)
-
-    let finalValue = 0;
+    let finalValue: number;
     if (categoryName === 'Transporte') {
       finalValue = kmCost;
     } else if (categoryName === 'Materiais') {
@@ -373,10 +372,16 @@ const RegistroDespesa = () => {
         categoria: category,
         data: finalDate,
         valor_gasto: finalValue,
-        descricao: description,
+        descricao: descriptionToSend,   // ← use aqui a variável default
         aprovacao: "Pendente",
-        km: categoryName === 'Transporte' ? parseFloat(km.replace(',', '.')) : undefined,
-        quantidade: categoryName === 'Materiais' ? parseFloat(quantidade.replace(',', '.')) : undefined,
+        km:
+          categoryName === "Transporte"
+            ? parseFloat(km.replace(",", "."))
+            : undefined,
+        quantidade:
+          categoryName === "Materiais"
+            ? parseFloat(quantidade.replace(",", "."))
+            : undefined,
       });
       /* console.log(response.data); */
       setSuccessMessage("Despesa cadastrada com sucesso!");
@@ -423,6 +428,13 @@ const RegistroDespesa = () => {
       return () => clearTimeout(timer);
     }
   }, [totalGastoCategoria, valor_maximo]);
+
+  useEffect(() => {
+    if (selectedProject) {
+      fetchPacotes(selectedProject);
+      fetchData();
+    }
+  }, [selectedProject]);
 
   const formatCurrency = (value: number) =>
     value.toLocaleString('pt-BR', {
