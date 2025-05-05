@@ -195,6 +195,13 @@ const InfosPessoais = () => {
               </TouchableOpacity>
 
               <CustomButton
+                titulo={`Alterar imagem do perfil`}
+                onPress={handleImageUpload}
+                iconName="chevron-forward"
+                iconColor="#000"
+              />
+
+              <CustomButton
                 titulo={`Voltar imagem padrão`}
                 onPress={handleImagemPadrao}
                 iconName="chevron-forward"
