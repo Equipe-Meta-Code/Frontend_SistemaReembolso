@@ -80,12 +80,12 @@ export const style = StyleSheet.create({
         marginLeft: -30, 
     },
     erroInput: {
-        borderColor: 'red',
+        borderColor: themas.colors.red,
         borderWidth: 1,
       },
       
       erroTexto: {
-        color: 'red',
+        color: themas.colors.red,
         fontSize: 12,
         marginTop: 4,
         marginBottom: 8,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import api from '../../services/api';
+import { themas } from "../../global/themes";
 export interface Despesa {
     categoria: string;
     valor_gasto: number;
@@ -105,7 +106,7 @@ export interface Despesa {
     };    
 
     const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
-      'Rascunho': { backgroundColor: '#E5E7EB', color: '#374151' },
+      'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
       'Aguardando Aprovação': { backgroundColor: 'rgba(255, 188, 20, 0.21)', color: 'rgba(214, 154, 1, 0.96)' },
       'Recusado': { backgroundColor: 'rgba(209, 53, 53, 0.15)', color: 'rgba(185, 14, 14, 0.70)' },
       'Aprovado': { backgroundColor: 'rgba(27, 143, 37, 0.15)', color: 'rgba(4, 155, 12, 0.83)' },
@@ -155,7 +156,7 @@ export interface Despesa {
                     {grupo.itens.map((item: any, index: number) => (
                     <Text key={index} style={styles.despesaItem}>
                     {mistoAprovacao && (
-                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || '#4B5563', fontWeight: 'bold' }}>
+                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || themas.colors.chumbo_claro, fontWeight: 'bold' }}>
                         [{item.aprovacao}]
                       </Text>
                     )}
@@ -173,7 +174,7 @@ export interface Despesa {
               {/* Botão de solicitar reembolso */}
               {status === 'Rascunho' && (
                 <TouchableOpacity
-                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: '#9CA3AF' }]}
+                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: themas.colors.cinza_medio }]}
                   onPress={handleSolicitarReembolso}
                   disabled={isSolicitando || despesas?.length === 0}
                 >
@@ -193,7 +194,7 @@ export interface Despesa {
 
   const styles = StyleSheet.create({
     card: {
-      backgroundColor: '#FBFBFB',
+      backgroundColor: themas.colors.cinza_muito_claro,
       padding: 10,
       borderRadius: 14,
       marginVertical: 12,
@@ -202,31 +203,31 @@ export interface Despesa {
     cardTitle: {
       fontSize: 18,
       fontWeight: '700',
-      color: '#1A1A1A',
+      color: themas.colors.black,
       marginBottom: 4,
     },
     cardSubtitle: {
       marginTop: 16,
       fontSize: 15,
       fontWeight: '600',
-      color: '#374151', 
+      color: themas.colors.chumbo, 
     },
     cardSubSubtitle: {
       marginTop: 12,
       fontSize: 15,
       fontWeight: '600',
-      color: '#374151', 
+      color: themas.colors.chumbo, 
     },
     despesaItem: {
       marginTop: 6,
       fontSize: 15,
-      color: '#4B5563',
+      color: themas.colors.chumbo_claro,
       lineHeight: 22,
     },
     semDespesa: {
       marginTop: 15,
       marginBottom: 10,
-      color: '#9CA3AF', 
+      color: themas.colors.cinza_medio, 
       fontSize: 14,
       fontStyle: 'italic',
     },
@@ -235,8 +236,8 @@ export interface Despesa {
       marginBottom: 15,
     },
     statusText: {
-      backgroundColor: '#E5E7EB', 
-      color: '#374151',
+      backgroundColor: themas.colors.cinza_claro, 
+      color: themas.colors.chumbo,
       fontSize: 12,
       paddingHorizontal: 16,
       paddingVertical: 4,
@@ -251,20 +252,20 @@ export interface Despesa {
     },
     botaoReembolso: {
       marginTop: 16,
-      backgroundColor: '#1F48AA',
+      backgroundColor: themas.colors.primary,
       paddingVertical: 10,
       borderRadius: 10,
       alignItems: 'center',
     },
     textoBotao: {
-      color: '#FFFFFF',
+      color: themas.colors.secondary,
       fontSize: 16,
       fontWeight: '600',
     },
     totalGasto: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#4B5563',
+      color: themas.colors.chumbo_claro,
       marginBottom: 6,
       marginLeft: 2,
     },    

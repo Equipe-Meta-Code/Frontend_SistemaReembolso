@@ -16,7 +16,7 @@ const BotaoOpcao: React.FC<BotaoOpcaoProps> = ({
   titulo,
   value,
   onValueChange,
-  trackColor = { false: "#E0E0E0", true: themas.colors.primary },
+  trackColor = { false: "themas.colors.cinza_claro", true: themas.colors.primary },
   thumbColor = themas.colors.secondary,
   style: customStyle,
 }) => {

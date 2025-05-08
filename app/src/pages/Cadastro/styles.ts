@@ -90,7 +90,7 @@ export const style = StyleSheet.create({
     checkboxText: {
         marginLeft: 10,
         fontSize: 14,
-        color: 'gray',
+        color: themas.colors.cinza,
     },
     passwordContainer: {
         flexDirection: 'row',

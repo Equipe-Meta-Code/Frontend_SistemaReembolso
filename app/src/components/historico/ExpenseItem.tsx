@@ -13,7 +13,7 @@ interface ExpenseItemProps {
 
 const ExpenseItem: React.FC<ExpenseItemProps> = ({ data, projeto, descricao, valor, status, index  }) => {
   return (
-    <View style={[styles.despesaItem, { backgroundColor: index % 2 === 0 ? "#F8F8F8" : "#FFFFFF" }]}>
+    <View style={[styles.despesaItem, { backgroundColor: index % 2 === 0 ? "#F8F8F8" : themas.colors.secondary }]}>
       <Text style={styles.data}>{data}</Text>
       <Text style={styles.tipoDespesa}>{projeto}</Text>
       <Text style={styles.tipoDespesa}>{descricao}</Text>
@@ -29,7 +29,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ data, projeto, descricao, val
                 ? "rgba(10, 138, 16, 0.87)"
                 : status === "Pendente"
                 ? "rgba(255, 188, 20, 0.87)"
-                : "#000000"
+                : themas.colors.black
           }
         ]}
       >

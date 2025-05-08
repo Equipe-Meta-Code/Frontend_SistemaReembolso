@@ -46,7 +46,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
         <ProgressBar 
           progress={progress} 
-          color={valueLeft >= 0 ? "#1F48AA" : "rgba(224, 7, 7, 0.8)"} 
+          color={valueLeft >= 0 ? themas.colors.primary : "rgba(224, 7, 7, 0.8)"} 
           style={styles.progressBar} 
         />
 
@@ -88,14 +88,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   cardDescription: {
-    color: 'gray',
+    color: themas.colors.cinza,
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 5,
   },
   category: {
     fontSize: 14,
-    color: 'gray',
+    color: themas.colors.cinza,
     marginBottom: 5,
     marginTop: 5,
   },
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   department: {
-    color: '#D7AA0D',
+    color: themas.colors.amarelo,
     fontSize: 12,
     paddingHorizontal: 8,
     paddingVertical: 3,

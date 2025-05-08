@@ -224,8 +224,8 @@ const Perfil = () => {
                     titulo="Darkmode"
                     value={isDarkMode}
                     onValueChange={toggleDarkMode}
-                    trackColor={{ false: "#E0E0E0", true: "#1F48AA" }}
-                    thumbColor="#ffffff"
+                    trackColor={{ false: "themas.colors.cinza_claro", true: themas.colors.primary }}
+                    thumbColor=themas.colors.secondary
                 /> */}
                 
             </View>

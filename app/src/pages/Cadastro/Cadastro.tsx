@@ -194,7 +194,7 @@ export default function Cadastro() {
                             <MaterialIcons
                                 name={acceptTerms ? "check-box" : "check-box-outline-blank"}
                                 size={24}
-                                color={acceptTerms ? "green" : "gray"}
+                                color={acceptTerms ? "green" : themas.colors.cinza}
                             />
                         </TouchableOpacity>
                         <Text style={style.checkboxText}>Eu aceito todos os termos e condições</Text>

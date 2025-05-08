@@ -55,7 +55,7 @@ export const style = StyleSheet.create({
         marginTop: 20,
         width: "90%",  
         height: 1,  
-        backgroundColor: "#E0E0E0",  
+        backgroundColor: "themas.colors.cinza_claro",  
         marginVertical: 15,  
         alignSelf: "center",  
     },    
@@ -95,12 +95,12 @@ export const style = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: 15,
         borderBottomWidth: 1,
-        borderBottomColor: "#E0E0E0",
+        borderBottomColor: "themas.colors.cinza_claro",
     },    
     textoBotao: {
         fontSize: 18,
         fontWeight: "400",
-        color: "#000000",
+        color: themas.colors.black,
     },    
     containerMostradores: {
         marginTop: 10,
@@ -129,7 +129,7 @@ export const style = StyleSheet.create({
     titulo: {
         fontSize: 22,
         fontWeight: "bold",
-        color: "#000000",
+        color: themas.colors.black,
         position: "absolute",
         alignSelf: "center",
     },

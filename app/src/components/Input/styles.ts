@@ -31,10 +31,10 @@ export const style = StyleSheet.create({
         marginLeft: 10,
     },
     erroInput: {
-        borderColor: 'red',
+        borderColor: themas.colors.red,
     },
     erroTexto: {
-        color: 'red',
+        color: themas.colors.red,
         fontSize: 12,
         marginTop: 4,
         marginBottom: 8,

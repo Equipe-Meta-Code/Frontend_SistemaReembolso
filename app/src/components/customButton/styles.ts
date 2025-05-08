@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        color: 'white',
+        color: themas.colors.secondary,
         fontSize: 16,
         fontWeight: 'bold',
     },

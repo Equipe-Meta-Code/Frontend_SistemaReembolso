@@ -16,7 +16,7 @@ export const style = StyleSheet.create({
     quantia: {
         fontSize: 28,
         fontWeight: "bold",
-        color: "#000000",
+        color: themas.colors.black,
     },
     botao: {
         width: "100%",
@@ -28,12 +28,12 @@ export const style = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: 15,
         borderBottomWidth: 1,
-        borderBottomColor: "#E0E0E0",
+        borderBottomColor: "themas.colors.cinza_claro",
       },    
     textoBotao: {
         fontSize: 18,
         fontWeight: "400",
-        color: "#000000",
+        color: themas.colors.black,
     },  
     botaoTopo: {
         width: "auto",
@@ -45,6 +45,6 @@ export const style = StyleSheet.create({
     textoBotaoTopo: {
         fontSize: 18,
         fontWeight: "400",
-        color: "#000000",
+        color: themas.colors.black,
     },
 });
