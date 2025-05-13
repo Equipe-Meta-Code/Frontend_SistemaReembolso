@@ -88,34 +88,34 @@ export interface Despesa {
     }, []);
 
     const cardCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(234, 234, 255, 0.8)',
-      'Hospedagem': 'rgba(3, 46, 31, 0.07)',
-      'Transporte': 'rgba(52, 163, 238, 0.1)',
-      'Serviços Terceirizados': 'rgba(90, 128, 19, 0.1)',
-      'Materiais': 'rgba(255, 109, 211, 0.06)',
-      'Outros': 'rgba(97, 97, 97, 0.1)',
+      'Alimentação': themas.colors.cinza_claro,
+      'Hospedagem': themas.colors.verde_escuro,
+      'Transporte': themas.colors.azul_claro,
+      'Serviços Terceirizados': themas.colors.verde_medio,
+      'Materiais': themas.colors.rosa,
+      'Outros': themas.colors.chumbo_claro,
     };    
 
     const tituloCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(58, 8, 196, 0.63)',
-      'Hospedagem': 'rgba(6, 58, 40, 0.65)',
-      'Transporte': 'rgba(19, 75, 165, 0.67)',
-      'Serviços Terceirizados': 'rgba(50, 70, 13, 0.5)',
-      'Materiais': 'rgba(160, 3, 95, 0.69)',
-      'Outros': 'rgba(54, 52, 52, 0.5)',
+      'Alimentação': themas.colors.roxo,
+      'Hospedagem': themas.colors.verde_escuro,
+      'Transporte': themas.colors.azul_escuro,
+      'Serviços Terceirizados': themas.colors.amarelo,
+      'Materiais': themas.colors.vinho_claro,
+      'Outros': themas.colors.chumbo, 
     };    
 
     const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
       'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
-      'Aguardando Aprovação': { backgroundColor: 'rgba(255, 188, 20, 0.21)', color: 'rgba(214, 154, 1, 0.96)' },
-      'Recusado': { backgroundColor: 'rgba(209, 53, 53, 0.15)', color: 'rgba(185, 14, 14, 0.70)' },
-      'Aprovado': { backgroundColor: 'rgba(27, 143, 37, 0.15)', color: 'rgba(4, 155, 12, 0.83)' },
-      'Aprovado Parcialmente': { backgroundColor: 'rgba(255, 139, 62, 0.21)', color: 'rgba(248, 103, 7, 0.69)' },
+      'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda, color: themas.colors.amarelo },
+      'Recusado': { backgroundColor: themas.colors.vinho_claro, color: themas.colors.vinho_claro }, 
+      'Aprovado': { backgroundColor: themas.colors.verde_medio, color: themas.colors.verde_medio },
+      'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja, color: themas.colors.laranja_forte },
     };    
 
     const aprovacaoDespesaCores: Record<string, string> = {
-      'Aprovado': 'rgba(10, 138, 16, 0.87)',
-      'Recusado': 'rgba(224, 7, 7, 0.8)',
+      'Aprovado': themas.colors.verde_medio,
+      'Recusado': themas.colors.vinho_claro,
     };    
 
     //mostra legenda apenas se o pacote for aprovado parcialmente
@@ -142,7 +142,7 @@ export interface Despesa {
             <Text style={styles.cardTitle}>{nome}</Text>
             <Text style={styles.totalGasto}>Total gasto: R$ {totalGasto.toFixed(2).replace('.', ',')}</Text>
           
-            <Text style={{ color: '#6B7280', marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
+            <Text style={{ color: themas.colors.gray, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
 
             {/* Histórico de despesas só aparece se estiver expandido */}
             {expandido && (

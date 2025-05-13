@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
       },
       label: {
         position: 'absolute',
-        backgroundColor: 'white',
+        backgroundColor: themas.colors.secondary,
         left: 22,
         top: 8,
         zIndex: 999,
@@ -126,8 +126,8 @@ export const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 8,
         color: themas.colors.vinho,
-        backgroundColor: themas.colors.rosa_claro,
-        borderColor: themas.colors.rosa_medio,
+        backgroundColor: themas.colors.rosa_muito_claro,
+        borderColor: themas.colors.rosa_claro,
         margin: 'auto',
       },
       pacoteErrorMessage: {
@@ -140,7 +140,7 @@ export const styles = StyleSheet.create({
       successMessage: {
         color: themas.colors.verde_escuro,
         backgroundColor: themas.colors.verde_claro,
-        borderColor: themas.colors.verde_medio,
+        borderColor: themas.colors.verde_claro,
         marginTop: 16,
         fontWeight: 'bold',
         padding: 10,

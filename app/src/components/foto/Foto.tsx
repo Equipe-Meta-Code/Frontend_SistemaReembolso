@@ -8,6 +8,7 @@ import {
   ImageSourcePropType
 } from 'react-native';
 import api from '../../services/api';
+import { themas } from '../../global/themes';
 
 interface Props {
   tipo: string;
@@ -28,7 +29,7 @@ export default function Foto({
   height = 200,
   borderRadius = 8,
   borderWidth = 0,
-  borderColor = '#000',
+  borderColor = themas.colors.black,
   refreshKey,
   fallbackSource,
 }: Props) {
@@ -67,7 +68,7 @@ export default function Foto({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#eee',
+    backgroundColor: themas.colors.cinza_muito_claro,
     justifyContent: 'center',
     alignItems: 'center',
   },

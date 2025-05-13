@@ -597,7 +597,7 @@ const RegistroDespesa = () => {
                     {
                       backgroundColor:
                         projectedTotal > valor_maximo
-                          ? '#E55451'
+                          ? themas.colors.vinho_claro
                           : themas.colors.primary,
                     },
                   ]}

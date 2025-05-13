@@ -10,7 +10,7 @@ export const style = StyleSheet.create({
     alignItems:'center',
     paddingHorizontal: width * 0.05,
     backgroundColor: themas.colors.secondary,
-    shadowColor: "#000",
+    shadowColor: themas.colors.black,
     shadowOffset:{
         width:0,
         height:3,

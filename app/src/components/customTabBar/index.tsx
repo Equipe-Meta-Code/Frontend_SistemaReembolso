@@ -29,9 +29,9 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
       >
         <Octicons
           name="home"
-          style={[style.iconHome, isFocused("Home") && { color: "#fff" }]}
+          style={[style.iconHome, isFocused("Home") && { color: themas.colors.secondary }]}
         />
-        <Text style={[style.textHome, isFocused("Home") && { color: "#fff" }]}>
+        <Text style={[style.textHome, isFocused("Home") && { color: themas.colors.secondary }]}>
           Home
         </Text>
       </TouchableOpacity>

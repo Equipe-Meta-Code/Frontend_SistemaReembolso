@@ -31,7 +31,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
         {project.department && (
           <View style={styles.departmentContainer}>
             {project.department.split(',').map((department, index) => (
-              <Text key={index} style={[styles.department, { backgroundColor: "#FFFCF1" }]}>
+              <Text key={index} style={[styles.department, { backgroundColor: themas.colors.amarelo_muito_claro }]}>  
                 {department.trim()}
               </Text>
             ))}
@@ -46,7 +46,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
         <ProgressBar 
           progress={progress} 
-          color={valueLeft >= 0 ? themas.colors.primary : "rgba(224, 7, 7, 0.8)"} 
+          color={valueLeft >= 0 ? themas.colors.primary : themas.colors.vinho_claro} 
           style={styles.progressBar} 
         />
 
@@ -57,7 +57,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           {valueLeft >= 0 ? (
             <> / Restante: R${valueLeft.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</>
           ) : (
-            <> / <Text style={{ color: 'rgb(206, 4, 4)' }}>
+            <> / <Text style={{ color: themas.colors.vinho_claro }}>
               Limite Ultrapassado: R${Math.abs(valueLeft).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </Text></>
           )}
@@ -74,11 +74,11 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'white',
+    backgroundColor: themas.colors.secondary,
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: themas.colors.black,
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
   },

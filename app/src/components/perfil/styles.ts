@@ -11,7 +11,7 @@ export const style = StyleSheet.create({
     },
     titulo:{
         fontSize: 22,
-        color: "#494949",
+        color: themas.colors.chumbo,
     },
     quantia: {
         fontSize: 28,
@@ -28,7 +28,7 @@ export const style = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: 15,
         borderBottomWidth: 1,
-        borderBottomColor: "themas.colors.cinza_claro",
+        borderBottomColor: themas.colors.cinza_claro,
       },    
     textoBotao: {
         fontSize: 18,

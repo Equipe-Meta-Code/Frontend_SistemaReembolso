@@ -19,7 +19,7 @@ export const style = StyleSheet.create({
     },
     boxMid: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: themas.colors.secondary,
         width: '100%',
         paddingTop: 20,
         paddingHorizontal: 20,
@@ -27,13 +27,13 @@ export const style = StyleSheet.create({
     },
     title: {
         fontSize: 18,   
-        color: 'white',  
+        color: themas.colors.secondary,  
         fontWeight: 'bold',
         paddingLeft:20  
     },
     description: {
         fontSize: 16,    
-        color: 'white',  
+        color: themas.colors.secondary,  
         textAlign: 'left',  
         marginTop: 10,  
         paddingLeft:20
@@ -41,11 +41,11 @@ export const style = StyleSheet.create({
     welcomeTitle: {
         fontSize: 24,    
         fontWeight: 'bold',  
-        color: 'black',  
+        color: themas.colors.black,  
     },
     instruction: {
         fontSize: 16,    
-        color: 'black',  
+        color: themas.colors.black,  
         textAlign: 'left',  
         marginTop: 10,   
     },
@@ -67,7 +67,7 @@ export const style = StyleSheet.create({
     noAccountText: {
         paddingTop:60,
         fontSize: 16,
-        color: '#D3D3D3',  
+        color: themas.colors.gray,  
         textAlign: 'center', 
         marginBottom: 40,
     },

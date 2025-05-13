@@ -2,6 +2,7 @@ import React, { forwardRef, LegacyRef } from "react";
 import { TextInput, View, TextInputProps, Text, TouchableOpacity, StyleProp, TextStyle } from 'react-native';
 import { MaterialIcons, FontAwesome, Octicons } from '@expo/vector-icons';
 import { style } from "./styles";
+import { themas } from "../../global/themes";
 
 type IconComponent = React.ComponentType<React.ComponentProps<typeof MaterialIcons>> | 
                      React.ComponentType<React.ComponentProps<typeof FontAwesome>> | 
@@ -35,7 +36,7 @@ export const Input = forwardRef((props: Props, ref: LegacyRef<TextInput> | null)
                 ]}>
                     {IconLeft && iconLeftName && (
                         <TouchableOpacity onPress={onIconLeftPress}>
-                            <IconLeft name={iconLeftName as any} size={20} color="#888" style={style.iconRight} />
+                            <IconLeft name={iconLeftName as any} size={20} color={themas.colors.gray} style={style.iconRight} />
                         </TouchableOpacity>
                     )}
 
@@ -48,7 +49,7 @@ export const Input = forwardRef((props: Props, ref: LegacyRef<TextInput> | null)
 
                     {IconRigth && iconRightName && (
                         <TouchableOpacity onPress={onIconRigthPress}>
-                            <IconRigth name={iconRightName as any} size={24} color="#888" style={style.iconRight} />
+                            <IconRigth name={iconRightName as any} size={24} color={themas.colors.gray} style={style.iconRight} />
                         </TouchableOpacity>
                     )}
                 </View>

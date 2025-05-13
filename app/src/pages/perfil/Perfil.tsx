@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import Foto from '../../com../../components/foto/Foto';
+import { themas } from '../../global/themes';
 
 interface Funcionario {
     userId: number;
@@ -157,7 +158,7 @@ const Perfil = () => {
                         height={150}
                         borderRadius={100}
                         borderWidth={3}
-                        borderColor="#fff"
+                        borderColor={themas.colors.secondary}
                         refreshKey={user.profileImage}
                         fallbackSource={require('../../assets/perfil.png')}
                     />
@@ -203,28 +204,28 @@ const Perfil = () => {
                     titulo="Informações pessoais"
                     onPress={() => navigation.navigate('InfosPessoais')}
                     iconName="chevron-forward"
-                    iconColor="#000"
+                    iconColor={themas.colors.black}
                 />
 
 {/*                 <CustomButton
                     titulo="Manual do usuário"
                     onPress={() => alert("Manual do usuário")}
                     iconName="chevron-forward"
-                    iconColor="#000"
+                    iconColor=themas.colors.black
                 />
 
                 <CustomButton
                     titulo="Alterar Senha"
                     onPress={() => alert("Alterar Senha")}
                     iconName="chevron-forward"
-                    iconColor="#000"
+                    iconColor=themas.colors.black
                 />
 
                 <CustomSwitchButton
                     titulo="Darkmode"
                     value={isDarkMode}
                     onValueChange={toggleDarkMode}
-                    trackColor={{ false: "themas.colors.cinza_claro", true: themas.colors.primary }}
+                    trackColor={{ false: themas.colors.cinza_claro, true: themas.colors.primary }}
                     thumbColor=themas.colors.secondary
                 /> */}
                 
@@ -235,7 +236,7 @@ const Perfil = () => {
                     titulo="Sair"
                     onPress={handleLogout}
                     iconName="log-out-outline"
-                    iconColor="#ff0000"
+                    iconColor={themas.colors.red}
                     iconSize={40}
                 />
             </View>

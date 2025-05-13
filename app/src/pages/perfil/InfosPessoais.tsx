@@ -13,6 +13,7 @@ import api from "../../services/api"
 import Foto from '../../com../../components/foto/Foto';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system'; 
+import { themas } from '../../global/themes';
 
 const InfosPessoais = () => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -180,7 +181,7 @@ const InfosPessoais = () => {
                       height={150}
                       borderRadius={100}
                       borderWidth={3}
-                      borderColor="#fff"
+                      borderColor={themas.colors.secondary}
                       refreshKey={user.profileImage}
                       fallbackSource={require('../../assets/perfil.png')}
                     />
@@ -198,14 +199,14 @@ const InfosPessoais = () => {
                 titulo={`Alterar imagem do perfil`}
                 onPress={handleImageUpload}
                 iconName="chevron-forward"
-                iconColor="#000"
+                iconColor={themas.colors.black}
               />
 
               <CustomButton
                 titulo={`Voltar imagem padrão`}
                 onPress={handleImagemPadrao}
                 iconName="chevron-forward"
-                iconColor="#000"
+                iconColor={themas.colors.black}
               />
 
             </View>
@@ -219,13 +220,13 @@ const InfosPessoais = () => {
                     titulo={`Nome: ${user?.name}`}
                     onPress={() => console.log("Nome")}
                     iconName=""
-                    iconColor="#000"
+                    iconColor={themas.colors.black}
                 />
                 <CustomButton
                     titulo={`Email: ${user?.email}`}
                     onPress={() => console.log("Email")}
                     iconName=""
-                    iconColor="#000"
+                    iconColor={themas.colors.black}
                 />
                 
             </View>

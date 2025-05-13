@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { themas } from "../../global/themes";
 
 const Select = () => {
     return (
@@ -14,12 +15,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: themas.colors.cinza_muito_claro,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#333',
+        color: themas.colors.chumbo,
     },
 });
 

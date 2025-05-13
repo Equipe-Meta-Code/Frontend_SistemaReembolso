@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { style } from "./styles";
+import { themas } from '../../global/themes';
 
 interface CustomButtonProps {
   titulo: string;
@@ -17,7 +18,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   onPress,
   iconName,
   iconSize = 20,
-  iconColor = '#000',
+  iconColor = themas.colors.black,
   style: customStyle,
   }) => {
   return (

@@ -103,7 +103,7 @@ const Home: React.FC = () => {
                 height={50}
                 borderRadius={25}
                 borderWidth={3}
-                borderColor="#fff"
+                borderColor={themas.colors.secondary}
                 refreshKey={user.profileImage}
                 fallbackSource={require('../../assets/perfil.png')}
             />
@@ -119,7 +119,7 @@ const Home: React.FC = () => {
       <View style={styles.projectsList}>
         <Text style={styles.projectTitle}>Projetos</Text>
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color={themas.colors.blue} />
         ) : (
           <FlatList
             data={projects}
@@ -140,7 +140,7 @@ const Home: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: themas.colors.secondary,
   },
   top: {
     flexDirection: 'row',
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: themas.colors.secondary,
   },
   image: {
     width: 50,

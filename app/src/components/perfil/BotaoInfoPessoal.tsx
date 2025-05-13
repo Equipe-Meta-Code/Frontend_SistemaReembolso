@@ -17,7 +17,7 @@ const BotaoInfoPessoal: React.FC<CustomButtonProps> = ({
   onPress,
   iconName,
   iconSize = 20,
-  iconColor = '#000',
+  iconColor = themas.colors.black,
   style: customStyle,
   }) => {
   return (

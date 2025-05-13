@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { themas } from "../global/themes";
 
 export const COLUMN_WIDTHS = {
   data: 78,
@@ -11,7 +12,7 @@ export const COLUMN_WIDTHS = {
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: themas.colors.secondary,
   },
 
   listContainer: {
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
 
   // Cabeçalho Azul
   header: {
-    backgroundColor: "#1E4DB7",
+    backgroundColor: themas.colors.primary,
     padding: 20,
     paddingTop: 60,
     flexDirection: "row",
@@ -30,7 +31,7 @@ export const styles = StyleSheet.create({
 
   // card de resumo no topo da tela
   cardInformacoes: {
-    backgroundColor: "rgb(247, 247, 247)", 
+    backgroundColor: themas.colors.cinza_muito_claro, 
     borderRadius: 10,            
     padding: 12,
     marginHorizontal: 20,
@@ -40,30 +41,30 @@ export const styles = StyleSheet.create({
   },  
   totalTitle: {
     fontSize: 14,
-    color: "#7F8C8D",
+    color: themas.colors.gray,
     marginBottom: 4,
   },
   totalValue: {
     fontSize: 26,
-    color: "rgb(43, 66, 143)",
+    color: themas.colors.primary,
     marginBottom: 4,
     fontWeight: "bold",
   },
   pendingValue: {
-    color: "rgb(179, 129, 3)", 
+    color: themas.colors.mostarda_escuro, 
     fontSize: 15,
   },
   approvedValue: {
-    color: "rgb(20, 148, 49)", 
+    color: themas.colors.verde_medio, 
     fontSize: 15,
   },  
   rejectedValue: {
-    color: "rgb(185, 0, 0)",
+    color: themas.colors.vinho_claro,
     fontSize: 15,
   },
   subText: {
     fontSize: 13,
-    color: "#7F8C8D",
+    color: themas.colors.cinza_medio,
   },
   cardRow: {
     flexDirection: "row",
@@ -81,7 +82,7 @@ export const styles = StyleSheet.create({
   },
   statusLabel: {
     fontSize: 12,
-    color: "#2C3E50", 
+    color: themas.colors.azul_escuro, 
   },
 
 
@@ -90,11 +91,11 @@ export const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 22,
-    color: "#fff",
+    color: themas.colors.secondary,
     fontWeight: "bold",
   },
   highlight: {
-    color: "#28B463",
+    color: themas.colors.verde_medio,
   },
 
   // Seção de Despesas
@@ -107,7 +108,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
     paddingVertical: 8,
-    backgroundColor: "#1E4DB7",
+    backgroundColor: themas.colors.primary,
     borderRadius: 8,
     paddingHorizontal: 12,
   },
@@ -117,23 +118,23 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 15,
-    backgroundColor: "#ECF0F1",
+    backgroundColor: themas.colors.cinza_muito_claro,
     marginRight: 10,
   },
   icon: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#2C3E50",
+    color: themas.colors.azul_escuro,
   },
   sectionTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: "#FFF",
+    color: themas.colors.secondary,
   },
   tableHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "#D5DBDB",
+    backgroundColor: themas.colors.cinza_claro, 
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 5,
@@ -143,7 +144,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#2C3E50",
+    color: themas.colors.azul_escuro,
   },
 
   // Itens de Despesas
@@ -162,7 +163,7 @@ export const styles = StyleSheet.create({
   data: {
     width: COLUMN_WIDTHS.data,
     fontSize: 14,
-    color: "#666",
+    color: themas.colors.chumbo_claro,
     textAlign: "center",
   },
   tipoDespesa: {
@@ -170,14 +171,14 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
-    color: "#2C3E50",
+    color: themas.colors.azul_escuro,
   },
   valor: {
     width: COLUMN_WIDTHS.valor,
     textAlign: "center",
     fontSize: 14,
     fontWeight: "bold",
-    color: "#2C3E50",
+    color: themas.colors.azul_escuro,
   },
   status: {
     fontSize: 14,
@@ -194,12 +195,12 @@ export const styles = StyleSheet.create({
     bottom: 10,
     left: "5%",
     right: "5%",
-    backgroundColor: "#1E4DB7",
+    backgroundColor: themas.colors.primary,
     borderRadius: 40,
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    shadowColor: "#000",
+    shadowColor: themas.colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 3,
@@ -209,13 +210,13 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#fff",
+    backgroundColor: themas.colors.secondary,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 8,
   },
   circleText: {
-    color: "#1E4DB7",
+    color: themas.colors.primary,
     fontSize: 12,
     fontWeight: "bold",
   },
@@ -228,7 +229,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#FFF",
+    color: themas.colors.secondary,
     textAlign: "center", 
     flex: 1, 
     marginLeft: 15,
@@ -236,7 +237,7 @@ export const styles = StyleSheet.create({
   buttonValue: {
     fontSize: 16, 
     fontWeight: "bold",
-    color: "#FFF",
+    color: themas.colors.secondary,
     marginRight: 5,
   },
   
