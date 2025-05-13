@@ -110,9 +110,14 @@ export default function Cadastro() {
             Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
             navigation.navigate("Login");
 
-        } catch (error) {
-            console.log('Erro no cadastro:', error);
-            Alert.alert('Erro', 'Ocorreu um erro ao tentar realizar o cadastro. Por favor, tente novamente.');
+        } catch (error:any) {
+            setErrorMessages([]);
+            const mensagemErro = error.response.data.message;
+            if (mensagemErro == "Email já está em uso!") {
+                setErrorMessages(["Email já está em uso!"]);
+            } else {
+                Alert.alert(error, 'Ocorreu um erro ao tentar realizar o cadastro. Por favor, tente novamente.');
+            }
         } finally {
             setLoading(false);
         }
