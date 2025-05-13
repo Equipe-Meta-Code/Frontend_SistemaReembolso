@@ -142,7 +142,7 @@ export interface Despesa {
             <Text style={styles.cardTitle}>{nome}</Text>
             <Text style={styles.totalGasto}>Total gasto: R$ {totalGasto.toFixed(2).replace('.', ',')}</Text>
           
-            <Text style={{ color: themas.colors.gray, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
+            <Text style={{ color: themas.colors.chumbo_claro, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
 
             {/* Histórico de despesas só aparece se estiver expandido */}
             {expandido && (

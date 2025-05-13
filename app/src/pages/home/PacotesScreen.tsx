@@ -40,7 +40,7 @@ type RootStackParamList = {
 
 const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
   'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
-  'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda, color: themas.colors.amarelo },
+  'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda, color: themas.colors.mostarda_escuro },
   'Recusado': { backgroundColor: themas.colors.vinho_claro, color: themas.colors.vinho },
   'Aprovado': { backgroundColor: themas.colors.verde_medio, color: themas.colors.verde_escuro },
   'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja, color: themas.colors.laranja_forte },

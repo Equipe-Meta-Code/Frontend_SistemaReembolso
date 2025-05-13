@@ -28,7 +28,7 @@ export const themas = {
         mostarda: "#FFBC14",
         mostarda_escuro: "#B38103",
         laranja: "#FF8B3E",
-        laranja_forte: "#F86707",
+        laranja_forte: "#d35400",
         roxo: "#3A08C4",
     }
 }
