@@ -99,6 +99,8 @@ export const styles = StyleSheet.create({
         marginTop: 12,
       },
       image: {
+        width: 150,
+        height: 150,
         marginTop: 12,
         fontSize: 140,
         color: themas.colors.primary,
@@ -200,6 +202,40 @@ export const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         marginTop: 8,
-      }
+      },
+      modalOverlay: {
+      position: 'absolute',
+      top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+  modalContainer: {
+    position: 'absolute',
+    top: '40%',
+    left: '10%',
+    right: '10%',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 20,
+    alignItems: 'center',
+    elevation: 5,
+    zIndex: 10,
+  },
+  modalButton: {
+    width: '100%',
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
+  modalText: {
+    fontSize: 18,
+    color: themas.colors.primary,
+  },
+  botoesUpload: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  }
+
       
 });
