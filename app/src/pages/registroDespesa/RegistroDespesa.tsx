@@ -12,6 +12,7 @@ import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { themas } from '../../global/themes';
+import * as ImagePicker from 'expo-image-picker';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
@@ -304,6 +305,23 @@ const RegistroDespesa = () => {
     const cost = litersConsumed * GAS_PRICE;
 
     setKmCost(cost);
+  };
+
+  const [imageUri, setImageUri] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permissão negada', 'Você precisa permitir o acesso à galeria.');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+    if (!result.canceled && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri);
+    }
   };
 
   const handleSubmit = async () => {
@@ -623,7 +641,7 @@ const RegistroDespesa = () => {
           />
 
           <Text style={styles.textBottom}>Adicione o comprovante</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={pickImage}>
             <MaterialCommunityIcons
               name="image-plus"
               style={styles.image}
