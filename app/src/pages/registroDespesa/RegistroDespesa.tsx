@@ -1,5 +1,5 @@
-import { Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
-import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Platform  } from 'react-native';
+import { ActionSheetIOS } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
 import { styles } from './styles';
 import CustomDropdown from '../../components/customDropdown';
@@ -310,16 +310,36 @@ const RegistroDespesa = () => {
 
   const [imageUri, setImageUri] = useState<string | null>(null);
 
-  const pickImage = async () => {
+  const openImagePickerOptions = () => {
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ['Cancelar', 'Galeria'],
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) escolherGaleria();
+        }
+      );
+    } else {
+      Alert.alert(
+        'Selecionar imagem',
+        'Escolha uma opção:',
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Galeria',    onPress: () => escolherGaleria() },
+        ],
+        { cancelable: true }
+      );
+    }
+  };
+
+  const escolherGaleria = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permissão negada', 'Você precisa permitir o acesso à galeria.');
-      return;
+      return Alert.alert('Permissão negada', 'Precisa liberar acesso à galeria.');
     }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-    });
+    const result = await ImagePicker.launchImageLibraryAsync({ quality: 1 });
     if (!result.canceled && result.assets.length > 0) {
       setImageUri(result.assets[0].uri);
     }
@@ -673,7 +693,8 @@ const RegistroDespesa = () => {
           />
 
           <Text style={styles.textBottom}>Adicione o comprovante</Text>
-          <TouchableOpacity onPress={pickImage}>
+
+          <TouchableOpacity onPress={openImagePickerOptions}>
             <MaterialCommunityIcons
               name="image-plus"
               style={styles.image}
