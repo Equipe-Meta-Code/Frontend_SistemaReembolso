@@ -314,11 +314,12 @@ const RegistroDespesa = () => {
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ['Cancelar', 'Galeria'],
+          options: ['Cancelar', 'Tirar foto', 'Galeria'],
           cancelButtonIndex: 0,
         },
         (buttonIndex) => {
-          if (buttonIndex === 1) escolherGaleria();
+          if (buttonIndex === 1) tirarFoto();
+          else if (buttonIndex === 2) escolherGaleria();
         }
       );
     } else {
@@ -327,6 +328,7 @@ const RegistroDespesa = () => {
         'Escolha uma opção:',
         [
           { text: 'Cancelar', style: 'cancel' },
+          { text: 'Tirar foto', onPress: () => tirarFoto() },
           { text: 'Galeria',    onPress: () => escolherGaleria() },
         ],
         { cancelable: true }
@@ -344,6 +346,18 @@ const RegistroDespesa = () => {
       setImageUri(result.assets[0].uri);
     }
   };
+
+  const tirarFoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      return Alert.alert('Permissão negada', 'Você precisa liberar acesso à câmera.');
+    }
+    const result = await ImagePicker.launchCameraAsync({ quality: 1 });
+    if (!result.canceled && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
 
   const handleImageUpload = async (despesaId: number) => {
     if (!imageUri) return;
