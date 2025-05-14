@@ -15,6 +15,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import Foto from '../../com../../components/foto/Foto';
 import { themas } from '../../global/themes';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Funcionario {
     userId: number;
@@ -56,10 +57,7 @@ interface Despesa {
   }
 
 const Perfil = () => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const toggleDarkMode = () => {
-        setIsDarkMode(previousState => !previousState);
-    };
+    const { isDarkMode, toggleTheme: toggleDarkMode, theme } = useTheme();
 
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     type RootStackParamList = {
@@ -219,15 +217,15 @@ const Perfil = () => {
                     onPress={() => alert("Alterar Senha")}
                     iconName="chevron-forward"
                     iconColor=themas.colors.black
-                />
+                />*/}
 
                 <CustomSwitchButton
-                    titulo="Darkmode"
+                    titulo="Modo Escuro"
                     value={isDarkMode}
                     onValueChange={toggleDarkMode}
                     trackColor={{ false: themas.colors.cinza_claro, true: themas.colors.primary }}
-                    thumbColor=themas.colors.secondary
-                /> */}
+                    thumbColor={themas.colors.secondary}
+                /> 
                 
             </View>
 

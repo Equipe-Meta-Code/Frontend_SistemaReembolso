@@ -4,6 +4,7 @@ import { ProgressBar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { themas } from "../../global/themes";
+import { useTheme } from '../../context/ThemeContext';
 
 export interface Project {
   id: string;
@@ -23,10 +24,11 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const progress = project.total > 0 ? project.spent / project.total : 0;
   const valueLeft = project.total - project.spent;
+  const { theme } = useTheme(); 
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Pacotes', { projectId: project.id })}>
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: theme.colors.secondary}]}>
 
         {project.department && (
           <View style={styles.departmentContainer}>
@@ -40,13 +42,15 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
         <Text style={styles.cardTitle}>{project.name || 'Sem Nome'}</Text>
 
-        {project.descricao && <Text style={styles.cardDescription}>{project.descricao}</Text>}
+        {project.descricao && <Text style={[styles.cardDescription, { color: theme.colors.cinza}]}>
+          {project.descricao}
+          </Text>}
 
         <Text>Limite de Gastos: R${project.total?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
 
         <ProgressBar 
           progress={progress} 
-          color={valueLeft >= 0 ? themas.colors.primary : themas.colors.vinho_claro} 
+          color={valueLeft >= 0 ? theme.colors.primary : theme.colors.vinho_claro} 
           style={styles.progressBar} 
         />
 
@@ -57,13 +61,14 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           {valueLeft >= 0 ? (
             <> / Restante: R${valueLeft.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</>
           ) : (
-            <> / <Text style={{ color: themas.colors.vinho_claro }}>
+            <> / <Text style={{ color: theme.colors.vinho_claro }}>
               Limite Ultrapassado: R${Math.abs(valueLeft).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </Text></>
           )}
         </Text>
 
-        <Text style={styles.category}>
+    
+        <Text style={[styles.category, { color: theme.colors.cinza }]}>
           {project.category?.length ? project.category.join(' • ') : 'Sem Categoria'}
         </Text>
 
@@ -74,7 +79,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: themas.colors.secondary,
+
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
@@ -88,14 +93,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   cardDescription: {
-    color: themas.colors.cinza,
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 5,
   },
   category: {
     fontSize: 14,
-    color: themas.colors.cinza,
     marginBottom: 5,
     marginTop: 5,
   },
@@ -109,7 +112,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   department: {
-    color: themas.colors.amarelo,
     fontSize: 12,
     paddingHorizontal: 8,
     paddingVertical: 3,
