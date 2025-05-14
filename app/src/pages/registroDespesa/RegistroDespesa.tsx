@@ -1,4 +1,5 @@
 import { Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
 import { styles } from './styles';
 import CustomDropdown from '../../components/customDropdown';
@@ -324,6 +325,33 @@ const RegistroDespesa = () => {
     }
   };
 
+  const handleImageUpload = async (despesaId: number) => {
+    if (!imageUri) return;
+
+    const filename = imageUri.split('/').pop()!;
+    const match = /\.(\w+)$/.exec(filename);
+    const mimeType = match ? `image/${match[1]}` : 'image';
+
+    const formData = new FormData();
+    formData.append('profileImage', {
+      uri: imageUri,
+      name: filename,
+      type: mimeType,
+    } as any);
+    formData.append('tipo', 'expense');
+    formData.append('tipoId', String(despesaId));
+
+    try {
+      const res = await api.post('/imagem', formData);
+      if (res.data.success) {
+        Alert.alert('Sucesso', 'Comprovante enviado!');
+      }
+    } catch (err) {
+      console.error('[FRONT] Erro ao enviar imagem:', err);
+      Alert.alert('Erro', 'Falha ao enviar comprovante.');
+    }
+  };
+
   const handleSubmit = async () => {
     fetchData();
     setError(""); // Limpar mensagem de erro anterior
@@ -402,7 +430,11 @@ const RegistroDespesa = () => {
             : undefined,
       });
       /* console.log(response.data); */
+      const novaDespesa = response.data;
+      
       setSuccessMessage("Despesa cadastrada com sucesso!");
+
+      await handleImageUpload(novaDespesa.despesaId);
 
       setTimeout(() => {
         setSelectedPacote("");
