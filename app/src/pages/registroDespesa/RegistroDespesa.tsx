@@ -714,10 +714,31 @@ const RegistroDespesa = () => {
           <Text style={styles.textBottom}>Adicione o comprovante</Text>
 
           <TouchableOpacity onPress={openImagePickerOptions}>
-            <MaterialCommunityIcons
-              name="image-plus"
-              style={styles.image}
-            />
+            {imageUri == null ? (
+
+              <MaterialCommunityIcons
+                name="image-plus"
+                style={styles.image}
+              />
+
+            ) :
+            (
+              <View style={styles.image}>
+                <Comprovante
+                  tipo="user"
+                  tipoId={90} //<-- fazer leitura da quantidade de despesas
+                  width={150}
+                  height={150}
+                  borderRadius={0}
+                  borderWidth={3}
+                  borderColor="#fff"
+                  refreshKey={2}
+                  fallbackSource={require('../../assets/perfil.png')}
+                  uriComprovante={imageUri}
+                />
+              </View>
+            )}
+
           </TouchableOpacity>
 
           {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
