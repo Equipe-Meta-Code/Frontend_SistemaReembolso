@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '70%',
         borderWidth: 2, 
-        borderColor: 'green',
+        borderColor: themas.colors.verde,
     },
     boxBottom: {
         height: '65%',
@@ -36,13 +36,13 @@ export const styles = StyleSheet.create({
         fontSize: 16,
     },
     textBottom: {
-        color: '#000000',
+        color: themas.colors.black,
         fontSize: 16,
         marginTop: 30,
     },
     dropdown: {
         height: 50,
-        borderColor: 'gray',
+        borderColor: themas.colors.cinza,
         borderWidth: 0.5,
         borderRadius: 8,
         paddingHorizontal: 8,
@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
       },
       label: {
         position: 'absolute',
-        backgroundColor: 'white',
+        backgroundColor: themas.colors.secondary,
         left: 22,
         top: 8,
         zIndex: 999,

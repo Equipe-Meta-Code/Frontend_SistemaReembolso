@@ -44,13 +44,13 @@ export const styles = StyleSheet.create({
         fontSize: 16,
     },
     textBottom: {
-        color: '#000000',
+        color: themas.colors.black,
         fontSize: 16,
         marginTop: 30,
     },
     dropdown: {
         height: 50,
-        borderColor: 'gray',
+        borderColor: themas.colors.cinza,
         borderWidth: 0.5,
         borderRadius: 8,
         paddingHorizontal: 8,
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
       },
       label: {
         position: 'absolute',
-        backgroundColor: 'white',
+        backgroundColor: themas.colors.secondary,
         left: 22,
         top: 8,
         zIndex: 999,
@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
       },
       inputMask: {
         borderWidth: 0.5,
-        borderColor: 'gray',
+        borderColor: themas.colors.cinza,
         padding: 10,
         height: 50,
         borderRadius: 8,
@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
       },
       inputDescription: {
         borderWidth: 0.5,
-        borderColor: 'gray',
+        borderColor: themas.colors.cinza,
         paddingLeft: 10,
         height: 90,
         borderRadius: 8,
@@ -127,22 +127,22 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         padding: 10,
         borderRadius: 8,
-        color: '#721c24',
-        backgroundColor: '#f8d7da',
-        borderColor: '#f5c6cb',
+        color: themas.colors.vinho,
+        backgroundColor: themas.colors.rosa_muito_claro,
+        borderColor: themas.colors.rosa_claro,
         margin: 'auto',
       },
       pacoteErrorMessage: {
         marginTop: 16,
         padding: 10,
         borderRadius: 8,
-        color: 'red',
+        color: themas.colors.red,
         margin: 'auto',
       },
       successMessage: {
-        color: '#155724',
-        backgroundColor: '#d4edda',
-        borderColor: '#c3e6cb',
+        color: themas.colors.verde_escuro,
+        backgroundColor: themas.colors.verde_claro,
+        borderColor: themas.colors.verde_claro,
         marginTop: 16,
         fontWeight: 'bold',
         padding: 10,
@@ -153,7 +153,7 @@ export const styles = StyleSheet.create({
         marginTop: 12,
         height: 18,
         borderRadius: 5,
-        backgroundColor: '#e0e0e0',
+        backgroundColor: themas.colors.cinza_claro,
         overflow: 'hidden',
       },
       progressBarFill: {
@@ -172,24 +172,24 @@ export const styles = StyleSheet.create({
         fontSize: 16,
       },
       limit: {
-        color: 'red',
+        color: themas.colors.red,
         fontSize: 16,
         marginTop: 6,
       },
       aviso: {
-        color: 'gray',
+        color: themas.colors.cinza,
         fontSize: 16,
         marginTop: 6,
       },
 
       link: {
-        color: '#1f4baa',
+        color: themas.colors.primary,
         marginTop: 8,
         textDecorationLine: 'underline',
       },
       
       smallButton: {
-        backgroundColor: '#1f4baa',
+        backgroundColor: themas.colors.primary,
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',
@@ -198,7 +198,7 @@ export const styles = StyleSheet.create({
       
       inputNome: {
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: themas.colors.cinza_claro,
         borderRadius: 8,
         padding: 10,
         marginTop: 8,

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { styles } from "../../styles/historico.styles";
+import { themas } from "../../global/themes";
 
 interface ExpenseItemProps {
   data: string;
@@ -13,7 +14,7 @@ interface ExpenseItemProps {
 
 const ExpenseItem: React.FC<ExpenseItemProps> = ({ data, projeto, descricao, valor, status, index  }) => {
   return (
-    <View style={[styles.despesaItem, { backgroundColor: index % 2 === 0 ? "#F8F8F8" : "#FFFFFF" }]}>
+    <View style={[styles.despesaItem, { backgroundColor: index % 2 === 0 ? themas.colors.cinza_muito_claro : themas.colors.secondary }]}>
       <Text style={styles.data}>{data}</Text>
       <Text style={styles.tipoDespesa}>{projeto}</Text>
       <Text style={styles.tipoDespesa}>{descricao}</Text>
@@ -24,12 +25,12 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ data, projeto, descricao, val
           {
             color:
               status === "Recusado"
-                ? "rgba(224, 7, 7, 0.8)"
+                ? themas.colors.vinho
                 : status === "Aprovado"
-                ? "rgba(10, 138, 16, 0.87)"
+                ? themas.colors.verde_medio
                 : status === "Pendente"
-                ? "rgba(255, 188, 20, 0.87)"
-                : "#000000"
+                ? themas.colors.mostarda
+                : themas.colors.black
           }
         ]}
       >

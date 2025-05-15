@@ -7,6 +7,7 @@ import { styles } from "../../styles/historico.styles";
 import api from "../../services/api";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
+import { themas } from "../../global/themes";
 
 interface Despesa {
   _id: string;
@@ -210,7 +211,7 @@ const Historico: React.FC = () => {
       </View>
 
       {despesasFiltradasUsuario.length === 0 && (
-        <Text style={{ textAlign: 'center', marginTop: 20, color: 'gray' }}>
+        <Text style={{ textAlign: 'center', marginTop: 20, color: themas.colors.cinza }}>
           Nenhuma despesa encontrada.
         </Text>
         )}

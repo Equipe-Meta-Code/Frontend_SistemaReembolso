@@ -11,6 +11,7 @@ import Profile from "../pages/perfil/Perfil";
 import Login from "../pages/login/Login";
 import BottomRoutes from "../routes/bottom.routes";
 import Cadastro from "../pages/Cadastro/Cadastro";
+import { themas } from "../global/themes";
 
 // Define os params de cada screen do Stack
 type RootStackParamList = {
@@ -34,7 +35,7 @@ function AppWrapper() {
     if (loading) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <ActivityIndicator size="large" color="#2A2F4F" />
+                <ActivityIndicator size="large" color={themas.colors.azul_escuro} />
             </View>
         );
     }

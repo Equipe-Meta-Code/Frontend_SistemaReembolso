@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     datePickerButton: {
         padding: 15,
         borderWidth: 0.5,
-        borderColor: 'gray',
+        borderColor: themas.colors.cinza,
         borderRadius: 8,
         backgroundColor:themas.colors.secondary,
         height: 50,
@@ -13,6 +13,6 @@ export const styles = StyleSheet.create({
       },
       dateText: {
         fontSize: 16,
-        color: 'black',
+        color: themas.colors.black,
       },
 });

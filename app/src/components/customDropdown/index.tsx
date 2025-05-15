@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { styles } from './styles';
+import { themas } from '../../global/themes';
 
 interface CustomDropdownProps {
   data: { label: string; value: string }[]; // Dados do dropdown
@@ -20,7 +21,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
 
   return (
       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+        style={[styles.dropdown, isFocus && { borderColor: themas.colors.blue }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
@@ -42,7 +43,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         renderLeftIcon={() => (
           <AntDesign
             style={styles.icon}
-            color={isFocus ? 'blue' : 'black'}
+            color={isFocus ? themas.colors.blue : themas.colors.black}
             name="Safety"
             size={20}
           />

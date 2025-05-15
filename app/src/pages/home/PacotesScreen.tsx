@@ -9,6 +9,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { themas } from "../../global/themes";
 
 interface Despesa {
   despesaId: string;
@@ -38,11 +39,11 @@ type RootStackParamList = {
 };
 
 const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
-  'Rascunho': { backgroundColor: '#E5E7EB', color: '#374151' },
-  'Aguardando Aprovação': { backgroundColor: 'rgba(255, 188, 20, 0.21)', color: 'rgba(214, 154, 1, 0.96)' },
-  'Recusado': { backgroundColor: 'rgba(209, 53, 53, 0.15)', color: 'rgba(185, 14, 14, 0.70)' },
-  'Aprovado': { backgroundColor: 'rgba(27, 143, 37, 0.15)', color: 'rgba(4, 155, 12, 0.83)' },
-  'Aprovado Parcialmente': { backgroundColor: 'rgba(255, 139, 62, 0.21)', color: 'rgba(248, 103, 7, 0.69)' },
+  'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
+  'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda, color: themas.colors.mostarda_escuro },
+  'Recusado': { backgroundColor: themas.colors.vinho_claro, color: themas.colors.vinho },
+  'Aprovado': { backgroundColor: themas.colors.verde_medio, color: themas.colors.verde_escuro },
+  'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja, color: themas.colors.laranja_forte },
 };
 
 const PacotesScreen = ({ route }: any) => {
@@ -181,7 +182,7 @@ const PacotesScreen = ({ route }: any) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.filtroChipLimpar} onPress={() => setStatusSelecionado(null)}>
-            <Ionicons name="close" size={20} color="#374151" />
+            <Ionicons name="close" size={20} color={themas.colors.chumbo} />
           </TouchableOpacity>
 
         </View>
@@ -234,20 +235,20 @@ const PacotesScreen = ({ route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FBFBFB',
+    backgroundColor: themas.colors.cinza_muito_claro,
   },
   top: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
     paddingTop: 50,
-    backgroundColor: '#1F48AA',
+    backgroundColor: themas.colors.primary,
     width: '100%',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: themas.colors.secondary,
     paddingLeft: 15,
   },
   image: {
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   },
   arrow: {
     fontSize: 24,
-    color: '#FFFFFF',
+    color: themas.colors.secondary,
   },
   filtroContainer: {
     paddingHorizontal: 50,
@@ -273,12 +274,12 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    color: '#111827',
+    color: themas.colors.azul_escuro,
   },  
   filtroRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: themas.colors.cinza_muito_claro,
     borderRadius: 8,
     paddingHorizontal: 8,
   },
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
   },
   divisor: {
     height: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: themas.colors.cinza_claro,
     marginVertical: 12,
   },
   emptyContainer: {
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: '#9CA3AF',
+    color: themas.colors.cinza_medio,
     textAlign: 'center',
   },  
   filtrosRow: {
@@ -310,29 +311,29 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filtroChip: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: themas.colors.cinza_claro,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   },
   filtroChipText: {
-    color: '#374151',
+    color: themas.colors.chumbo,
     fontSize: 14,
     fontWeight: '500',
   },
   filtroChipSelecionado: {
-    backgroundColor: '#1F48AA',
+    backgroundColor: themas.colors.primary,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   }, 
   filtroChipSelecionadoText: {
-    color: '#FFFFFF',
+    color: themas.colors.secondary,
     fontSize: 14,
     fontWeight: '500',
   },
   filtroChipLimpar: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: themas.colors.cinza_muito_claro,
     borderRadius: 20,
     padding: 6,
     alignItems: 'center',

@@ -19,7 +19,7 @@ export const style = StyleSheet.create({
     },
     boxMid:{
         flex:1,
-        backgroundColor:'white',
+        backgroundColor:themas.colors.secondary,
         width:'100%',
         paddingBlockStart:20,
         paddingHorizontal:20,
@@ -32,7 +32,7 @@ export const style = StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        color: 'white',  
+        color: themas.colors.secondary,  
         fontWeight: 'bold',
         marginLeft: 10, 
     },
@@ -42,7 +42,7 @@ export const style = StyleSheet.create({
     
     description: {
         fontSize: 16,  
-        color: 'white', 
+        color: themas.colors.secondary, 
         textAlign: 'left', 
         paddingLeft:20,//
    
@@ -51,11 +51,11 @@ export const style = StyleSheet.create({
         marginTop: 10,
         fontSize: 24,   
         fontWeight: 'bold', 
-        color: 'black', 
+        color: themas.colors.black, 
     },
     instruction: {
         fontSize: 16,   
-        color: 'black', 
+        color: themas.colors.black, 
         textAlign: 'left',  
         marginTop: 10, 
     },
@@ -76,7 +76,7 @@ export const style = StyleSheet.create({
     noAccountText: {
         paddingTop:20,
         fontSize: 16,
-        color: themas.colors.grey,    
+        color: themas.colors.gray,    
         textAlign: 'center', 
     },
     checkboxContainer: {
@@ -90,7 +90,7 @@ export const style = StyleSheet.create({
     checkboxText: {
         marginLeft: 10,
         fontSize: 14,
-        color: 'gray',
+        color: themas.colors.cinza,
     },
     passwordContainer: {
         flexDirection: 'row',
@@ -104,13 +104,13 @@ export const style = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
         padding: 10,
-        backgroundColor: "#FFCCCC", // Fundo vermelho claro
+        backgroundColor: themas.colors.rosa_muito_claro, // Fundo vermelho claro
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: "#FF0000", // Borda vermelha
+        borderColor: themas.colors.red, // Borda vermelha
       },
       errorMessage: {
-        color: "#FF0000", // Cor do texto vermelho
+        color: themas.colors.red, // Cor do texto vermelho
         fontSize: 14,
         fontWeight: 'bold',
       }

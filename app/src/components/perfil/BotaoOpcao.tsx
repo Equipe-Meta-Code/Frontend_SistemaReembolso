@@ -16,7 +16,7 @@ const BotaoOpcao: React.FC<BotaoOpcaoProps> = ({
   titulo,
   value,
   onValueChange,
-  trackColor = { false: "#E0E0E0", true: themas.colors.primary },
+  trackColor = { false: themas.colors.cinza_claro, true: themas.colors.primary },
   thumbColor = themas.colors.secondary,
   style: customStyle,
 }) => {
@@ -27,7 +27,7 @@ const BotaoOpcao: React.FC<BotaoOpcaoProps> = ({
         value={value}
         onValueChange={onValueChange}
         trackColor={trackColor}
-        thumbColor={value ? thumbColor : "#f4f4f4"}
+        thumbColor={value ? thumbColor : themas.colors.cinza_muito_claro} 
       />
     </View>
   );
