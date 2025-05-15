@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { themas } from '../../global/themes';
 import * as ImagePicker from 'expo-image-picker';
+import Comprovante from '../../components/registroDespesa/Comprovante';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
@@ -367,7 +368,7 @@ const RegistroDespesa = () => {
     const mimeType = match ? `image/${match[1]}` : 'image';
 
     const formData = new FormData();
-    formData.append('profileImage', {
+    formData.append('receipt', {
       uri: imageUri,
       name: filename,
       type: mimeType,
@@ -376,7 +377,11 @@ const RegistroDespesa = () => {
     formData.append('tipoId', String(despesaId));
 
     try {
-      const res = await api.post('/imagem', formData);
+      const res = await api.post(
+      '/uploadcomprovante',
+      formData,
+      { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
       if (res.data.success) {
         Alert.alert('Sucesso', 'Comprovante enviado!');
       }
