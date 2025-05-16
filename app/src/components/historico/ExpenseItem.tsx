@@ -18,7 +18,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ data, projeto, descricao, val
   const styles = createStyles (theme);
   
   return (
-    <View style={[styles.despesaItem, { backgroundColor: index % 2 === 0 ? theme.colors.cinza_muito_claro : themas.colors.secondary }]}>
+    <View style={[styles.despesaItem, { backgroundColor: index % 2 === 0 ? theme.colors.cinza_tabela : theme.colors.preto_tabela }]}>
       <Text style={styles.data}>{data}</Text>
       <Text style={styles.tipoDespesa}>{projeto}</Text>
       <Text style={styles.tipoDespesa}>{descricao}</Text>

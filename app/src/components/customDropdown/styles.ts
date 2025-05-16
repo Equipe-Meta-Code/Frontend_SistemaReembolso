@@ -3,7 +3,7 @@ import { themas } from "../../global/themes";
 
 export const createStyles = (theme: any) => StyleSheet.create({
     boxTop: {
-        backgroundColor: themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         height: '35%',
     },
     boxTopTwo: {
@@ -50,13 +50,16 @@ export const createStyles = (theme: any) => StyleSheet.create({
         backgroundColor: theme.colors.secondary,
       },
       placeholderStyle: {
+        color: theme.colors.text,
         fontSize: 16,
       },
       selectedTextStyle: {
+        color: theme.colors.text,
         fontSize: 16,
       },
       inputSearchStyle: {
         height: 40,
+        color: theme.colors.text,
         fontSize: 16,
       },
       iconStyle: {

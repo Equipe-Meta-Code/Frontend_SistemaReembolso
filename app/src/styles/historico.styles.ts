@@ -31,7 +31,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
 
   // card de resumo no topo da tela
   cardInformacoes: {
-    backgroundColor: theme.colors.cinza_muito_claro, 
+    backgroundColor: theme.colors.cinza_muito_claro_historico, 
     borderRadius: 10,            
     padding: 12,
     marginHorizontal: 20,
@@ -41,12 +41,12 @@ export const createStyles = (theme: any) => StyleSheet.create({
   },  
   totalTitle: {
     fontSize: 14,
-    color: theme.colors.gray,
+    color: theme.colors.text,
     marginBottom: 4,
   },
   totalValue: {
     fontSize: 26,
-    color: theme.colors.primary,
+    color: theme.colors.blue,
     marginBottom: 4,
     fontWeight: "bold",
   },
@@ -82,7 +82,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
   },
   statusLabel: {
     fontSize: 12,
-    color: theme.colors.azul_escuro, 
+    color: theme.colors.text, 
   },
 
 
@@ -91,7 +91,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
   },
   headerTitle: {
     fontSize: 22,
-    color: theme.colors.secondary,
+    color: themas.colors.secondary,
     fontWeight: "bold",
   },
   highlight: {
@@ -129,12 +129,12 @@ export const createStyles = (theme: any) => StyleSheet.create({
   sectionTitle: {
     fontSize: 17,
     fontWeight: "bold",
-    color: theme.colors.secondary,
+    color: themas.colors.secondary,
   },
   tableHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: theme.colors.cinza_claro, 
+    backgroundColor: theme.colors.primary, 
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 5,
@@ -155,6 +155,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 8,
+    borderColor: theme.colors.black,
     marginBottom: 5,
     elevation: 1,
   },

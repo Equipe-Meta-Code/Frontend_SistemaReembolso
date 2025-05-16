@@ -251,7 +251,7 @@ const createStyles = (theme: any) => StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: theme.colors.secondary,
+    color: theme.colors.sempre_branco,
     paddingLeft: 15,
   },
   image: {
@@ -269,7 +269,7 @@ const createStyles = (theme: any) => StyleSheet.create({
   },
   arrow: {
     fontSize: 24,
-    color: theme.colors.secondary,
+    color: theme.colors.sempre_branco,
   },
   filtroContainer: {
     paddingHorizontal: 50,

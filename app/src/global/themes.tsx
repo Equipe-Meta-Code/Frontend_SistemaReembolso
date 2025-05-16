@@ -10,6 +10,7 @@ export const themas = {
       azul_escuro: "#D69A01",
       azul_claro: "#34A3EE",
       black: "#000000",
+      preto_tabela: "#FFFFFF",
   
       vinho: "#721c24",
       vinho_claro: "#D13535",
@@ -26,6 +27,8 @@ export const themas = {
       cinza_claro: "#e0e0e0",
       cinza: "gray",
       cinza_muito_claro: "#f5f5f5",
+      cinza_muito_claro_historico: "#f5f5f5",
+      cinza_tabela: "#f5f5f5",
       cinza_medio: "#9CA3AF",
   
       chumbo: "#374151",
@@ -40,7 +43,9 @@ export const themas = {
       laranja_forte: "#d35400",
   
       roxo: "#3A08C4",
-      sempre_branco: "#FFFFFF"
+      sempre_branco: "#FFFFFF",
+      sempre_preto: "#000000",
+      sempre_cinza_claro: "#e0e0e0"
     }
   };
   
@@ -56,6 +61,7 @@ export const themas = {
       azul_escuro: "#D69A01",
       azul_claro: "#34A3EE",
       black: "#FFFFFF", //branco
+      preto_tabela: "#252525",
   
       vinho: "#721c24",
       vinho_claro: "#D13535",
@@ -72,7 +78,9 @@ export const themas = {
       cinza_claro: "#FFFFFF", //branco
       cinza: "gray",
       cinza_muito_claro: "#FFFFFF", //branco
+      cinza_muito_claro_historico: "#252525",
       cinza_medio: "#FFFFFF", //branco
+      cinza_tabela: "#474A51",
   
       chumbo: "#FFFFFF", //branco
       chumbo_claro: "#FFFFFF", //branco
@@ -86,7 +94,9 @@ export const themas = {
       laranja_forte: "#d35400",
   
       roxo: "#3A08C4",
-      sempre_branco: "#FFFFFF"
+      sempre_branco: "#FFFFFF",
+      sempre_preto: "#000000",
+      sempre_cinza_claro: "#9CA3AF"
     }
   };
   
