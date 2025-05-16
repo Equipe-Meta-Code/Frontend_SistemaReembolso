@@ -39,52 +39,54 @@ export const themas = {
       laranja: "#FF8B3E",
       laranja_forte: "#d35400",
   
-      roxo: "#3A08C4"
+      roxo: "#3A08C4",
+      sempre_branco: "#FFFFFF"
     }
   };
   
   export const darkTheme = {
     colors: {
-      background: "#202020", // fundo escuro (unchanged)
+      background: "#202020", // fundo escuro
       primary: "#1F48AA", // unchanged
-      secondary: "#1C1C1C", // unchanged
-      text: "#FFFFFF", // texto branco (unchanged)
+      secondary: "#1C1C1C",
+      text: "#FFFFFF", // texto branco 
   
-      gray: "#2C2C2C",
-      blue: "#FFFF00",
-      azul_escuro: "#2965FE",
-      azul_claro: "#CB5C11",
-      black: "#FFFFFF",
+      gray: "#FFFFFF", //branco
+      blue: "blue",
+      azul_escuro: "#D69A01",
+      azul_claro: "#34A3EE",
+      black: "#FFFFFF", //branco
   
-      vinho: "#8DE3DB",
-      vinho_claro: "#2ECACA",
-      rosa_muito_claro: "#072825",
-      rosa_claro: "#0A3934",
-      rosa: "#00922C",
-      red: "#00FFFF",
+      vinho: "#721c24",
+      vinho_claro: "#D13535",
+      rosa_muito_claro: "#f8d7da",
+      rosa_claro: "#f5c6cb",
+      rosa: "#FF6DD3",
+      red: "red",
   
-      verde_escuro: "#EAA8DB",
-      verde_claro: "#2B1225",
-      verde_medio: "#E470DA",
-      verde: "#FF7FFF",
+      verde_escuro: "#155724",
+      verde_claro: "#d4edda",
+      verde_medio: "#1B8F25",
+      verde: "green",
   
-      cinza_claro: "#1F1F1F",
-      cinza: "#7F7F7F",
-      cinza_muito_claro: "#0A0A0A",
-      cinza_medio: "#635C50",
+      cinza_claro: "#FFFFFF", //branco
+      cinza: "gray",
+      cinza_muito_claro: "#FFFFFF", //branco
+      cinza_medio: "#FFFFFF", //branco
   
-      chumbo: "#C8BEAE",
-      chumbo_claro: "#B4AA9C",
+      chumbo: "#FFFFFF", //branco
+      chumbo_claro: "#FFFFFF", //branco
   
-      amarelo: "#2855F2",
-      amarelo_muito_claro: "#00030E",
-      mostarda: "#0043EB",
-      mostarda_escuro: "#4C7EFC",
+      amarelo: "#D7AA0D",
+      amarelo_muito_claro: "#FFFCF1", 
+      mostarda: "#FFBC14",
+      mostarda_escuro: "#B38103",
   
-      laranja: "#0074C1",
-      laranja_forte: "#2CABFF",
+      laranja: "#FF8B3E",
+      laranja_forte: "#d35400",
   
-      roxo: "#C5F73B"
+      roxo: "#3A08C4",
+      sempre_branco: "#FFFFFF"
     }
   };
   

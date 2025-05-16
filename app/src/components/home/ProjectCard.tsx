@@ -25,6 +25,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const progress = project.total > 0 ? project.spent / project.total : 0;
   const valueLeft = project.total - project.spent;
   const { theme } = useTheme(); 
+  const styles = createStyles (theme); 
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Pacotes', { projectId: project.id })}>
@@ -33,7 +34,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
         {project.department && (
           <View style={styles.departmentContainer}>
             {project.department.split(',').map((department, index) => (
-              <Text key={index} style={[styles.department, { backgroundColor: themas.colors.amarelo_muito_claro }]}>  
+              <Text key={index} style={[styles.department, { backgroundColor: theme.colors.amarelo_muito_claro }]}>  
                 {department.trim()}
               </Text>
             ))}
@@ -46,7 +47,10 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           {project.descricao}
           </Text>}
 
-        <Text>Limite de Gastos: R${project.total?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
+        <Text style={[{ color: theme.colors.text }]}>
+          Limite de Gastos: R${project.total?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+        </Text>
+
 
         <ProgressBar 
           progress={progress} 
@@ -55,7 +59,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
         />
 
 
-        <Text>
+        <Text style={[{ color: theme.colors.text }]}>
           Gasto: R$
           {project.spent?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) ?? '0,00'}
           {valueLeft >= 0 ? (
@@ -77,13 +81,13 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   card: {
 
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
-    shadowColor: themas.colors.black,
+    shadowColor: theme.colors.black,
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
   },
@@ -91,11 +95,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+    color: theme.colors.text,
   },
   cardDescription: {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 5,
+    color: theme.colors.text,
   },
   category: {
     fontSize: 14,

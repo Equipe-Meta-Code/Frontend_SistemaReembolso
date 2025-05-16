@@ -1,9 +1,9 @@
 import { StyleSheet } from "react-native";
 import { themas } from "../../global/themes"; // Se você quiser usar seu themas lindão!
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
     button: {
-        backgroundColor: themas.colors.primary, 
+        backgroundColor: theme.colors.primary, 
         paddingVertical: 19,
         paddingHorizontal: 130,
         borderRadius: 25, 
@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        color: themas.colors.secondary,
+        color: theme.colors.secondary,
         fontSize: 16,
         fontWeight: 'bold',
     },

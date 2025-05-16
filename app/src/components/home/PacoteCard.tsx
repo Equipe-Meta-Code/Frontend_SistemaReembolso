@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import api from '../../services/api';
 import { themas } from "../../global/themes";
+import { useTheme } from '../../context/ThemeContext';
 export interface Despesa {
     categoria: string;
     valor_gasto: number;
@@ -28,6 +29,8 @@ export interface Despesa {
 
   const PacoteCard: React.FC<PacoteCardProps> = ({ nome, despesas, status, pacoteId, fetchPacotesDespesas, resetarExpandido }) => {
     
+      const { theme } = useTheme();
+      const styles = createStyles (theme);    
       const [isSolicitando, setIsSolicitando] = useState(false);
       const [expandido, setExpandido] = useState(false);  
 
@@ -88,34 +91,34 @@ export interface Despesa {
     }, []);
 
     const cardCategoriaCores: Record<string, string> = {
-      'Alimentação': themas.colors.cinza_claro,
-      'Hospedagem': themas.colors.verde_escuro,
-      'Transporte': themas.colors.azul_claro,
-      'Serviços Terceirizados': themas.colors.verde_medio,
-      'Materiais': themas.colors.rosa,
-      'Outros': themas.colors.chumbo_claro,
+      'Alimentação': theme.colors.cinza_claro,
+      'Hospedagem': theme.colors.verde_escuro,
+      'Transporte': theme.colors.azul_claro,
+      'Serviços Terceirizados': theme.colors.verde_medio,
+      'Materiais': theme.colors.rosa,
+      'Outros': theme.colors.chumbo_claro,
     };    
 
     const tituloCategoriaCores: Record<string, string> = {
-      'Alimentação': themas.colors.roxo,
-      'Hospedagem': themas.colors.verde_escuro,
-      'Transporte': themas.colors.azul_escuro,
-      'Serviços Terceirizados': themas.colors.amarelo,
-      'Materiais': themas.colors.vinho_claro,
-      'Outros': themas.colors.chumbo, 
+      'Alimentação': theme.colors.roxo,
+      'Hospedagem': theme.colors.verde_escuro,
+      'Transporte': theme.colors.azul_escuro,
+      'Serviços Terceirizados': theme.colors.amarelo,
+      'Materiais': theme.colors.vinho_claro,
+      'Outros': theme.colors.chumbo, 
     };    
 
     const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
-      'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
-      'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda, color: themas.colors.amarelo },
-      'Recusado': { backgroundColor: themas.colors.vinho_claro, color: themas.colors.vinho_claro }, 
-      'Aprovado': { backgroundColor: themas.colors.verde_medio, color: themas.colors.verde_medio },
-      'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja, color: themas.colors.laranja_forte },
+      'Rascunho': { backgroundColor: theme.colors.cinza_claro, color: theme.colors.chumbo },
+      'Aguardando Aprovação': { backgroundColor: theme.colors.mostarda, color: theme.colors.amarelo },
+      'Recusado': { backgroundColor: theme.colors.vinho_claro, color: theme.colors.vinho_claro }, 
+      'Aprovado': { backgroundColor: theme.colors.verde_medio, color: theme.colors.verde_medio },
+      'Aprovado Parcialmente': { backgroundColor: theme.colors.laranja, color: theme.colors.laranja_forte },
     };    
 
     const aprovacaoDespesaCores: Record<string, string> = {
-      'Aprovado': themas.colors.verde_medio,
-      'Recusado': themas.colors.vinho_claro,
+      'Aprovado': theme.colors.verde_medio,
+      'Recusado': theme.colors.vinho_claro,
     };    
 
     //mostra legenda apenas se o pacote for aprovado parcialmente
@@ -142,7 +145,7 @@ export interface Despesa {
             <Text style={styles.cardTitle}>{nome}</Text>
             <Text style={styles.totalGasto}>Total gasto: R$ {totalGasto.toFixed(2).replace('.', ',')}</Text>
           
-            <Text style={{ color: themas.colors.chumbo_claro, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
+            <Text style={{ color: theme.colors.chumbo_claro, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
 
             {/* Histórico de despesas só aparece se estiver expandido */}
             {expandido && (
@@ -156,7 +159,7 @@ export interface Despesa {
                     {grupo.itens.map((item: any, index: number) => (
                     <Text key={index} style={styles.despesaItem}>
                     {mistoAprovacao && (
-                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || themas.colors.chumbo_claro, fontWeight: 'bold' }}>
+                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || theme.colors.chumbo_claro, fontWeight: 'bold' }}>
                         [{item.aprovacao}]
                       </Text>
                     )}
@@ -174,7 +177,7 @@ export interface Despesa {
               {/* Botão de solicitar reembolso */}
               {status === 'Rascunho' && (
                 <TouchableOpacity
-                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: themas.colors.cinza_medio }]}
+                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: theme.colors.cinza_medio }]}
                   onPress={handleSolicitarReembolso}
                   disabled={isSolicitando || despesas?.length === 0}
                 >
@@ -192,9 +195,9 @@ export interface Despesa {
     );
   };
 
-  const styles = StyleSheet.create({
+  const createStyles = (theme: any) => StyleSheet.create({
     card: {
-      backgroundColor: themas.colors.cinza_muito_claro,
+      backgroundColor: theme.colors.cinza_muito_claro,
       padding: 10,
       borderRadius: 14,
       marginVertical: 12,
@@ -203,31 +206,31 @@ export interface Despesa {
     cardTitle: {
       fontSize: 18,
       fontWeight: '700',
-      color: themas.colors.black,
+      color: theme.colors.black,
       marginBottom: 4,
     },
     cardSubtitle: {
       marginTop: 16,
       fontSize: 15,
       fontWeight: '600',
-      color: themas.colors.chumbo, 
+      color: theme.colors.chumbo, 
     },
     cardSubSubtitle: {
       marginTop: 12,
       fontSize: 15,
       fontWeight: '600',
-      color: themas.colors.chumbo, 
+      color: theme.colors.chumbo, 
     },
     despesaItem: {
       marginTop: 6,
       fontSize: 15,
-      color: themas.colors.chumbo_claro,
+      color: theme.colors.chumbo_claro,
       lineHeight: 22,
     },
     semDespesa: {
       marginTop: 15,
       marginBottom: 10,
-      color: themas.colors.cinza_medio, 
+      color: theme.colors.cinza_medio, 
       fontSize: 14,
       fontStyle: 'italic',
     },
@@ -236,8 +239,8 @@ export interface Despesa {
       marginBottom: 15,
     },
     statusText: {
-      backgroundColor: themas.colors.cinza_claro, 
-      color: themas.colors.chumbo,
+      backgroundColor: theme.colors.cinza_claro, 
+      color: theme.colors.chumbo,
       fontSize: 12,
       paddingHorizontal: 16,
       paddingVertical: 4,
@@ -252,20 +255,20 @@ export interface Despesa {
     },
     botaoReembolso: {
       marginTop: 16,
-      backgroundColor: themas.colors.primary,
+      backgroundColor: theme.colors.primary,
       paddingVertical: 10,
       borderRadius: 10,
       alignItems: 'center',
     },
     textoBotao: {
-      color: themas.colors.secondary,
+      color: theme.colors.secondary,
       fontSize: 16,
       fontWeight: '600',
     },
     totalGasto: {
       fontSize: 14,
       fontWeight: '600',
-      color: themas.colors.chumbo_claro,
+      color: theme.colors.chumbo_claro,
       marginBottom: 6,
       marginLeft: 2,
     },    

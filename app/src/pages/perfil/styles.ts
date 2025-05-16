@@ -1,11 +1,11 @@
 import { StyleSheet, Platform } from "react-native";
 import { themas } from "../../global/themes";
 
-export const style = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
     container: {
         width: "100%",
         height: "100%",
-        backgroundColor: themas.colors.secondary,
+        backgroundColor: theme.colors.secondary,
         padding: 0,
         display: "flex",
         flexDirection: "column",
@@ -14,7 +14,7 @@ export const style = StyleSheet.create({
     corTopo:{
         width: "100%",
         height: 140,
-        backgroundColor: themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         position: "absolute",
         borderRadius: 20,
         borderTopLeftRadius: 0,
@@ -40,22 +40,23 @@ export const style = StyleSheet.create({
         height: 150,
         borderRadius: 100,
         borderWidth: 3,
-        borderColor: themas.colors.secondary,
+        borderColor: theme.colors.secondary,
     },
     nomeFuncionario: {
         fontSize: 28,
         fontWeight: "bold",
+        color: theme.colors.text,
     },
     emailFuncionario: {
         fontSize: 22,
         fontWeight: "400",
-        color: themas.colors.chumbo,
+        color: theme.colors.text,
     },
     divisor: {
         marginTop: 20,
         width: "90%",  
         height: 1,  
-        backgroundColor: themas.colors.cinza_claro,  
+        backgroundColor: theme.colors.cinza_claro,  
         marginVertical: 15,  
         alignSelf: "center",  
     },    
@@ -70,37 +71,38 @@ export const style = StyleSheet.create({
         fontSize: 22,
         fontWeight: "bold",
         textAlign: "left", // Garante que o texto esteja alinhado à esquerda
+        color: theme.colors.text,
     },    
     containerBotoes: {
         marginTop: 10,
         width: "90%",
-        backgroundColor: themas.colors.secondary,
+        backgroundColor: theme.colors.secondary,
         borderRadius: 12,
         padding: 5,
-        shadowColor: themas.colors.black,
+        shadowColor: theme.colors.black,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 2,
         borderWidth: 1,
-        borderColor: themas.colors.cinza_claro,
+        borderColor: theme.colors.cinza_claro,
     },
     botao: {
         width: "100%",
         height: 50,
         borderRadius: 8,
-        backgroundColor: themas.colors.secondary,
+        backgroundColor: theme.colors.secondary,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: 15,
         borderBottomWidth: 1,
-        borderBottomColor: themas.colors.cinza_claro,
+        borderBottomColor: theme.colors.cinza_claro,
     },    
     textoBotao: {
         fontSize: 18,
         fontWeight: "400",
-        color: themas.colors.black,
+        color: theme.colors.black,
     },    
     containerMostradores: {
         marginTop: 10,
@@ -129,7 +131,7 @@ export const style = StyleSheet.create({
     titulo: {
         fontSize: 22,
         fontWeight: "bold",
-        color: themas.colors.black,
+        color: theme.colors.black,
         position: "absolute",
         alignSelf: "center",
     },

@@ -1,7 +1,8 @@
 import React, { forwardRef, LegacyRef } from "react";
 import { TextInput, View, TextInputProps, Text, TouchableOpacity, StyleProp, TextStyle } from 'react-native';
 import { MaterialIcons, FontAwesome, Octicons } from '@expo/vector-icons';
-import { style } from "./styles";
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
 import { themas } from "../../global/themes";
 
 type IconComponent = React.ComponentType<React.ComponentProps<typeof MaterialIcons>> | 
@@ -24,6 +25,8 @@ type Props = TextInputProps & {
 
 export const Input = forwardRef((props: Props, ref: LegacyRef<TextInput> | null) => {
     const {IconLeft, IconRigth, iconLeftName, iconRightName, title, onIconLeftPress, onIconRigthPress, height, labelStyle, error = false, ...rest} = props;
+    const { theme } = useTheme();
+    const style = createStyles (theme);
 
     return (
         <>

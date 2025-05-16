@@ -30,7 +30,6 @@ type RootStackParamList = {
 
 const Home: React.FC = () => {
   const { theme } = useTheme(); 
-
   const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [projects, setProjects] = useState<Project[]>([]);

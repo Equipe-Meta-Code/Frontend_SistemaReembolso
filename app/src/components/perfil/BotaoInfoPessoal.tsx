@@ -1,7 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-
-import { style } from "./styles";
+import { themas } from '../../global/themes';
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext'; 
 
 interface CustomButtonProps {
   titulo: string;
@@ -11,6 +12,7 @@ interface CustomButtonProps {
   iconColor?: string;
   style?: object;
 }
+    
 
 const BotaoInfoPessoal: React.FC<CustomButtonProps> = ({
   titulo,
@@ -20,6 +22,10 @@ const BotaoInfoPessoal: React.FC<CustomButtonProps> = ({
   iconColor = themas.colors.black,
   style: customStyle,
   }) => {
+
+  const { theme } = useTheme();
+  const style = createStyles (theme);
+    
   return (
     <TouchableOpacity style={style.botaoTopo} onPress={onPress}>
       <Text style={style.textoBotaoTopo}>{titulo}</Text>

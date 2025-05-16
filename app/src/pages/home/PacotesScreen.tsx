@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { themas } from "../../global/themes";
+import { useTheme } from '../../context/ThemeContext';
 
 interface Despesa {
   despesaId: string;
@@ -47,6 +48,8 @@ const statusStyles: Record<string, { backgroundColor: string; color: string }> =
 };
 
 const PacotesScreen = ({ route }: any) => {
+  const { theme } = useTheme();  
+  const styles = createStyles (theme); 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { projectId } = route.params;
   const [pacotes, setPacotes] = useState<Pacote[]>([]);
@@ -182,7 +185,7 @@ const PacotesScreen = ({ route }: any) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.filtroChipLimpar} onPress={() => setStatusSelecionado(null)}>
-            <Ionicons name="close" size={20} color={themas.colors.chumbo} />
+            <Ionicons name="close" size={20} color={theme.colors.chumbo} />
           </TouchableOpacity>
 
         </View>
@@ -232,23 +235,23 @@ const PacotesScreen = ({ route }: any) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: themas.colors.cinza_muito_claro,
+    backgroundColor: theme.colors.cinza_muito_claro,
   },
   top: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
     paddingTop: 50,
-    backgroundColor: themas.colors.primary,
+    backgroundColor: theme.colors.primary,
     width: '100%',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: themas.colors.secondary,
+    color: theme.colors.secondary,
     paddingLeft: 15,
   },
   image: {
@@ -266,7 +269,7 @@ const styles = StyleSheet.create({
   },
   arrow: {
     fontSize: 24,
-    color: themas.colors.secondary,
+    color: theme.colors.secondary,
   },
   filtroContainer: {
     paddingHorizontal: 50,
@@ -274,12 +277,12 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    color: themas.colors.azul_escuro,
+    color: theme.colors.azul_escuro,
   },  
   filtroRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: themas.colors.cinza_muito_claro,
+    backgroundColor: theme.colors.cinza_muito_claro,
     borderRadius: 8,
     paddingHorizontal: 8,
   },
@@ -289,7 +292,7 @@ const styles = StyleSheet.create({
   },
   divisor: {
     height: 2,
-    backgroundColor: themas.colors.cinza_claro,
+    backgroundColor: theme.colors.cinza_claro,
     marginVertical: 12,
   },
   emptyContainer: {
@@ -300,7 +303,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: themas.colors.cinza_medio,
+    color: theme.colors.cinza_medio,
     textAlign: 'center',
   },  
   filtrosRow: {
@@ -311,29 +314,29 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filtroChip: {
-    backgroundColor: themas.colors.cinza_claro,
+    backgroundColor: theme.colors.cinza_claro,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   },
   filtroChipText: {
-    color: themas.colors.chumbo,
+    color: theme.colors.chumbo,
     fontSize: 14,
     fontWeight: '500',
   },
   filtroChipSelecionado: {
-    backgroundColor: themas.colors.primary,
+    backgroundColor: theme.colors.primary,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   }, 
   filtroChipSelecionadoText: {
-    color: themas.colors.secondary,
+    color: theme.colors.secondary,
     fontSize: 14,
     fontWeight: '500',
   },
   filtroChipLimpar: {
-    backgroundColor: themas.colors.cinza_muito_claro,
+    backgroundColor: theme.colors.cinza_muito_claro,
     borderRadius: 20,
     padding: 6,
     alignItems: 'center',

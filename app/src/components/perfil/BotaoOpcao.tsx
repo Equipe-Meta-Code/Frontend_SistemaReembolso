@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
-import { style } from './styles';
+import { createStyles } from "./styles";
 import { useTheme } from '../../context/ThemeContext'; 
 
 interface BotaoOpcaoProps {
@@ -21,6 +21,8 @@ const BotaoOpcao: React.FC<BotaoOpcaoProps> = ({
   style: customStyle,
 }) => {
   const { theme } = useTheme();
+  const style = createStyles (theme);
+  
 
   const track = trackColor || {
     false: theme.colors.cinza_claro,
