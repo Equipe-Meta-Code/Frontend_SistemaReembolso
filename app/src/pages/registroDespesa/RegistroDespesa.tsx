@@ -1,5 +1,4 @@
-import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Platform  } from 'react-native';
-import { ActionSheetIOS } from 'react-native';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Platform, Modal, TouchableWithoutFeedback, Pressable  } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
 import { styles } from './styles';
 import CustomDropdown from '../../components/customDropdown';
@@ -16,6 +15,7 @@ import { themas } from '../../global/themes';
 import * as ImagePicker from 'expo-image-picker';
 import Comprovante from '../../components/registroDespesa/Comprovante';
 import * as DocumentPicker from 'expo-document-picker';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
@@ -313,29 +313,27 @@ const RegistroDespesa = () => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [mimeType, setMimeType] = useState<string>('image/jpeg');
 
+  const { showActionSheetWithOptions } = useActionSheet();
+  const [showPickerModal, setShowPickerModal] = useState(false);
+
   const openImagePickerOptions = () => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions({
-        options: ['Cancelar', 'Tirar foto', 'Galeria', 'Selecionar PDF'],
-        cancelButtonIndex: 0,
-      }, buttonIndex => {
-        if (buttonIndex === 1) tirarFoto();
-        else if (buttonIndex === 2) escolherGaleria();
-        else if (buttonIndex === 3) selecionarPDF();
-      });
-    } else {
-      Alert.alert(
-        'Selecionar comprovante',
-        'Escolha uma opção:',
-        [
-          { text: 'Cancelar', style: 'cancel' },
-          { text: 'Tirar foto', onPress: tirarFoto },
-          { text: 'Galeria',    onPress: escolherGaleria },
-          { text: 'Selecionar PDF', onPress: selecionarPDF },
-        ],
-        { cancelable: true }
-      );
-    }
+    const options = ['Cancelar', 'Tirar foto', 'Galeria', 'Selecionar PDF'];
+    const cancelButtonIndex = 0;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 1: return tirarFoto();
+          case 2: return escolherGaleria();
+          case 3: return selecionarPDF();
+          default: return;
+        }
+      }
+    );
   };
 
   const escolherGaleria = async () => {
@@ -770,6 +768,23 @@ const RegistroDespesa = () => {
         </View>
         <View style={styles.teste}></View>
       </ScrollView>
+
+      <Modal transparent animationType="fade" visible={showPickerModal}>
+        <TouchableWithoutFeedback onPress={() => setShowPickerModal(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.modalContainer}>
+          <Pressable style={styles.modalButton} onPress={() => { tirarFoto(); setShowPickerModal(false); }}>
+            <Text style={styles.modalTexto}>Tirar foto</Text>
+          </Pressable>
+          <Pressable style={styles.modalButton} onPress={() => { escolherGaleria(); setShowPickerModal(false); }}>
+            <Text style={styles.modalTexto}>Galeria</Text>
+          </Pressable>
+          <Pressable style={styles.modalButton} onPress={() => { selecionarPDF(); setShowPickerModal(false); }}>
+            <Text style={styles.modalTexto}>Selecionar PDF</Text>
+          </Pressable>
+        </View>
+      </Modal>
     </>
   );
 };
