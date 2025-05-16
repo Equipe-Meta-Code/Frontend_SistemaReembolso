@@ -15,6 +15,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { themas } from '../../global/themes';
 import * as ImagePicker from 'expo-image-picker';
 import Comprovante from '../../components/registroDespesa/Comprovante';
+import * as DocumentPicker from 'expo-document-picker';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
@@ -310,27 +311,27 @@ const RegistroDespesa = () => {
   };
 
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [mimeType, setMimeType] = useState<string>('image/jpeg');
 
   const openImagePickerOptions = () => {
     if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ['Cancelar', 'Tirar foto', 'Galeria'],
-          cancelButtonIndex: 0,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 1) tirarFoto();
-          else if (buttonIndex === 2) escolherGaleria();
-        }
-      );
+      ActionSheetIOS.showActionSheetWithOptions({
+        options: ['Cancelar', 'Tirar foto', 'Galeria', 'Selecionar PDF'],
+        cancelButtonIndex: 0,
+      }, buttonIndex => {
+        if (buttonIndex === 1) tirarFoto();
+        else if (buttonIndex === 2) escolherGaleria();
+        else if (buttonIndex === 3) selecionarPDF();
+      });
     } else {
       Alert.alert(
-        'Selecionar imagem',
+        'Selecionar comprovante',
         'Escolha uma opção:',
         [
           { text: 'Cancelar', style: 'cancel' },
-          { text: 'Tirar foto', onPress: () => tirarFoto() },
-          { text: 'Galeria',    onPress: () => escolherGaleria() },
+          { text: 'Tirar foto', onPress: tirarFoto },
+          { text: 'Galeria',    onPress: escolherGaleria },
+          { text: 'Selecionar PDF', onPress: selecionarPDF },
         ],
         { cancelable: true }
       );
@@ -359,13 +360,29 @@ const RegistroDespesa = () => {
     }
   };
 
+  const selecionarPDF = async () => {
+    const res = await DocumentPicker.getDocumentAsync({
+      type: 'application/pdf',
+      copyToCacheDirectory: true,
+    });
+
+    // Cancelado? O campo `canceled` indica isso
+    if (res.canceled) return;
+
+    const file = res.assets?.[0];
+    if (!file) return;
+
+    // Agora, file.uri aponta para o PDF
+    setImageUri(file.uri);
+    setMimeType(file.mimeType || 'application/pdf');
+  };
+
+
 
   const handleImageUpload = async (despesaId: number) => {
     if (!imageUri) return;
 
     const filename = imageUri.split('/').pop()!;
-    const match = /\.(\w+)$/.exec(filename);
-    const mimeType = match ? `image/${match[1]}` : 'image';
 
     const formData = new FormData();
     formData.append('receipt', {
@@ -378,25 +395,26 @@ const RegistroDespesa = () => {
 
     try {
       const res = await api.post(
-      '/uploadcomprovante',
-      formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
+        '/uploadcomprovante',
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
       if (res.data.success) {
         Alert.alert('Sucesso', 'Comprovante enviado!');
       }
     } catch (err) {
-      console.error('[FRONT] Erro ao enviar imagem:', err);
+      console.error('[FRONT] Erro ao enviar comprovante:', err);
       Alert.alert('Erro', 'Falha ao enviar comprovante.');
     }
   };
+
 
   const handleSubmit = async () => {
     fetchData();
     setError(""); // Limpar mensagem de erro anterior
     setSuccessMessage(""); // Limpar mensagem de sucesso anterior
 
-    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount)) {
+    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount || !imageUri)) {
       setError("Por favor, preencha todos os campos.");
       return;
     }
