@@ -102,6 +102,8 @@ export default function Login() {
                             iconRightName="email"
                             IconRigth={MaterialIcons}
                             placeholder="Digite seu e-mail"
+                            placeholderTextColor={theme.colors.cinza}
+
                         />
                         {/* Senha */}
                         <Input
@@ -117,6 +119,7 @@ export default function Login() {
                             IconRigth={MaterialIcons}
                             onIconRigthPress={() => setShowPassword(!showPassword)}
                             placeholder="Digite sua senha"
+                            placeholderTextColor={theme.colors.cinza}
                         />
 
                         <Text style={style.forgotPassword}>Esqueceu a senha?</Text>

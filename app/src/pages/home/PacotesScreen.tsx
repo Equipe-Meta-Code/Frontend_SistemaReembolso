@@ -238,7 +238,7 @@ const PacotesScreen = ({ route }: any) => {
 const createStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.cinza_muito_claro,
+    backgroundColor: theme.colors.background,
   },
   top: {
     flexDirection: 'row',
@@ -262,6 +262,7 @@ const createStyles = (theme: any) => StyleSheet.create({
   pacotesTitle: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: theme.colors.text,
   },
   pacotesList: {
     flex: 1,

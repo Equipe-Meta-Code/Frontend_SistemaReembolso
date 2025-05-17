@@ -152,6 +152,7 @@ export default function Cadastro() {
                         }}
                         iconRightName="person"
                         IconRigth={MaterialIcons}
+                        placeholderTextColor={theme.colors.cinza}
                     />
 
                     {/* Email */}
@@ -164,6 +165,7 @@ export default function Cadastro() {
                         }}
                         iconRightName="email"
                         IconRigth={MaterialIcons}
+                        placeholderTextColor={theme.colors.cinza}
                     />
 
                     {/* Senha */}
@@ -178,6 +180,7 @@ export default function Cadastro() {
                         iconRightName={showPassword ? "visibility-off" : "visibility"}
                         IconRigth={MaterialIcons}
                         onIconRigthPress={() => setShowPassword(!showPassword)}
+                        placeholderTextColor={theme.colors.cinza}
                     />
 
                     {/* Confirmação de Senha */}
@@ -192,6 +195,7 @@ export default function Cadastro() {
                         iconRightName={showPasswordConfirm ? "visibility-off" : "visibility"}
                         IconRigth={MaterialIcons}
                         onIconRigthPress={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                        placeholderTextColor={theme.colors.cinza}
                     />
                     {/* Aceitar Termos */}
                     <View style={style.checkboxContainer}>

@@ -109,7 +109,7 @@ export interface Despesa {
     };    
 
     const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
-      'Rascunho': { backgroundColor: theme.colors.cinza_claro, color: theme.colors.chumbo },
+      'Rascunho': { backgroundColor: theme.colors.cinza_claro, color: theme.colors.cinza },
       'Aguardando Aprovação': { backgroundColor: theme.colors.mostarda, color: theme.colors.amarelo },
       'Recusado': { backgroundColor: theme.colors.vinho_claro, color: theme.colors.vinho_claro }, 
       'Aprovado': { backgroundColor: theme.colors.verde_medio, color: theme.colors.verde_medio },
@@ -197,7 +197,7 @@ export interface Despesa {
 
   const createStyles = (theme: any) => StyleSheet.create({
     card: {
-      backgroundColor: theme.colors.cinza_muito_claro,
+      backgroundColor: theme.colors.secondary,
       padding: 10,
       borderRadius: 14,
       marginVertical: 12,
@@ -261,7 +261,7 @@ export interface Despesa {
       alignItems: 'center',
     },
     textoBotao: {
-      color: theme.colors.secondary,
+      color: theme.colors.sempre_branco,
       fontSize: 16,
       fontWeight: '600',
     },

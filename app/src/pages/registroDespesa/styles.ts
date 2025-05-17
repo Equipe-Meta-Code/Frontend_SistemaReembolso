@@ -196,7 +196,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
       
       inputNome: {
         borderWidth: 1,
-        borderColor: theme.colors.cinza_claro,
+        borderColor: theme.colors.cinza,
         borderRadius: 8,
         padding: 10,
         marginTop: 8,

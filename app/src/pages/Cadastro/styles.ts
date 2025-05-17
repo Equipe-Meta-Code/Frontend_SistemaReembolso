@@ -32,7 +32,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        color: theme.colors.secondary,  
+        color: theme.colors.sempre_branco,  
         fontWeight: 'bold',
         marginLeft: 10, 
     },
@@ -42,7 +42,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
     
     description: {
         fontSize: 16,  
-        color: theme.colors.secondary, 
+        color: theme.colors.sempre_branco, 
         textAlign: 'left', 
         paddingLeft:20,//
    

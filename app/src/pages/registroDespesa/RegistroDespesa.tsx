@@ -495,6 +495,7 @@ const RegistroDespesa = () => {
                 value={newPacoteName}
                 onChangeText={setNewPacoteName}
                 style={styles.inputNome}
+                placeholderTextColor={theme.colors.text}
               />
 
               <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>

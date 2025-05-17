@@ -11,7 +11,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        color: theme.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 16,
         fontWeight: 'bold',
     },
