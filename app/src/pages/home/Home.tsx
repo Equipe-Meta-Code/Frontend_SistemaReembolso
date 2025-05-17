@@ -92,7 +92,7 @@ const Home: React.FC = () => {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.top, { backgroundColor: theme.colors.primary }]}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>Bem vindo(a)!</Text>
+        <Text style={[styles.title, { color: theme.colors.sempre_branco }]}>Bem vindo(a)!</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
           {user ? (
             <Foto
