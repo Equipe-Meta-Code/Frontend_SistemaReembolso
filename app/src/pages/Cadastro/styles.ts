@@ -2,7 +2,7 @@ import { StyleSheet,Dimensions} from "react-native";
 import { themas } from "../../global/themes";
 
 
-export const style = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
     container:{
         flex:1,
         alignItems:'center',
@@ -11,7 +11,7 @@ export const style = StyleSheet.create({
     boxTop:{
         height:Dimensions.get('window').height/5,
         width:'100%',
-        backgroundColor:themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         alignItems:'flex-start',
         justifyContent:'center',
         borderBottomLeftRadius: 20,
@@ -19,7 +19,7 @@ export const style = StyleSheet.create({
     },
     boxMid:{
         flex:1,
-        backgroundColor:themas.colors.secondary,
+        backgroundColor: theme.colors.secondary,
         width:'100%',
         paddingBlockStart:20,
         paddingHorizontal:20,
@@ -32,7 +32,7 @@ export const style = StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        color: themas.colors.secondary,  
+        color: theme.colors.sempre_branco,  
         fontWeight: 'bold',
         marginLeft: 10, 
     },
@@ -42,7 +42,7 @@ export const style = StyleSheet.create({
     
     description: {
         fontSize: 16,  
-        color: themas.colors.secondary, 
+        color: theme.colors.sempre_branco, 
         textAlign: 'left', 
         paddingLeft:20,//
    
@@ -51,17 +51,17 @@ export const style = StyleSheet.create({
         marginTop: 10,
         fontSize: 24,   
         fontWeight: 'bold', 
-        color: themas.colors.black, 
+        color: theme.colors.black, 
     },
     instruction: {
         fontSize: 16,   
-        color: themas.colors.black, 
+        color: theme.colors.black, 
         textAlign: 'left',  
         marginTop: 10, 
     },
     forgotPassword: {
         paddingTop:10,
-        color: themas.colors.primary, 
+        color: theme.colors.primary, 
         fontSize: 14,
         marginTop: 10,
         textAlign: 'center',
@@ -76,7 +76,7 @@ export const style = StyleSheet.create({
     noAccountText: {
         paddingTop:20,
         fontSize: 16,
-        color: themas.colors.gray,    
+        color: theme.colors.gray,    
         textAlign: 'center', 
     },
     checkboxContainer: {
@@ -90,7 +90,7 @@ export const style = StyleSheet.create({
     checkboxText: {
         marginLeft: 10,
         fontSize: 14,
-        color: themas.colors.cinza,
+        color: theme.colors.cinza,
     },
     passwordContainer: {
         flexDirection: 'row',
@@ -104,13 +104,13 @@ export const style = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
         padding: 10,
-        backgroundColor: themas.colors.rosa_muito_claro, // Fundo vermelho claro
+        backgroundColor: theme.colors.rosa_muito_claro, // Fundo vermelho claro
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: themas.colors.red, // Borda vermelha
+        borderColor: theme.colors.red, // Borda vermelha
       },
       errorMessage: {
-        color: themas.colors.red, // Cor do texto vermelho
+        color: theme.colors.red, // Cor do texto vermelho
         fontSize: 14,
         fontWeight: 'bold',
       }

@@ -1,7 +1,8 @@
 import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Platform  } from 'react-native';
 import { ActionSheetIOS } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
-import { styles } from './styles';
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
 import CustomDropdown from '../../components/customDropdown';
 import CustomDatePicker from '../../components/customDate/index';
 import { TextInputMask } from 'react-native-masked-text';
@@ -19,6 +20,8 @@ const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
 
 const RegistroDespesa = () => {
+  const { theme } = useTheme();
+  const styles = createStyles (theme);
   const [error, setError] = useState("");
   const [pacoteError, setPacoteError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -576,6 +579,7 @@ const RegistroDespesa = () => {
                 value={newPacoteName}
                 onChangeText={setNewPacoteName}
                 style={styles.inputNome}
+                placeholderTextColor={theme.colors.text}
               />
 
               <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
@@ -643,14 +647,15 @@ const RegistroDespesa = () => {
           ) : (
             // SENÃO (outras categorias) → mostra o campo de Valor gasto
             <>
-              <Text style={styles.textBottom}>Valor gasto</Text>
               <TextInputMask
                 type={'money'}
                 value={amount}
                 onChangeText={handleAmountChange}
                 style={styles.inputMask}
                 placeholder='R$ 0,00'
+                placeholderTextColor={theme.colors.text}
               />
+
             </>
           )}
 
@@ -681,8 +686,8 @@ const RegistroDespesa = () => {
                     {
                       backgroundColor:
                         projectedTotal > valor_maximo
-                          ? themas.colors.vinho_claro
-                          : themas.colors.primary,
+                          ? theme.colors.vinho_claro
+                          : theme.colors.primary,
                     },
                   ]}
                 />
@@ -698,13 +703,14 @@ const RegistroDespesa = () => {
             </>
           }
 
-          <Text style={styles.textBottom}>Descrição</Text>
           <TextInput
             value={description}
             onChangeText={handleDescriptionChange}
             placeholder="Digite uma descrição"
             style={styles.inputDescription}
+            placeholderTextColor={theme.colors.text}
           />
+
 
           <Text style={styles.textBottom}>Adicione o comprovante</Text>
 

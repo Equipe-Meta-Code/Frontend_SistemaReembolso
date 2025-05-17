@@ -1,8 +1,9 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { style } from "./styles";
 import { themas } from "../../global/themes";
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
 import {
   FontAwesome5,
   MaterialCommunityIcons,
@@ -11,6 +12,9 @@ import {
 } from "@expo/vector-icons";
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
+  const { theme } = useTheme();
+  const style = createStyles (theme);
+
   const go = (screenName: string) => {
     navigation.navigate(screenName);
   };
@@ -29,9 +33,9 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
       >
         <Octicons
           name="home"
-          style={[style.iconHome, isFocused("Home") && { color: themas.colors.secondary }]}
+          style={[style.iconHome, isFocused("Home") && { color: theme.colors.sempre_branco }]}
         />
-        <Text style={[style.textHome, isFocused("Home") && { color: themas.colors.secondary }]}>
+        <Text style={[style.textHome, isFocused("Home") && { color: theme.colors.sempre_branco }]}>
           Home
         </Text>
       </TouchableOpacity>
@@ -43,7 +47,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
       >
         <SimpleLineIcons
           name="plus"
-          style={[style.iconCenter, isFocused("Registrar") && { color: themas.colors.primary }]}
+          style={[style.iconCenter, isFocused("Registrar") && { color: theme.colors.primary }]}
         />
       </TouchableOpacity>
 
@@ -52,9 +56,9 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
         <TouchableOpacity style={style.tabItem} onPress={() => go("Historico")}>
           <MaterialCommunityIcons
             name="file-document-edit"
-            style={[style.iconRight, isFocused("Historico") && { color: themas.colors.primary }]}
+            style={[style.iconRight, isFocused("Historico") && { color: theme.colors.primary }]}
           />
-          <Text style={[style.textRight, isFocused("Historico") && { color: themas.colors.primary }]}>
+          <Text style={[style.textRight, isFocused("Historico") && { color: theme.colors.primary }]}>
             Histórico
           </Text>
         </TouchableOpacity>
@@ -63,9 +67,9 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
         <TouchableOpacity style={style.tabItem} onPress={() => go("Perfil")}>
           <FontAwesome5
             name="user"
-            style={[style.iconRight, isFocused("Perfil") && { color: themas.colors.primary }]}
+            style={[style.iconRight, isFocused("Perfil") && { color: theme.colors.primary }]}
           />
-          <Text style={[style.textRight, isFocused("Perfil") && { color: themas.colors.primary }]}>
+          <Text style={[style.textRight, isFocused("Perfil") && { color: theme.colors.primary }]}>
             Perfil
           </Text>
         </TouchableOpacity>
