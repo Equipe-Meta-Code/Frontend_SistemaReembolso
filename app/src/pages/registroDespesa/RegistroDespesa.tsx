@@ -412,7 +412,7 @@ const RegistroDespesa = () => {
     setError(""); // Limpar mensagem de erro anterior
     setSuccessMessage(""); // Limpar mensagem de sucesso anterior
 
-    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount || !imageUri)) {
+    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount)) {
       setError("Por favor, preencha todos os campos.");
       return;
     }
@@ -428,6 +428,11 @@ const RegistroDespesa = () => {
 
     if (projectedTotal > valor_maximo && description.trim() === "") {
       setError("Justifique o motivo da despesa.");
+      return;
+    }
+
+    if (projectedTotal > valor_maximo && imageUri === null) {
+      setError("Anexe o comprovante da despesa.");
       return;
     }
 
