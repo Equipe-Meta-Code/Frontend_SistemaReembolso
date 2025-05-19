@@ -235,5 +235,25 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center'
-  }
+  },
+  comprovantesContainer: {
+    marginTop: 12,
+  },
+  comprovanteRecebido: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  textoComprovante: {
+    flex: 1,
+    fontSize: 18,
+    color: themas.colors.primary,
+    fontStyle: 'italic',
+  },
+  botoesComprovante: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  iconeBotoesComprovante: {
+  },
 });

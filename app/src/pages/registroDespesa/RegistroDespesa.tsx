@@ -763,25 +763,25 @@ const RegistroDespesa = () => {
                 style={styles.image}
               />
 
-            ) :
-            (
-              <View style={styles.image}>
-                <Comprovante
-                  tipo="user"
-                  tipoId={90} //<-- fazer leitura da quantidade de despesas
-                  width={150}
-                  height={150}
-                  borderRadius={0}
-                  borderWidth={3}
-                  borderColor="#fff"
-                  refreshKey={2}
-                  fallbackSource={require('../../assets/perfil.png')}
-                  uriComprovante={imageUri}
-                />
-              </View>
-            )}
-
           </TouchableOpacity>
+
+          <View style={styles.comprovantesContainer}>
+            {comprovantes.map((c, i) => (
+              <View key={c.id} style={styles.comprovanteRecebido}>
+                <Text style={styles.textoComprovante}>{c.uri.split('/').pop()}</Text>
+                <View style={styles.botoesComprovante}>
+                  <TouchableOpacity onPress={() => editarComprovante(i)}>
+                    <MaterialCommunityIcons name="square-edit-outline" size={24} color={themas.colors.primary}/>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => removerComprovante(i)}>
+                    <MaterialCommunityIcons name="trash-can-outline" size={24} color={themas.colors.red}/>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </View>
+            
+       
 
           {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
           {error && <Text style={styles.errorMessage}>{error}</Text>}
