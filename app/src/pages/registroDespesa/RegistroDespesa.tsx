@@ -75,6 +75,12 @@ const RegistroDespesa = () => {
     status: string;
   };
 
+  interface ComprovanteItem {
+    id: string;
+    uri: string;
+    mimeType: string;
+  }
+
   const fetchData = async () => {
     try {
       let response = await api.get('/projeto');
@@ -311,6 +317,7 @@ const RegistroDespesa = () => {
   };
 
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [comprovantes, setComprovantes] = useState<ComprovanteItem[]>([]);
   const [mimeType, setMimeType] = useState<string>('image/jpeg');
 
   const { showActionSheetWithOptions } = useActionSheet();
@@ -325,37 +332,48 @@ const RegistroDespesa = () => {
         options,
         cancelButtonIndex,
       },
-      buttonIndex => {
         switch (buttonIndex) {
           case 1: return tirarFoto();
           case 2: return escolherGaleria();
           case 3: return selecionarPDF();
           default: return;
         }
+      (buttonIndex?: number) => {
       }
     );
   };
 
+  const adicionarComprovante = (uri: string, mimeType: string) => {
+    setComprovantes(prev => [
+      ...prev,
+      { id: Date.now().toString(), uri, mimeType }
+    ]);
+  };
+
   const escolherGaleria = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      return Alert.alert('Permissão negada', 'Precisa liberar acesso à galeria.');
-    }
+    if (status !== 'granted') return Alert.alert('Permissão negada');
     const result = await ImagePicker.launchImageLibraryAsync({ quality: 1 });
-    if (!result.canceled && result.assets.length > 0) {
-      setImageUri(result.assets[0].uri);
-    }
+    if (result.canceled) return;
+    const asset = result.assets[0];
+    const inferredType = asset.type === 'video' ? asset.type : 'image';
+    adicionarComprovante(
+      asset.uri,
+      inferredType === 'image'
+        ? 'image/jpeg'
+        : asset.uri.endsWith('.png')
+          ? 'image/png'
+          : `video/${asset.uri.split('.').pop()}`
+    );
   };
+
 
   const tirarFoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      return Alert.alert('Permissão negada', 'Você precisa liberar acesso à câmera.');
-    }
+    if (status !== 'granted') return Alert.alert('Permissão negada');
     const result = await ImagePicker.launchCameraAsync({ quality: 1 });
-    if (!result.canceled && result.assets.length > 0) {
-      setImageUri(result.assets[0].uri);
-    }
+    if (result.canceled) return;
+    adicionarComprovante(result.assets[0].uri, 'image/jpeg');
   };
 
   const selecionarPDF = async () => {
@@ -363,139 +381,142 @@ const RegistroDespesa = () => {
       type: 'application/pdf',
       copyToCacheDirectory: true,
     });
-
-    // Cancelado? O campo `canceled` indica isso
     if (res.canceled) return;
+    const getMimeTypeFromUri = (uri: string) => {
+      if (uri.endsWith('.pdf')) return 'application/pdf';
+      if (uri.endsWith('.png')) return 'image/png';
+      if (uri.endsWith('.jpg') || uri.endsWith('.jpeg')) return 'image/jpeg';
+      return 'application/octet-stream';
+    };
+    adicionarComprovante(
+      res.assets[0].uri,
+      getMimeTypeFromUri(res.assets[0].uri)
+    );
+  };
 
-    const file = res.assets?.[0];
-    if (!file) return;
 
-    // Agora, file.uri aponta para o PDF
-    setImageUri(file.uri);
-    setMimeType(file.mimeType || 'application/pdf');
+
+  const removerComprovante = (idx: number) =>
+    setComprovantes(prev => prev.filter((_, i) => i !== idx));
+
+  const editarComprovante = async (idx: number) => {
+    const res = await DocumentPicker.getDocumentAsync({ type: '*/*' });
+    if (res.canceled) return;
+    setComprovantes(prev => {
+      const copia = [...prev];
+      copia[idx] = {
+        id: copia[idx].id,
+        uri: res.assets[0].uri,
+        mimeType: res.assets[0].mimeType ?? 'application/octet-stream'
+      };
+      return copia;
+    });
   };
 
 
 
   const handleImageUpload = async (despesaId: number) => {
-    if (!imageUri) return;
+    if (comprovantes.length === 0) return;
 
-    const filename = imageUri.split('/').pop()!;
-
-    const formData = new FormData();
-    formData.append('receipt', {
-      uri: imageUri,
-      name: filename,
-      type: mimeType,
-    } as any);
-    formData.append('tipo', 'expense');
-    formData.append('tipoId', String(despesaId));
-
-    try {
-      const res = await api.post(
-        '/uploadcomprovante',
-        formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
-      if (res.data.success) {
-        Alert.alert('Sucesso', 'Comprovante enviado!');
-      }
-    } catch (err) {
-      console.error('[FRONT] Erro ao enviar comprovante:', err);
-      Alert.alert('Erro', 'Falha ao enviar comprovante.');
-    }
+    await Promise.all(comprovantes.map(c => {
+      const fd = new FormData();
+      fd.append('receipt', {
+        uri: c.uri,
+        name: c.uri.split('/').pop()!,
+        type: c.mimeType
+      } as any);
+      fd.append('tipo', 'expense');
+      fd.append('tipoId', String(despesaId));
+      return api.post('/uploadcomprovante', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+    }));
   };
 
 
-  const handleSubmit = async () => {
-    fetchData();
-    setError(""); // Limpar mensagem de erro anterior
-    setSuccessMessage(""); // Limpar mensagem de sucesso anterior
 
-    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount)) {
-      setError("Por favor, preencha todos os campos.");
+  const handleSubmit = async () => {
+    // limpa
+    setError('');
+    setSuccessMessage('');
+    fetchData();
+
+    if (
+      !selectedPacote ||
+      !category ||
+      !selectedProject ||
+      !date ||
+      (categoryName === 'Transporte' ? !km : !amount)
+    ) {
+      setError('Por favor, preencha todos os campos.');
       return;
     }
 
-    const newAmount =
+    // calcula valor
+    const valor =
       categoryName === 'Transporte'
         ? kmCost
         : categoryName === 'Materiais'
           ? quantidadeTotal
           : parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+    const projected = totalGastoCategoria + valor;
 
-    const projectedTotal = totalGastoCategoria + newAmount;
-
-    if (projectedTotal > valor_maximo && description.trim() === "") {
-      setError("Justifique o motivo da despesa.");
+    // justificativa
+    if (projected > valor_maximo && description.trim() === '') {
+      setError('Justifique o motivo da despesa.');
       return;
     }
 
-    if (projectedTotal > valor_maximo && imageUri === null) {
-      setError("Anexe o comprovante da despesa.");
+    // comprovante se exceder
+    if (projected > valor_maximo && comprovantes.length === 0) {
+      setError('Anexe pelo menos um comprovante da despesa.');
       return;
     }
 
-    // Converte antes:
-    const descriptionToSend =
-      description.trim() === ""
-        ? "Sem Descrição"
-        : description;
-
-    const parsedKm = parseFloat(km.replace(',', '.'));
-    const parsedAmount = parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.'));
-
-    // Validação dinâmica:
-    if (categoryName === 'Transporte') {
-      if (isNaN(parsedKm)) {
-        setError("KM inválido. Insira um número válido.");
-        return;
-      }
-    } else {
-      if (isNaN(parsedAmount)) {
-        setError("Valor inválido. Por favor, insira um valor válido.");
-        return;
-      }
-    }
-
-    const [day, month, year] = date.split("/");
-    const finalDate = new Date(`${year}-${month}-${day}`);
-
-    let finalValue: number;
-    if (categoryName === 'Transporte') {
-      finalValue = kmCost;
-    } else if (categoryName === 'Materiais') {
-      finalValue = quantidadeTotal;
-    } else {
-      finalValue = parsedAmount;
-    }
+    // payload
+    const [d, m, y] = date.split('/');
+    const payload = {
+      pacoteId: selectedPacote,
+      projetoId: selectedProject,
+      userId: user?.userId,
+      categoria: category,
+      data: new Date(`${y}-${m}-${d}`),
+      valor_gasto: valor,
+      descricao: description.trim() || 'Sem Descrição',
+      aprovacao: 'Pendente',
+      km:
+        categoryName === 'Transporte'
+          ? parseFloat(km.replace(',', '.'))
+          : undefined,
+      quantidade:
+        categoryName === 'Materiais'
+          ? parseFloat(quantidade.replace(',', '.'))
+          : undefined,
+    };
 
     try {
-      const response = await api.post("/despesa", {
-        pacoteId: selectedPacote,
-        projetoId: selectedProject,
-        userId: user?.userId,
-        categoria: category,
-        data: finalDate,
-        valor_gasto: finalValue,
-        descricao: descriptionToSend,   // ← use aqui a variável default
-        aprovacao: "Pendente",
-        km:
-          categoryName === "Transporte"
-            ? parseFloat(km.replace(",", "."))
-            : undefined,
-        quantidade:
-          categoryName === "Materiais"
-            ? parseFloat(quantidade.replace(",", "."))
-            : undefined,
-      });
-      /* console.log(response.data); */
-      const novaDespesa = response.data;
-      
-      setSuccessMessage("Despesa cadastrada com sucesso!");
+      const { data: novaDespesa } = await api.post('/despesa', payload);
+      setSuccessMessage('Despesa cadastrada com sucesso!');
 
-      await handleImageUpload(novaDespesa.despesaId);
+      // upload comprovantes
+      await Promise.all(
+        comprovantes.map(c => {
+          const fd = new FormData();
+          fd.append('receipt', {
+            uri: c.uri,
+            name: c.uri.split('/').pop()!,
+            type: c.mimeType
+          } as any);
+          fd.append('tipo', 'expense');
+          fd.append('tipoId', String(novaDespesa.despesaId));
+          return api.post('/uploadcomprovante', fd, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          });
+        })
+      );
+      Alert.alert('Sucesso', 'Todos os comprovantes enviados!');
 
+      // limpa tudo
       setTimeout(() => {
         setSelectedPacote("");
         setCategory("");
@@ -510,10 +531,12 @@ const RegistroDespesa = () => {
         setQuantidade("");
         setQuantidadeTotal(0);
 
+        setComprovantes([]);
+        setSuccessMessage('');
       }, 1500);
-    } catch (error) {
-      console.error("Erro ao cadastrar despesa:", error);
-      setError("Erro ao cadastrar despesa. Por favor, tente novamente.");
+    } catch (err) {
+      console.error(err);
+      setError('Erro ao cadastrar despesa. Tente novamente.');
     }
   };
 
@@ -680,7 +703,6 @@ const RegistroDespesa = () => {
             </>
           )}
 
-
           <Text style={styles.textBottom}>Data</Text>
           <CustomDatePicker
             value={date}
@@ -735,8 +757,7 @@ const RegistroDespesa = () => {
           <Text style={styles.textBottom}>Adicione o comprovante</Text>
 
           <TouchableOpacity onPress={openImagePickerOptions}>
-            {imageUri == null ? (
-
+      
               <MaterialCommunityIcons
                 name="image-plus"
                 style={styles.image}
