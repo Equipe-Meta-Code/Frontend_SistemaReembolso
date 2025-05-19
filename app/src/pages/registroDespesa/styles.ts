@@ -227,7 +227,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#ccc',
   },
-  modalText: {
+  modalTexto: {
     fontSize: 18,
     color: themas.colors.primary,
   },
@@ -236,6 +236,4 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center'
   }
-
-      
 });
