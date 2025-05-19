@@ -16,6 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Comprovante from '../../components/registroDespesa/Comprovante';
 import * as DocumentPicker from 'expo-document-picker';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import PdfComprovante from '../../components/registroDespesa/PdfComprovante';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
@@ -316,7 +317,6 @@ const RegistroDespesa = () => {
     setKmCost(cost);
   };
 
-  const [imageUri, setImageUri] = useState<string | null>(null);
   const [comprovantes, setComprovantes] = useState<ComprovanteItem[]>([]);
   const [mimeType, setMimeType] = useState<string>('image/jpeg');
 
@@ -332,13 +332,13 @@ const RegistroDespesa = () => {
         options,
         cancelButtonIndex,
       },
-        switch (buttonIndex) {
-          case 1: return tirarFoto();
-          case 2: return escolherGaleria();
-          case 3: return selecionarPDF();
-          default: return;
-        }
       (buttonIndex?: number) => {
+      switch (buttonIndex) {
+        case 1: return tirarFoto();
+        case 2: return escolherGaleria();
+        case 3: return selecionarPDF();
+        default: return;
+      }
       }
     );
   };
@@ -518,19 +518,16 @@ const RegistroDespesa = () => {
 
       // limpa tudo
       setTimeout(() => {
-        setSelectedPacote("");
-        setCategory("");
-        setSelectedProject("");
-        setDate("");
-        setAmount("");
-        setDescription("");
-        setSuccessMessage("");
-        setKm("");
-        setCategoryName("");
-        setTotalGastoCategoria(0);
-        setQuantidade("");
+        setSelectedPacote('');
+        setCategory('');
+        setSelectedProject('');
+        setDate('');
+        setAmount('');
+        setDescription('');
+        setKm('');
+        setQuantidade('');
         setQuantidadeTotal(0);
-
+        setTotalGastoCategoria(0);
         setComprovantes([]);
         setSuccessMessage('');
       }, 1500);
@@ -539,6 +536,9 @@ const RegistroDespesa = () => {
       setError('Erro ao cadastrar despesa. Tente novamente.');
     }
   };
+
+
+
 
   const newAmount = categoryName === 'Transporte'
     ? kmCost
