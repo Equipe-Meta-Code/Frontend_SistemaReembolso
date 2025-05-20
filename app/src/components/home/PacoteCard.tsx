@@ -85,37 +85,28 @@ export interface Despesa {
       }
   
       return acc;
-    }, []);
-
-    const cardCategoriaCores: Record<string, string> = {
-      'Alimentação': themas.colors.cinza_claro,
-      'Hospedagem': themas.colors.verde_escuro,
-      'Transporte': themas.colors.azul_claro,
-      'Serviços Terceirizados': themas.colors.verde_medio,
-      'Materiais': themas.colors.rosa,
-      'Outros': themas.colors.chumbo_claro,
-    };    
+    }, []); 
 
     const tituloCategoriaCores: Record<string, string> = {
-      'Alimentação': themas.colors.roxo,
-      'Hospedagem': themas.colors.verde_escuro,
-      'Transporte': themas.colors.azul_escuro,
-      'Serviços Terceirizados': themas.colors.amarelo,
-      'Materiais': themas.colors.vinho_claro,
-      'Outros': themas.colors.chumbo, 
+      'Alimentação': themas.colors.roxo_opaco,
+      'Hospedagem': themas.colors.verde_escuro_opaco,
+      'Transporte': themas.colors.azul_escuro_opaco,
+      'Serviços Terceirizados': themas.colors.verde2_escuro_opaco,
+      'Materiais': themas.colors.vinho_escuro_opaco,
+      'Outros': themas.colors.cinza, 
     };    
 
     const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
       'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
-      'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda, color: themas.colors.amarelo },
-      'Recusado': { backgroundColor: themas.colors.vinho_claro, color: themas.colors.vinho_claro }, 
-      'Aprovado': { backgroundColor: themas.colors.verde_medio, color: themas.colors.verde_medio },
-      'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja, color: themas.colors.laranja_forte },
-    };    
+      'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda_opaco, color: themas.colors.mostarda_escuro_opaco },
+      'Recusado': { backgroundColor: themas.colors.vinho_claro_opaco, color: themas.colors.vinho_escuro_opaco },
+      'Aprovado': { backgroundColor: themas.colors.verde_claro_opaco, color: themas.colors.verde_medio_opaco },
+      'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja_claro_opaco, color: themas.colors.laranja_escuro_opaco },
+    };   
 
     const aprovacaoDespesaCores: Record<string, string> = {
-      'Aprovado': themas.colors.verde_medio,
-      'Recusado': themas.colors.vinho_claro,
+      'Aprovado': themas.colors.verde_medio_opaco,
+      'Recusado': themas.colors.vinho,
     };    
 
     //mostra legenda apenas se o pacote for aprovado parcialmente
@@ -150,7 +141,7 @@ export interface Despesa {
               <Text style={styles.cardSubtitle}>Histórico de Despesas:</Text>
               {despesas && despesas.length > 0 ? (
                 despesasAgrupadas?.map((grupo) => (
-                  <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || cardCategoriaCores['Outros'] }]}>
+                  <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: themas.colors.secondary }]}>
                     <Text style={[styles.cardSubSubtitle, { color: tituloCategoriaCores[grupo.categoria] || tituloCategoriaCores['Outros'] }]}>{grupo.categoria}</Text>
                     
                     {grupo.itens.map((item: any, index: number) => (

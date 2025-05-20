@@ -46,7 +46,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
         <ProgressBar 
           progress={progress} 
-          color={valueLeft >= 0 ? themas.colors.primary : themas.colors.vinho_claro} 
+          color={valueLeft >= 0 ? themas.colors.primary : themas.colors.vinho_escuro_opaco} 
           style={styles.progressBar} 
         />
 
@@ -57,7 +57,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           {valueLeft >= 0 ? (
             <> / Restante: R${valueLeft.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</>
           ) : (
-            <> / <Text style={{ color: themas.colors.vinho_claro }}>
+            <> / <Text style={{ color: themas.colors.vinho_escuro_opaco }}>
               Limite Ultrapassado: R${Math.abs(valueLeft).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </Text></>
           )}

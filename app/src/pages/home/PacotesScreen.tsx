@@ -40,10 +40,10 @@ type RootStackParamList = {
 
 const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
   'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
-  'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda, color: themas.colors.mostarda_escuro },
-  'Recusado': { backgroundColor: themas.colors.vinho_claro, color: themas.colors.vinho },
-  'Aprovado': { backgroundColor: themas.colors.verde_medio, color: themas.colors.verde_escuro },
-  'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja, color: themas.colors.laranja_forte },
+  'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda_opaco, color: themas.colors.mostarda_escuro_opaco },
+  'Recusado': { backgroundColor: themas.colors.vinho_claro_opaco, color: themas.colors.vinho_escuro_opaco },
+  'Aprovado': { backgroundColor: themas.colors.verde_claro_opaco, color: themas.colors.verde_medio_opaco },
+  'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja_claro_opaco, color: themas.colors.laranja_escuro_opaco },
 };
 
 const PacotesScreen = ({ route }: any) => {

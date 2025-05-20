@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   pendingValue: {
-    color: themas.colors.mostarda_escuro, 
+    color: themas.colors.mostarda_escuro_opaco, 
     fontSize: 15,
   },
   approvedValue: {
