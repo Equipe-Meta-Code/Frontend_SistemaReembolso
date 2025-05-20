@@ -45,7 +45,9 @@ export const themas = {
       roxo: "#3A08C4",
       sempre_branco: "#FFFFFF",
       sempre_preto: "#000000",
-      sempre_cinza_claro: "#e0e0e0"
+      sempre_cinza_claro: "#e0e0e0",
+
+      transparente: "rgba(0,0,0,0.8)"
     }
   };
   
@@ -96,7 +98,9 @@ export const themas = {
       roxo: "#3A08C4",
       sempre_branco: "#FFFFFF",
       sempre_preto: "#000000",
-      sempre_cinza_claro: "#9CA3AF"
+      sempre_cinza_claro: "#9CA3AF",
+
+      transparente: "rgba(0,0,0,0.8)"
     }
   };
   

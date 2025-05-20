@@ -15,9 +15,11 @@ export default function App() {
   return (
     <Provider store={store}>
       <ThemeProvider>
-        <NavigationContainer>
-          <AppWrapper />
-        </NavigationContainer>
+        <ActionSheetProvider>
+          <NavigationContainer>
+            <AppWrapper />
+          </NavigationContainer>
+        </ActionSheetProvider>
       </ThemeProvider>
     </Provider>
   );
