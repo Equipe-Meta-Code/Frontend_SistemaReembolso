@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch  } from 'react-native';
-import { style } from "./styles";
+import { createStyles  } from "./styles";
 import Indicadores from '../../components/perfil/Indicadores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../../components/perfil/Botao';
@@ -15,6 +15,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import Foto from '../../com../../components/foto/Foto';
 import { themas } from '../../global/themes';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Funcionario {
     userId: number;
@@ -56,10 +57,8 @@ interface Despesa {
   }
 
 const Perfil = () => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const toggleDarkMode = () => {
-        setIsDarkMode(previousState => !previousState);
-    };
+    const { isDarkMode, toggleTheme: toggleDarkMode, theme } = useTheme();
+    const style = createStyles (theme);
 
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     type RootStackParamList = {
@@ -204,30 +203,16 @@ const Perfil = () => {
                     titulo="Informações pessoais"
                     onPress={() => navigation.navigate('InfosPessoais')}
                     iconName="chevron-forward"
-                    iconColor={themas.colors.black}
-                />
-
-{/*                 <CustomButton
-                    titulo="Manual do usuário"
-                    onPress={() => alert("Manual do usuário")}
-                    iconName="chevron-forward"
-                    iconColor=themas.colors.black
-                />
-
-                <CustomButton
-                    titulo="Alterar Senha"
-                    onPress={() => alert("Alterar Senha")}
-                    iconName="chevron-forward"
-                    iconColor=themas.colors.black
+                    iconColor={theme.colors.black}
                 />
 
                 <CustomSwitchButton
-                    titulo="Darkmode"
+                    titulo="Modo Escuro"
                     value={isDarkMode}
                     onValueChange={toggleDarkMode}
-                    trackColor={{ false: themas.colors.cinza_claro, true: themas.colors.primary }}
-                    thumbColor=themas.colors.secondary
-                /> */}
+                    trackColor={{ false: theme.colors.cinza_claro, true: theme.colors.primary }}
+                    thumbColor={theme.colors.secondary}
+                /> 
                 
             </View>
 
@@ -236,7 +221,7 @@ const Perfil = () => {
                     titulo="Sair"
                     onPress={handleLogout}
                     iconName="log-out-outline"
-                    iconColor={themas.colors.red}
+                    iconColor={theme.colors.red}
                     iconSize={40}
                 />
             </View>

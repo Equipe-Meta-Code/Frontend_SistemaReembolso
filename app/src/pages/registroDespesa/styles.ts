@@ -1,12 +1,12 @@
 import { StyleSheet} from "react-native";
 import { themas } from "../../global/themes";
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
     container: {
-        backgroundColor: themas.colors.secondary,
+        backgroundColor: theme.colors.secondary,
     },
     boxTop: {
-        backgroundColor: themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         height: '28%',
     },
     boxTitle: {
@@ -25,32 +25,32 @@ export const styles = StyleSheet.create({
     },
     arrow: {
       fontSize: 24,
-      color: themas.colors.secondary,
+      color: theme.colors.sempre_branco,
       paddingLeft: '7%',
       paddingTop: '12%',
     },
     title: {
-        color: themas.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 32,
         fontWeight: 'bold', 
       },
     subTitle: {
-        color: themas.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 16,
         marginTop: 12,
     },
     textTop: {
-        color: themas.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 16,
     },
     textBottom: {
-        color: themas.colors.black,
+        color: theme.colors.black,
         fontSize: 16,
         marginTop: 30,
     },
     dropdown: {
         height: 50,
-        borderColor: themas.colors.cinza,
+        borderColor: theme.colors.cinza,
         borderWidth: 0.5,
         borderRadius: 8,
         paddingHorizontal: 8,
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
       },
       label: {
         position: 'absolute',
-        backgroundColor: themas.colors.secondary,
+        backgroundColor: theme.colors.secondary,
         left: 22,
         top: 8,
         zIndex: 999,
@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
       },
       inputMask: {
         borderWidth: 0.5,
-        borderColor: themas.colors.cinza,
+        borderColor: theme.colors.cinza,
         padding: 10,
         height: 50,
         borderRadius: 8,
@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
       },
       inputDescription: {
         borderWidth: 0.5,
-        borderColor: themas.colors.cinza,
+        borderColor: theme.colors.cinza,
         paddingLeft: 10,
         height: 90,
         borderRadius: 8,
@@ -111,14 +111,14 @@ export const styles = StyleSheet.create({
         
       },
       button: {
-        backgroundColor: themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         paddingVertical: 18,
         borderRadius: 25,
         alignItems: 'center',
         marginTop: 20,           
       },
       buttonText: {
-        color: themas.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 16,
         fontWeight: 'bold',
       },
@@ -127,22 +127,22 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         padding: 10,
         borderRadius: 8,
-        color: themas.colors.vinho,
-        backgroundColor: themas.colors.rosa_muito_claro,
-        borderColor: themas.colors.rosa_claro,
+        color: theme.colors.vinho,
+        backgroundColor: theme.colors.rosa_muito_claro,
+        borderColor: theme.colors.rosa_claro,
         margin: 'auto',
       },
       pacoteErrorMessage: {
         marginTop: 16,
         padding: 10,
         borderRadius: 8,
-        color: themas.colors.red,
+        color: theme.colors.red,
         margin: 'auto',
       },
       successMessage: {
-        color: themas.colors.verde_escuro,
-        backgroundColor: themas.colors.verde_claro,
-        borderColor: themas.colors.verde_claro,
+        color: theme.colors.verde_escuro,
+        backgroundColor: theme.colors.verde_claro,
+        borderColor: theme.colors.verde_claro,
         marginTop: 16,
         fontWeight: 'bold',
         padding: 10,
@@ -153,7 +153,7 @@ export const styles = StyleSheet.create({
         marginTop: 12,
         height: 18,
         borderRadius: 5,
-        backgroundColor: themas.colors.cinza_claro,
+        backgroundColor: theme.colors.cinza_claro,
         overflow: 'hidden',
       },
       progressBarFill: {
@@ -172,24 +172,24 @@ export const styles = StyleSheet.create({
         fontSize: 16,
       },
       limit: {
-        color: themas.colors.red,
+        color: theme.colors.red,
         fontSize: 16,
         marginTop: 6,
       },
       aviso: {
-        color: themas.colors.cinza,
+        color: theme.colors.cinza,
         fontSize: 16,
         marginTop: 6,
       },
 
       link: {
-        color: themas.colors.primary,
+        color: theme.colors.primary,
         marginTop: 8,
         textDecorationLine: 'underline',
       },
       
       smallButton: {
-        backgroundColor: themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',
@@ -198,7 +198,7 @@ export const styles = StyleSheet.create({
       
       inputNome: {
         borderWidth: 1,
-        borderColor: themas.colors.cinza_claro,
+        borderColor: theme.colors.cinza,
         borderRadius: 8,
         padding: 10,
         marginTop: 8,

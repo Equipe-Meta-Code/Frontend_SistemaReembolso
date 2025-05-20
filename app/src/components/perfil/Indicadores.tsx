@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { style } from "./styles";
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
+
 
 interface IndicadoresProps {
   titulo: string;
@@ -8,6 +10,9 @@ interface IndicadoresProps {
 }
 
 const Indicadores: React.FC<IndicadoresProps> = ({ titulo, quantia}) => {
+    const { theme } = useTheme();
+    const style = createStyles (theme);
+  
   return (
       <View style={style.container}>
         <Text style={style.titulo}>

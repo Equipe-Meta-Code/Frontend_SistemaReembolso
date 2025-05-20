@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { style } from "./styles";
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
 import { Text, View, Image, Alert, ActivityIndicator, 
     TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -13,6 +14,8 @@ import { ButtonCustom } from "../../components/customButton";
 import { Divider } from "react-native-paper";
 
 export default function Login() {
+    const { theme } = useTheme();
+    const style = createStyles (theme);
     const navigation = useNavigation<NavigationProp<any>>();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -99,6 +102,8 @@ export default function Login() {
                             iconRightName="email"
                             IconRigth={MaterialIcons}
                             placeholder="Digite seu e-mail"
+                            placeholderTextColor={theme.colors.cinza}
+
                         />
                         {/* Senha */}
                         <Input
@@ -114,6 +119,7 @@ export default function Login() {
                             IconRigth={MaterialIcons}
                             onIconRigthPress={() => setShowPassword(!showPassword)}
                             placeholder="Digite sua senha"
+                            placeholderTextColor={theme.colors.cinza}
                         />
 
                         <Text style={style.forgotPassword}>Esqueceu a senha?</Text>

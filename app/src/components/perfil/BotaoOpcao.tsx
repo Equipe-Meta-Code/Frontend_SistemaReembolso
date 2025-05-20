@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
-import { style } from "./styles";
-import { themas } from '../../global/themes';
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext'; 
 
 interface BotaoOpcaoProps {
   titulo: string;
@@ -16,21 +16,34 @@ const BotaoOpcao: React.FC<BotaoOpcaoProps> = ({
   titulo,
   value,
   onValueChange,
-  trackColor = { false: themas.colors.cinza_claro, true: themas.colors.primary },
-  thumbColor = themas.colors.secondary,
+  trackColor,
+  thumbColor,
   style: customStyle,
 }) => {
+  const { theme } = useTheme();
+  const style = createStyles (theme);
+  
+
+  const track = trackColor || {
+    false: theme.colors.cinza_claro,
+    true: theme.colors.primary,
+  };
+
+  const thumb = value
+    ? thumbColor || theme.colors.secondary
+    : theme.colors.cinza_muito_claro;
+
   return (
     <View style={[style.botao, customStyle]}>
       <Text style={style.textoBotao}>{titulo}</Text>
       <Switch
         value={value}
         onValueChange={onValueChange}
-        trackColor={trackColor}
-        thumbColor={value ? thumbColor : themas.colors.cinza_muito_claro} 
+        trackColor={track}
+        thumbColor={thumb}
       />
     </View>
   );
 };
 
-export default BotaoOpcao;1
+export default BotaoOpcao;
