@@ -4,21 +4,20 @@ import { WebView } from 'react-native-webview';
 import api from '../../services/api';
 
 interface PdfComprovanteProps {
-  tipo: string;
-  tipoId: number;
+  comprovanteId: number;
   width?: number;
   height?: number;
 }
 
 export default function PdfComprovante({
-  tipo,
-  tipoId,
+  comprovanteId,
   width = Dimensions.get('window').width - 40,
   height = 300,
 }: PdfComprovanteProps) {
 
+  // retira possível barra final da baseURL
   const baseURL = api.defaults.baseURL!.replace(/\/$/, '');
-  const pdfUrl = `${baseURL}/comprovantes/${encodeURIComponent(tipo)}/${tipoId}`;
+  const pdfUrl = `${baseURL}/comprovantes/${comprovanteId}`;
 
   return (
     <View style={[styles.container, { width, height }]}>
@@ -44,9 +43,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#f8f8f8',
   },
-  webview: {
-    flex: 1,
-  },
+  webview: { flex: 1 },
   loader: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
