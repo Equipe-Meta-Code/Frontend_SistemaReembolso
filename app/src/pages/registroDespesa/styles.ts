@@ -99,10 +99,10 @@ export const styles = StyleSheet.create({
         marginTop: 12,
       },
       image: {
-        width: 150,
-        height: 150,
+        width: 100,
+        height: 100,
         marginTop: 12,
-        fontSize: 140,
+        fontSize: 100,
         color: themas.colors.primary,
         margin: 'auto',
       },
@@ -238,22 +238,59 @@ export const styles = StyleSheet.create({
   },
   comprovantesContainer: {
     marginTop: 12,
+    gap: 2,
   },
   comprovanteRecebido: {
-    display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',         // centraliza verticalmente todos os filhos
+    backgroundColor: themas.colors.cinza_muito_claro,
+    paddingHorizontal: 5,
   },
+
   textoComprovante: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 14,
+    lineHeight: 30,
     color: themas.colors.primary,
     fontStyle: 'italic',
+    marginLeft: 5,
   },
   botoesComprovante: {
     flexDirection: 'row',
     gap: 10,
   },
-  iconeBotoesComprovante: {
+  modalContent: {
+    position: 'absolute',
+    top: '10%',
+    left: '5%',
+    right: '5%',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 10,
+    alignItems: 'center',
   },
+  closeButton: {
+    marginTop: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: themas.colors.primary,
+    borderRadius: 4,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+    fundoModalEscuro: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: themas.colors.transparente,
+  },
+  conteudoModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconDelete: {
+    marginRight: 5,
+  }
 });

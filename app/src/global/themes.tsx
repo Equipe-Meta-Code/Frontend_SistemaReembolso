@@ -30,5 +30,6 @@ export const themas = {
         laranja: "#FF8B3E",
         laranja_forte: "#d35400",
         roxo: "#3A08C4",
+        transparente: "rgba(0,0,0,0.8)",
     }
 }

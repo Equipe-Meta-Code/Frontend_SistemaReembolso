@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Platform, Modal, TouchableWithoutFeedback, Pressable  } from 'react-native';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback, Pressable  } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
 import { styles } from './styles';
 import CustomDropdown from '../../components/customDropdown';
@@ -13,10 +13,10 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { themas } from '../../global/themes';
 import * as ImagePicker from 'expo-image-picker';
-import Comprovante from '../../components/registroDespesa/Comprovante';
 import * as DocumentPicker from 'expo-document-picker';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import PdfComprovante from '../../components/registroDespesa/PdfComprovante';
+import ComprovantePreview from '../../components/registroDespesa/ComprovantePreview';
+import { FontAwesome  } from '@expo/vector-icons';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
@@ -46,6 +46,9 @@ const RegistroDespesa = () => {
   const [km, setKm] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [quantidadeTotal, setQuantidadeTotal] = useState(0);
+  const [mostrarModalPrevisualizacao, setMostrarModalPrevisualizacao] = useState(false);
+  const [uriPrevisualizacao, setUriPrevisualizacao] = useState<string>("");
+  const [previsualizacaoMime, setPrevisualizacaoMime] = useState<string>("");
 
   type RootStackParamList = {
     Home: undefined;
@@ -399,22 +402,6 @@ const RegistroDespesa = () => {
   const removerComprovante = (idx: number) =>
     setComprovantes(prev => prev.filter((_, i) => i !== idx));
 
-  const editarComprovante = async (idx: number) => {
-    const res = await DocumentPicker.getDocumentAsync({ type: '*/*' });
-    if (res.canceled) return;
-    setComprovantes(prev => {
-      const copia = [...prev];
-      copia[idx] = {
-        id: copia[idx].id,
-        uri: res.assets[0].uri,
-        mimeType: res.assets[0].mimeType ?? 'application/octet-stream'
-      };
-      return copia;
-    });
-  };
-
-
-
   const handleImageUpload = async (despesaId: number) => {
     if (comprovantes.length === 0) return;
 
@@ -433,6 +420,11 @@ const RegistroDespesa = () => {
     }));
   };
 
+  const handlePrevisualizar = (c: ComprovanteItem) => {
+    setUriPrevisualizacao(c.uri);
+    setPrevisualizacaoMime(c.mimeType);
+    setMostrarModalPrevisualizacao(true);
+  };
 
 
   const handleSubmit = async () => {
@@ -768,20 +760,27 @@ const RegistroDespesa = () => {
           <View style={styles.comprovantesContainer}>
             {comprovantes.map((c, i) => (
               <View key={c.id} style={styles.comprovanteRecebido}>
-                <Text style={styles.textoComprovante}>{c.uri.split('/').pop()}</Text>
+  
+                <TouchableOpacity onPress={() => handlePrevisualizar(c)}>
+                  <Text style={styles.textoComprovante}>
+                    {c.uri.split('/').pop()}
+                  </Text>
+                </TouchableOpacity>
+
                 <View style={styles.botoesComprovante}>
-                  <TouchableOpacity onPress={() => editarComprovante(i)}>
-                    <MaterialCommunityIcons name="square-edit-outline" size={24} color={themas.colors.primary}/>
-                  </TouchableOpacity>
                   <TouchableOpacity onPress={() => removerComprovante(i)}>
-                    <MaterialCommunityIcons name="trash-can-outline" size={24} color={themas.colors.red}/>
+                    <FontAwesome 
+                      name="trash-o" 
+                      size={24} 
+                      color={themas.colors.red} 
+                      style={styles.iconDelete}
+                    />
                   </TouchableOpacity>
                 </View>
+                
               </View>
             ))}
           </View>
-            
-       
 
           {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
           {error && <Text style={styles.errorMessage}>{error}</Text>}
@@ -809,6 +808,17 @@ const RegistroDespesa = () => {
           <Pressable style={styles.modalButton} onPress={() => { selecionarPDF(); setShowPickerModal(false); }}>
             <Text style={styles.modalTexto}>Selecionar PDF</Text>
           </Pressable>
+        </View>
+      </Modal>
+
+      <Modal visible={mostrarModalPrevisualizacao} transparent animationType="fade">
+        <View style={styles.fundoModalEscuro} />
+        <View style={styles.conteudoModal}>
+          <ComprovantePreview
+            uri={uriPrevisualizacao}
+            mimeType={previsualizacaoMime}
+            onClose={() => setMostrarModalPrevisualizacao(false)}
+          />
         </View>
       </Modal>
     </>
