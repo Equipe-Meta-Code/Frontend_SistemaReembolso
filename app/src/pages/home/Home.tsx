@@ -65,7 +65,9 @@ const Home: React.FC = () => {
       const projetoIds = formattedProjects.map(p => p.id);
 
       const totalPorProjeto = allDespesas
-        .filter((d: any) => projetoIds.includes(d.projetoId))
+        .filter(
+          (d: any) => projetoIds.includes(d.projetoId) &&
+          d.userId.toString() === user?.userId.toString())
         .reduce((acc: { [key: number]: number }, d: any) => {
           if (!acc[d.projetoId]) acc[d.projetoId] = 0;
           acc[d.projetoId] += d.valor_gasto;
