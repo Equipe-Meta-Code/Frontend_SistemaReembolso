@@ -11,6 +11,9 @@ import Profile from "../pages/perfil/Perfil";
 import Login from "../pages/login/Login";
 import BottomRoutes from "../routes/bottom.routes";
 import Cadastro from "../pages/Cadastro/Cadastro";
+import Intro from "../pages/Intro/Intro";
+import PreRegistro from "../pages/PreRegistro/PreRegistro";
+import guiaDoUsuario from "../pages/guiaDoUsuario/guiaDoUsuario";      
 import Verificacao2FA from "../pages/login/Verificacao2FA";
 import { themas } from "../global/themes";
 
@@ -20,6 +23,9 @@ type RootStackParamList = {
   Cadastro: undefined;
   Verificacao2FA: { email: string };
   BottomRoutes: undefined;
+  Intro: undefined;
+  PreRegistro: undefined;
+  guiaDoUsuario: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -48,11 +54,15 @@ function AppWrapper() {
                 <>  
                     <Stack.Screen name="Login" component={Login} />
                     <Stack.Screen name="Cadastro" component={Cadastro} />
+                    <Stack.Screen name="Intro" component={Intro} />
+                    <Stack.Screen name="PreRegistro" component={PreRegistro} />
+
                     <Stack.Screen name="Verificacao2FA" component={Verificacao2FA} />
                 </>
             ) : (
                 <>
                     <Stack.Screen name="BottomRoutes" component={BottomRoutes} />
+                    <Stack.Screen name="guiaDoUsuario" component={guiaDoUsuario} />
                 </>
             )}
         </Stack.Navigator>
