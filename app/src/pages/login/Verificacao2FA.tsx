@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from "react-native";
 import { useNavigation, NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
@@ -68,6 +68,21 @@ export default function Verificacao2FA() {
     }
   }
 
+  // reenviar código se o usuário pedir
+  async function handleResendCode() {
+    try {
+      setLoading(true);
+      await api.post("/resend-code", { email }); 
+      Alert.alert("Código reenviado", "Verifique sua caixa de entrada.");
+    } catch (error: any) {
+      const msg = error.response?.data?.message || "Erro ao reenviar o código.";
+      console.log("Erro ao reenviar código", error.response?.data);
+      Alert.alert("Erro", msg);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <KeyboardAvoidingView
@@ -107,6 +122,11 @@ export default function Verificacao2FA() {
             onPress={handleVerifyCode}
             loading={loading}
           />
+
+          <TouchableOpacity onPress={handleResendCode}>
+            <Text style={styles.resendText}>Reenviar código</Text>
+          </TouchableOpacity>
+
           
         </View>
         </View>

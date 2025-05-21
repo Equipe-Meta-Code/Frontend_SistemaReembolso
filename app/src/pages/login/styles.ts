@@ -98,6 +98,13 @@ export const createStyles = (theme: any) => StyleSheet.create({
         paddingHorizontal: 10,
         marginTop: 60,
     },
-      
+    resendText: {
+        marginTop: 16,
+        color: theme.colors.primary,
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+        fontSize: 14,
+    },
+
       
 })
