@@ -141,7 +141,7 @@ export interface Despesa {
               <Text style={styles.cardSubtitle}>Histórico de Despesas:</Text>
               {despesas && despesas.length > 0 ? (
                 despesasAgrupadas?.map((grupo) => (
-                  <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: themas.colors.secondary }]}>
+                  <View key={grupo.categoria} style={[styles.categoriaCard]}>
                     <Text style={[styles.cardSubSubtitle, { color: tituloCategoriaCores[grupo.categoria] || tituloCategoriaCores['Outros'] }]}>{grupo.categoria}</Text>
                     
                     {grupo.itens.map((item: any, index: number) => (
@@ -204,7 +204,6 @@ export interface Despesa {
       color: themas.colors.chumbo, 
     },
     cardSubSubtitle: {
-      marginTop: 12,
       fontSize: 15,
       fontWeight: '600',
       color: themas.colors.chumbo, 
@@ -240,6 +239,17 @@ export interface Despesa {
       padding: 16,
       borderRadius: 12,
       marginTop: 12,
+       backgroundColor: 'white',
+       marginVertical: 10,
+
+        // Sombra no iOS
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 2 },
+       shadowOpacity: 0.25,
+       shadowRadius: 3.84,
+
+        // Sombra no Android
+       elevation: 5,
     },
     botaoReembolso: {
       marginTop: 16,

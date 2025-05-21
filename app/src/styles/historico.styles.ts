@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
   },  
   totalTitle: {
     fontSize: 14,
-    color: themas.colors.gray,
+    color: themas.colors.cinza,
     marginBottom: 4,
   },
   totalValue: {
