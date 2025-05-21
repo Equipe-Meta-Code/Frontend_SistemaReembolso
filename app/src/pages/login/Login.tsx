@@ -52,18 +52,10 @@ export default function Login() {
 
         try {
             const response = await api.post('/login', { email, password });
-            const user = response.data;
+            console.log("Resposta do login:", response.data);
 
-            dispatch(loginUserAction(user));
-
-            setTimeout(() => {
-                if (user.token) {
-                    navigation.navigate('BottomRoutes');
-                } else {
-                    Alert.alert('Erro', 'Usuário não foi encontrado');
-                }
-                setLoading(false);
-            }, 1500);
+            // Verificação de dois fatores
+            navigation.navigate("Verificacao2FA", { email });
 
         } catch (error: any) {
             console.log('Erro ao logar o usuário.', error);
