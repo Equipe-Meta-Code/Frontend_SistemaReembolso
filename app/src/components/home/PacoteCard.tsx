@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import api from '../../services/api';
 import { themas } from "../../global/themes";
+import { useTheme } from '../../context/ThemeContext';
 export interface Despesa {
     categoria: string;
     valor_gasto: number;
@@ -28,6 +29,8 @@ export interface Despesa {
 
   const PacoteCard: React.FC<PacoteCardProps> = ({ nome, despesas, status, pacoteId, fetchPacotesDespesas, resetarExpandido }) => {
     
+      const { theme } = useTheme();
+      const styles = createStyles (theme);    
       const [isSolicitando, setIsSolicitando] = useState(false);
       const [expandido, setExpandido] = useState(false);  
 
@@ -133,7 +136,7 @@ export interface Despesa {
             <Text style={styles.cardTitle}>{nome}</Text>
             <Text style={styles.totalGasto}>Total gasto: R$ {totalGasto.toFixed(2).replace('.', ',')}</Text>
           
-            <Text style={{ color: themas.colors.chumbo_claro, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
+            <Text style={{ color: theme.colors.chumbo_claro, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
 
             {/* Histórico de despesas só aparece se estiver expandido */}
             {expandido && (
@@ -147,7 +150,7 @@ export interface Despesa {
                     {grupo.itens.map((item: any, index: number) => (
                     <Text key={index} style={styles.despesaItem}>
                     {mistoAprovacao && (
-                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || themas.colors.chumbo_claro, fontWeight: 'bold' }}>
+                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || theme.colors.chumbo_claro, fontWeight: 'bold' }}>
                         [{item.aprovacao}]
                       </Text>
                     )}
@@ -165,7 +168,7 @@ export interface Despesa {
               {/* Botão de solicitar reembolso */}
               {status === 'Rascunho' && (
                 <TouchableOpacity
-                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: themas.colors.cinza_medio }]}
+                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: theme.colors.cinza_medio }]}
                   onPress={handleSolicitarReembolso}
                   disabled={isSolicitando || despesas?.length === 0}
                 >
@@ -183,7 +186,7 @@ export interface Despesa {
     );
   };
 
-  const styles = StyleSheet.create({
+  const createStyles = (theme: any) => StyleSheet.create({
     card: {
       backgroundColor: themas.colors.cinza_muito_claro,
       padding: 10,
@@ -194,30 +197,30 @@ export interface Despesa {
     cardTitle: {
       fontSize: 18,
       fontWeight: '700',
-      color: themas.colors.black,
+      color: theme.colors.black,
       marginBottom: 4,
     },
     cardSubtitle: {
       marginTop: 16,
       fontSize: 15,
       fontWeight: '600',
-      color: themas.colors.chumbo, 
+      color: theme.colors.chumbo, 
     },
     cardSubSubtitle: {
       fontSize: 15,
       fontWeight: '600',
-      color: themas.colors.chumbo, 
+      color: theme.colors.chumbo, 
     },
     despesaItem: {
       marginTop: 6,
       fontSize: 15,
-      color: themas.colors.chumbo_claro,
+      color: theme.colors.chumbo_claro,
       lineHeight: 22,
     },
     semDespesa: {
       marginTop: 15,
       marginBottom: 10,
-      color: themas.colors.cinza_medio, 
+      color: theme.colors.cinza_medio, 
       fontSize: 14,
       fontStyle: 'italic',
     },
@@ -226,8 +229,8 @@ export interface Despesa {
       marginBottom: 15,
     },
     statusText: {
-      backgroundColor: themas.colors.cinza_claro, 
-      color: themas.colors.chumbo,
+      backgroundColor: theme.colors.cinza_claro, 
+      color: theme.colors.chumbo,
       fontSize: 12,
       paddingHorizontal: 16,
       paddingVertical: 4,
@@ -253,20 +256,20 @@ export interface Despesa {
     },
     botaoReembolso: {
       marginTop: 16,
-      backgroundColor: themas.colors.primary,
+      backgroundColor: theme.colors.primary,
       paddingVertical: 10,
       borderRadius: 10,
       alignItems: 'center',
     },
     textoBotao: {
-      color: themas.colors.secondary,
+      color: theme.colors.sempre_branco,
       fontSize: 16,
       fontWeight: '600',
     },
     totalGasto: {
       fontSize: 14,
       fontWeight: '600',
-      color: themas.colors.chumbo_claro,
+      color: theme.colors.chumbo_claro,
       marginBottom: 6,
       marginLeft: 2,
     },    

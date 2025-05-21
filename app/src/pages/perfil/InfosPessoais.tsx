@@ -4,7 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfileImage } from '../../(redux)/authSlice';
 import { RootState } from '../../(redux)/store';
-import { style } from "./styles";
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
 import CustomButton from '../../components/perfil/Botao';
 import BotaoInfoPessoal from '../../components/perfil/BotaoInfoPessoal';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native';
@@ -18,6 +19,8 @@ import { themas } from '../../global/themes';
 const InfosPessoais = () => {
     const user = useSelector((state: RootState) => state.auth.user);
     const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
+    const { theme } = useTheme();
+    const style = createStyles (theme);
 
     type RootStackParamList = {
         Perfil: undefined; // Add other routes and their parameters here
@@ -181,7 +184,7 @@ const InfosPessoais = () => {
                       height={150}
                       borderRadius={100}
                       borderWidth={3}
-                      borderColor={themas.colors.secondary}
+                      borderColor={theme.colors.secondary}
                       refreshKey={user.profileImage}
                       fallbackSource={require('../../assets/perfil.png')}
                     />
@@ -199,14 +202,14 @@ const InfosPessoais = () => {
                 titulo={`Alterar imagem do perfil`}
                 onPress={handleImageUpload}
                 iconName="chevron-forward"
-                iconColor={themas.colors.black}
+                iconColor={theme.colors.black}
               />
 
               <CustomButton
                 titulo={`Voltar imagem padrão`}
                 onPress={handleImagemPadrao}
                 iconName="chevron-forward"
-                iconColor={themas.colors.black}
+                iconColor={theme.colors.black}
               />
 
             </View>
@@ -220,13 +223,13 @@ const InfosPessoais = () => {
                     titulo={`Nome: ${user?.name}`}
                     onPress={() => console.log("Nome")}
                     iconName=""
-                    iconColor={themas.colors.black}
+                    iconColor={theme.colors.black}
                 />
                 <CustomButton
                     titulo={`Email: ${user?.email}`}
                     onPress={() => console.log("Email")}
                     iconName=""
-                    iconColor={themas.colors.black}
+                    iconColor={theme.colors.black}
                 />
                 
             </View>

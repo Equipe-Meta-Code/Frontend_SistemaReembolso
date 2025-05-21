@@ -9,10 +9,10 @@ export const COLUMN_WIDTHS = {
   status: 100,
 };
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: themas.colors.secondary,
+    backgroundColor: theme.colors.secondary,
   },
 
   listContainer: {
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
 
   // Cabeçalho Azul
   header: {
-    backgroundColor: themas.colors.primary,
+    backgroundColor: theme.colors.primary,
     padding: 20,
     paddingTop: 60,
     flexDirection: "row",
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
 
   // card de resumo no topo da tela
   cardInformacoes: {
-    backgroundColor: themas.colors.cinza_muito_claro, 
+    backgroundColor: theme.colors.cinza_muito_claro_historico, 
     borderRadius: 10,            
     padding: 12,
     marginHorizontal: 20,
@@ -41,12 +41,12 @@ export const styles = StyleSheet.create({
   },  
   totalTitle: {
     fontSize: 14,
-    color: themas.colors.cinza,
+    color: theme.colors.text,
     marginBottom: 4,
   },
   totalValue: {
     fontSize: 26,
-    color: themas.colors.primary,
+    color: theme.colors.blue,
     marginBottom: 4,
     fontWeight: "bold",
   },
@@ -55,16 +55,16 @@ export const styles = StyleSheet.create({
     fontSize: 15,
   },
   approvedValue: {
-    color: themas.colors.verde_medio, 
+    color: theme.colors.verde_medio, 
     fontSize: 15,
   },  
   rejectedValue: {
-    color: themas.colors.vinho_claro,
+    color: theme.colors.vinho_claro,
     fontSize: 15,
   },
   subText: {
     fontSize: 13,
-    color: themas.colors.cinza_medio,
+    color: theme.colors.cinza_medio,
   },
   cardRow: {
     flexDirection: "row",
@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
   },
   statusLabel: {
     fontSize: 12,
-    color: themas.colors.azul_escuro, 
+    color: theme.colors.text, 
   },
 
 
@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   highlight: {
-    color: themas.colors.verde_medio,
+    color: theme.colors.verde_medio,
   },
 
   // Seção de Despesas
@@ -108,7 +108,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
     paddingVertical: 8,
-    backgroundColor: themas.colors.primary,
+    backgroundColor: theme.colors.primary,
     borderRadius: 8,
     paddingHorizontal: 12,
   },
@@ -118,13 +118,13 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 15,
-    backgroundColor: themas.colors.cinza_muito_claro,
+    backgroundColor: theme.colors.cinza_muito_claro,
     marginRight: 10,
   },
   icon: {
     fontSize: 18,
     fontWeight: "bold",
-    color: themas.colors.azul_escuro,
+    color: theme.colors.azul_escuro,
   },
   sectionTitle: {
     fontSize: 17,
@@ -134,7 +134,7 @@ export const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: themas.colors.cinza_claro, 
+    backgroundColor: theme.colors.primary, 
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 5,
@@ -144,7 +144,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
-    color: themas.colors.azul_escuro,
+    color: theme.colors.azul_escuro,
   },
 
   // Itens de Despesas
@@ -155,6 +155,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 8,
+    borderColor: theme.colors.black,
     marginBottom: 5,
     elevation: 1,
   },
@@ -163,7 +164,7 @@ export const styles = StyleSheet.create({
   data: {
     width: COLUMN_WIDTHS.data,
     fontSize: 14,
-    color: themas.colors.chumbo_claro,
+    color: theme.colors.chumbo_claro,
     textAlign: "center",
   },
   tipoDespesa: {
@@ -171,14 +172,14 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
-    color: themas.colors.azul_escuro,
+    color: theme.colors.azul_escuro,
   },
   valor: {
     width: COLUMN_WIDTHS.valor,
     textAlign: "center",
     fontSize: 14,
     fontWeight: "bold",
-    color: themas.colors.azul_escuro,
+    color: theme.colors.azul_escuro,
   },
   status: {
     fontSize: 14,
@@ -195,12 +196,12 @@ export const styles = StyleSheet.create({
     bottom: 10,
     left: "5%",
     right: "5%",
-    backgroundColor: themas.colors.primary,
+    backgroundColor: theme.colors.primary,
     borderRadius: 40,
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    shadowColor: themas.colors.black,
+    shadowColor: theme.colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 3,
@@ -210,13 +211,13 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: themas.colors.secondary,
+    backgroundColor: theme.colors.secondary,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 8,
   },
   circleText: {
-    color: themas.colors.primary,
+    color: theme.colors.primary,
     fontSize: 12,
     fontWeight: "bold",
   },
@@ -229,7 +230,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: themas.colors.secondary,
+    color: theme.colors.secondary,
     textAlign: "center", 
     flex: 1, 
     marginLeft: 15,
@@ -237,7 +238,7 @@ export const styles = StyleSheet.create({
   buttonValue: {
     fontSize: 16, 
     fontWeight: "bold",
-    color: themas.colors.secondary,
+    color: theme.colors.secondary,
     marginRight: 5,
   },
   

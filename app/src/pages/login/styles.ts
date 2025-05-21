@@ -2,7 +2,7 @@ import { StyleSheet,Dimensions} from "react-native";
 import { themas } from "../../global/themes";
 
 
-export const style = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
     container:{
         flex:1,
         alignItems:'center',
@@ -11,7 +11,7 @@ export const style = StyleSheet.create({
     boxTop: {
         height: Dimensions.get('window').height / 5,
         width: '100%',
-        backgroundColor: themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         alignItems: 'flex-start',
         justifyContent: 'center',
         borderBottomLeftRadius: 20,
@@ -19,7 +19,7 @@ export const style = StyleSheet.create({
     },
     boxMid: {
         flex: 1,
-        backgroundColor: themas.colors.secondary,
+        backgroundColor: theme.colors.secondary,
         width: '100%',
         paddingTop: 20,
         paddingHorizontal: 20,
@@ -41,17 +41,17 @@ export const style = StyleSheet.create({
     welcomeTitle: {
         fontSize: 24,    
         fontWeight: 'bold',  
-        color: themas.colors.black,  
+        color: theme.colors.black,  
     },
     instruction: {
         fontSize: 16,    
-        color: themas.colors.black,  
+        color: theme.colors.black,  
         textAlign: 'left',  
         marginTop: 10,   
     },
     forgotPassword: {
         paddingTop:10,
-        color: themas.colors.primary,
+        color: theme.colors.primary,
         fontSize: 16,
         marginTop: 30,
         textAlign: 'center',
@@ -67,7 +67,7 @@ export const style = StyleSheet.create({
     noAccountText: {
         paddingTop:60,
         fontSize: 16,
-        color: themas.colors.gray,  
+        color: theme.colors.gray,  
         textAlign: 'center', 
         marginBottom: 40,
     },
@@ -80,12 +80,12 @@ export const style = StyleSheet.create({
         marginLeft: -30, 
     },
     erroInput: {
-        borderColor: themas.colors.red,
+        borderColor: theme.colors.red,
         borderWidth: 1,
       },
       
       erroTexto: {
-        color: themas.colors.red,
+        color: theme.colors.red,
         fontSize: 12,
         marginTop: 4,
         marginBottom: 8,

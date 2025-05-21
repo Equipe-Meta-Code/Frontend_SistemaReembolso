@@ -1,6 +1,8 @@
-import { Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Platform  } from 'react-native';
+import { ActionSheetIOS } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
-import { styles } from './styles';
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
 import CustomDropdown from '../../components/customDropdown';
 import CustomDatePicker from '../../components/customDate/index';
 import { TextInputMask } from 'react-native-masked-text';
@@ -12,11 +14,14 @@ import { RootState } from "../../(redux)/store";
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { themas } from '../../global/themes';
+import * as ImagePicker from 'expo-image-picker';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
 
 const RegistroDespesa = () => {
+  const { theme } = useTheme();
+  const styles = createStyles (theme);
   const [error, setError] = useState("");
   const [pacoteError, setPacoteError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -306,6 +311,84 @@ const RegistroDespesa = () => {
     setKmCost(cost);
   };
 
+  const [imageUri, setImageUri] = useState<string | null>(null);
+
+  const openImagePickerOptions = () => {
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ['Cancelar', 'Tirar foto', 'Galeria'],
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) tirarFoto();
+          else if (buttonIndex === 2) escolherGaleria();
+        }
+      );
+    } else {
+      Alert.alert(
+        'Selecionar imagem',
+        'Escolha uma opção:',
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Tirar foto', onPress: () => tirarFoto() },
+          { text: 'Galeria',    onPress: () => escolherGaleria() },
+        ],
+        { cancelable: true }
+      );
+    }
+  };
+
+  const escolherGaleria = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      return Alert.alert('Permissão negada', 'Precisa liberar acesso à galeria.');
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({ quality: 1 });
+    if (!result.canceled && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const tirarFoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      return Alert.alert('Permissão negada', 'Você precisa liberar acesso à câmera.');
+    }
+    const result = await ImagePicker.launchCameraAsync({ quality: 1 });
+    if (!result.canceled && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+
+  const handleImageUpload = async (despesaId: number) => {
+    if (!imageUri) return;
+
+    const filename = imageUri.split('/').pop()!;
+    const match = /\.(\w+)$/.exec(filename);
+    const mimeType = match ? `image/${match[1]}` : 'image';
+
+    const formData = new FormData();
+    formData.append('profileImage', {
+      uri: imageUri,
+      name: filename,
+      type: mimeType,
+    } as any);
+    formData.append('tipo', 'expense');
+    formData.append('tipoId', String(despesaId));
+
+    try {
+      const res = await api.post('/imagem', formData);
+      if (res.data.success) {
+        Alert.alert('Sucesso', 'Comprovante enviado!');
+      }
+    } catch (err) {
+      console.error('[FRONT] Erro ao enviar imagem:', err);
+      Alert.alert('Erro', 'Falha ao enviar comprovante.');
+    }
+  };
+
   const handleSubmit = async () => {
     fetchData();
     setError(""); // Limpar mensagem de erro anterior
@@ -384,7 +467,11 @@ const RegistroDespesa = () => {
             : undefined,
       });
       /* console.log(response.data); */
+      const novaDespesa = response.data;
+      
       setSuccessMessage("Despesa cadastrada com sucesso!");
+
+      await handleImageUpload(novaDespesa.despesaId);
 
       setTimeout(() => {
         setSelectedPacote("");
@@ -492,6 +579,7 @@ const RegistroDespesa = () => {
                 value={newPacoteName}
                 onChangeText={setNewPacoteName}
                 style={styles.inputNome}
+                placeholderTextColor={theme.colors.text}
               />
 
               <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
@@ -559,14 +647,15 @@ const RegistroDespesa = () => {
           ) : (
             // SENÃO (outras categorias) → mostra o campo de Valor gasto
             <>
-              <Text style={styles.textBottom}>Valor gasto</Text>
               <TextInputMask
                 type={'money'}
                 value={amount}
                 onChangeText={handleAmountChange}
                 style={styles.inputMask}
                 placeholder='R$ 0,00'
+                placeholderTextColor={theme.colors.text}
               />
+
             </>
           )}
 
@@ -597,8 +686,8 @@ const RegistroDespesa = () => {
                     {
                       backgroundColor:
                         projectedTotal > valor_maximo
-                          ? themas.colors.vinho_claro
-                          : themas.colors.primary,
+                          ? theme.colors.vinho_claro
+                          : theme.colors.primary,
                     },
                   ]}
                 />
@@ -614,16 +703,18 @@ const RegistroDespesa = () => {
             </>
           }
 
-          <Text style={styles.textBottom}>Descrição</Text>
           <TextInput
             value={description}
             onChangeText={handleDescriptionChange}
             placeholder="Digite uma descrição"
             style={styles.inputDescription}
+            placeholderTextColor={theme.colors.text}
           />
 
+
           <Text style={styles.textBottom}>Adicione o comprovante</Text>
-          <TouchableOpacity>
+
+          <TouchableOpacity onPress={openImagePickerOptions}>
             <MaterialCommunityIcons
               name="image-plus"
               style={styles.image}

@@ -8,13 +8,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import { store } from './src/(redux)/store';
 import { Provider } from 'react-redux';
 import AppWrapper from './src/(redux)/appWrapper';
+import { ThemeProvider } from './src/context/ThemeContext';
+
 
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <AppWrapper />
-      </NavigationContainer>
+      <ThemeProvider>
+        <NavigationContainer>
+          <AppWrapper />
+        </NavigationContainer>
+      </ThemeProvider>
     </Provider>
   );
 }

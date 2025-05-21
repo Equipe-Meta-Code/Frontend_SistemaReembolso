@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { style } from "./styles";
-import { Text, View, Image, Alert, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
+import { Text, View, Image, Alert, ActivityIndicator, 
+    TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
@@ -12,6 +14,8 @@ import { ButtonCustom } from "../../components/customButton";
 import { Divider } from "react-native-paper";
 
 export default function Login() {
+    const { theme } = useTheme();
+    const style = createStyles (theme);
     const navigation = useNavigation<NavigationProp<any>>();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -71,70 +75,75 @@ export default function Login() {
     }
 
     return (
-        <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
-        >
-            <View style={style.container}>
-                <View style={style.boxTop}>
-                    <Text style={style.title}>Login</Text>
-                    <Text style={style.description}>Faça login com seu e-mail e senha para poder acessar a sua conta</Text>
-                </View>
-
-                <View style={style.boxMid}>
-                    <Text style={style.welcomeTitle}>Bem-Vindo novamente👋</Text>
-                    <Text style={style.instruction}>Para acessar sua conta você deve fazer o login primeiro.</Text>
-                    {/* Email */}
-                    <Input
-                        value={email}
-                        onChangeText={text => {
-                            if (formInvalido) setFormInvalido(false);
-                            validarEmail(text);
-                        }}
-                        error={(formInvalido && !email) || (!emailValido && !!email)}
-                        title="Email"
-                        iconRightName="email"
-                        IconRigth={MaterialIcons}
-                        placeholder="Digite seu e-mail"
-                    />
-                    {/* Senha */}
-                    <Input
-                        value={password}
-                        onChangeText={(text) => {
-                            if (formInvalido) setFormInvalido(false);
-                            setPassword(text);
-                        }}
-                        error={formInvalido && !password}
-                        title="Senha"
-                        secureTextEntry={!showPassword}
-                        iconRightName={showPassword ? "visibility-off" : "visibility"}
-                        IconRigth={MaterialIcons}
-                        onIconRigthPress={() => setShowPassword(!showPassword)}
-                        placeholder="Digite sua senha"
-                    />
-
-                    <Text style={style.forgotPassword}>Esqueceu a senha?</Text>
-
-                    <ButtonCustom
-                        title="Login"
-                        onPress={() => getLogin()}
-                        loading={loading}
-                    />
-
-                    {/* Texto "Ainda não possuo uma conta" no meio da linha */}
-                    <View style={style.lineContainer}>
-                        <Text style={style.noAccountText}>Ainda não possuo uma conta</Text>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
+            >
+                <View style={style.container}>
+                    <View style={style.boxTop}>
+                        <Text style={style.title}>Login</Text>
+                        <Text style={style.description}>Faça login com seu e-mail e senha para poder acessar a sua conta</Text>
                     </View>
 
-                    {/* Botão "Cadastre-se" */}
-                    <ButtonCustom
-                        title="Cadastre-se"
-                        onPress={() => navigation.navigate("Cadastro")}
-                    />
+                    <View style={style.boxMid}>
+                        <Text style={style.welcomeTitle}>Bem-Vindo novamente👋</Text>
+                        <Text style={style.instruction}>Para acessar sua conta você deve fazer o login primeiro.</Text>
+                        {/* Email */}
+                        <Input
+                            value={email}
+                            onChangeText={text => {
+                                if (formInvalido) setFormInvalido(false);
+                                validarEmail(text);
+                            }}
+                            error={(formInvalido && !email) || (!emailValido && !!email)}
+                            title="Email"
+                            iconRightName="email"
+                            IconRigth={MaterialIcons}
+                            placeholder="Digite seu e-mail"
+                            placeholderTextColor={theme.colors.cinza}
 
+                        />
+                        {/* Senha */}
+                        <Input
+                            value={password}
+                            onChangeText={(text) => {
+                                if (formInvalido) setFormInvalido(false);
+                                setPassword(text);
+                            }}
+                            error={formInvalido && !password}
+                            title="Senha"
+                            secureTextEntry={!showPassword}
+                            iconRightName={showPassword ? "visibility-off" : "visibility"}
+                            IconRigth={MaterialIcons}
+                            onIconRigthPress={() => setShowPassword(!showPassword)}
+                            placeholder="Digite sua senha"
+                            placeholderTextColor={theme.colors.cinza}
+                        />
+
+                        <Text style={style.forgotPassword}>Esqueceu a senha?</Text>
+
+                        <ButtonCustom
+                            title="Login"
+                            onPress={() => getLogin()}
+                            loading={loading}
+                        />
+
+                        {/* Texto "Ainda não possuo uma conta" no meio da linha */}
+                        <View style={style.lineContainer}>
+                            <Text style={style.noAccountText}>Ainda não possuo uma conta</Text>
+                        </View>
+
+                        {/* Botão "Cadastre-se" */}
+                        <ButtonCustom
+                            title="Cadastre-se"
+                            onPress={() => navigation.navigate("Cadastro")}
+                        />
+
+                    </View>
                 </View>
-            </View>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
     );
 }

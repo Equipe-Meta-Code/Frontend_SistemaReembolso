@@ -2,11 +2,11 @@ import { StyleSheet, Dimensions } from "react-native";
 import { themas } from "../../global/themes";
 
 
-export const style = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
     inputTitle: {
         paddingTop: 5,
         fontSize: 16,
-        color: themas.colors.black,
+        color: theme.colors.black,
         marginTop: 20,
         alignSelf: 'flex-start',
         marginLeft: 10,
@@ -18,7 +18,7 @@ export const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: themas.colors.gray,
+        borderColor: theme.colors.gray,
         borderRadius: 5,
         paddingHorizontal: 10,
         height: 40,
@@ -26,16 +26,16 @@ export const style = StyleSheet.create({
     },
     input: {
         flex: 1,
-        color: themas.colors.black,
+        color: theme.colors.black,
     },
     iconRight: {
         marginLeft: 10,
     },
     erroInput: {
-        borderColor: themas.colors.red,
+        borderColor: theme.colors.red,
     },
     erroTexto: {
-        color: themas.colors.red,
+        color: theme.colors.red,
         fontSize: 12,
         marginTop: 4,
         marginBottom: 8,

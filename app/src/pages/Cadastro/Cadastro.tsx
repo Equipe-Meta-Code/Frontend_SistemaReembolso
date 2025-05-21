@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { style } from "./styles";
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
 import { Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
@@ -10,6 +11,8 @@ import { ButtonCustom } from "../../components/customButton";
 import { Asset } from 'expo-asset';
 
 export default function Cadastro() {
+    const { theme } = useTheme();
+    const style = createStyles (theme);
     const navigation = useNavigation<NavigationProp<any>>();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -110,9 +113,14 @@ export default function Cadastro() {
             Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
             navigation.navigate("Login");
 
-        } catch (error) {
-            console.log('Erro no cadastro:', error);
-            Alert.alert('Erro', 'Ocorreu um erro ao tentar realizar o cadastro. Por favor, tente novamente.');
+        } catch (error:any) {
+            setErrorMessages([]);
+            const mensagemErro = error.response.data.message;
+            if (mensagemErro == "Email já está em uso!") {
+                setErrorMessages(["Email já está em uso!"]);
+            } else {
+                Alert.alert(error, 'Ocorreu um erro ao tentar realizar o cadastro. Por favor, tente novamente.');
+            }
         } finally {
             setLoading(false);
         }
@@ -144,6 +152,7 @@ export default function Cadastro() {
                         }}
                         iconRightName="person"
                         IconRigth={MaterialIcons}
+                        placeholderTextColor={theme.colors.cinza}
                     />
 
                     {/* Email */}
@@ -156,6 +165,7 @@ export default function Cadastro() {
                         }}
                         iconRightName="email"
                         IconRigth={MaterialIcons}
+                        placeholderTextColor={theme.colors.cinza}
                     />
 
                     {/* Senha */}
@@ -170,6 +180,7 @@ export default function Cadastro() {
                         iconRightName={showPassword ? "visibility-off" : "visibility"}
                         IconRigth={MaterialIcons}
                         onIconRigthPress={() => setShowPassword(!showPassword)}
+                        placeholderTextColor={theme.colors.cinza}
                     />
 
                     {/* Confirmação de Senha */}
@@ -184,6 +195,7 @@ export default function Cadastro() {
                         iconRightName={showPasswordConfirm ? "visibility-off" : "visibility"}
                         IconRigth={MaterialIcons}
                         onIconRigthPress={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                        placeholderTextColor={theme.colors.cinza}
                     />
                     {/* Aceitar Termos */}
                     <View style={style.checkboxContainer}>
@@ -194,7 +206,7 @@ export default function Cadastro() {
                             <MaterialIcons
                                 name={acceptTerms ? "check-box" : "check-box-outline-blank"}
                                 size={24}
-                                color={acceptTerms ? "green" : themas.colors.cinza}
+                                color={acceptTerms ? "green" : theme.colors.cinza}
                             />
                         </TouchableOpacity>
                         <Text style={style.checkboxText}>Eu aceito todos os termos e condições</Text>
@@ -222,7 +234,7 @@ export default function Cadastro() {
                     <View style={style.lineContainer}>
                         <Text style={style.noAccountText}>Já possui uma conta?
                             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                                <Text style={{ color: themas.colors.primary }}> Login</Text>
+                                <Text style={{ color: theme.colors.primary }}> Login</Text>
                             </TouchableOpacity>
                         </Text>
                     </View>
