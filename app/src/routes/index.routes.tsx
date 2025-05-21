@@ -5,6 +5,7 @@ import BottomRoutes from "./bottom.routes";
 import Home from "../pages/home/Home";
 import RegistroDespesa from "../pages/registroDespesa/RegistroDespesa";
 import { useTheme } from '../context/ThemeContext';
+import Intro from "../pages/Intro/Intro";
 
 
 export default function Routes(){
@@ -21,7 +22,7 @@ export default function Routes(){
                 }
             }}
         >
-
+            <Stack.Screen name="Intro" component={Intro} />
             <Stack.Screen
                 name="Login"
                 component={Login}
