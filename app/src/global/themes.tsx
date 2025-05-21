@@ -45,7 +45,7 @@ export const themas = {
       roxo: "#3A08C4",
       sempre_branco: "#FFFFFF",
       sempre_preto: "#000000",
-      sempre_cinza_claro: "#e0e0e0"
+      sempre_cinza_claro: "#e0e0e0",
       
       azul_escuro_opaco: 'rgba(19, 75, 165, 0.67)',
       vinho_claro_opaco: 'rgba(209, 53, 53, 0.15)',
