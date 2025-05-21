@@ -54,6 +54,7 @@ export default function Login() {
             const response = await api.post('/login', { email, password });
             console.log("Resposta do login:", response.data);
 
+            // Verificação de dois fatores
             navigation.navigate("Verificacao2FA", { email });
 
         } catch (error: any) {
