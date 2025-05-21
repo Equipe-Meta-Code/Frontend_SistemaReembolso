@@ -46,10 +46,14 @@ export default function Verificacao2FA() {
         dispatch(loginUserAction(data)); //envia dados para o redux
         Alert.alert("Sucesso", "Autenticação concluída!");
         
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "BottomRoutes" }],
-        }); // redireciona para a tela principal do app
+        setTimeout(() => {
+          if (data.token) {
+            navigation.navigate('BottomRoutes');
+          } else {
+            Alert.alert('Erro', 'Usuário não foi encontrado');
+          }
+            setLoading(false);
+        }, 1500);
 
       } else {
         Alert.alert("Erro", "Token não recebido, tente novamente.");
