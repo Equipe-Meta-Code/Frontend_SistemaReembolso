@@ -64,6 +64,7 @@ const Perfil = () => {
     type RootStackParamList = {
         InfosPessoais: undefined;
         Login: undefined;
+        guiaDoUsuario: undefined;
     };
 
     const user = useSelector((state: RootState) => state.auth.user);
@@ -202,6 +203,12 @@ const Perfil = () => {
                 <CustomButton
                     titulo="Informações pessoais"
                     onPress={() => navigation.navigate('InfosPessoais')}
+                    iconName="chevron-forward"
+                    iconColor={theme.colors.black}
+                />
+                <CustomButton
+                    titulo="Guia do Usuário"
+                    onPress={() => navigation.navigate('guiaDoUsuario')}
                     iconName="chevron-forward"
                     iconColor={theme.colors.black}
                 />
