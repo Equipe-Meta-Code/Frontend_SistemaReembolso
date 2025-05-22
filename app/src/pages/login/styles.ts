@@ -90,5 +90,21 @@ export const createStyles = (theme: any) => StyleSheet.create({
         marginTop: 4,
         marginBottom: 8,
       },
+
+    // Verificacao2FA.tsx
+    inputGroup: {
+        width: '100%',
+        gap: 16,
+        paddingHorizontal: 10,
+        marginTop: 60,
+    },
+    resendText: {
+        marginTop: 16,
+        color: theme.colors.primary,
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+        fontSize: 14,
+    },
+
       
 })

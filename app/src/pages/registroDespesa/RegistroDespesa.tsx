@@ -1,5 +1,4 @@
-import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Platform  } from 'react-native';
-import { ActionSheetIOS } from 'react-native';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback, Pressable  } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
 import { createStyles } from "./styles";
 import { useTheme } from '../../context/ThemeContext';
@@ -15,6 +14,10 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { themas } from '../../global/themes';
 import * as ImagePicker from 'expo-image-picker';
+import * as DocumentPicker from 'expo-document-picker';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import ComprovantePreview from '../../components/registroDespesa/ComprovantePreview';
+import { FontAwesome  } from '@expo/vector-icons';
 
 const GAS_PRICE = 6.20; // preço fixo da gasolina
 const KM_PER_LITER = 10; // litro fixo para exemplos
@@ -46,6 +49,9 @@ const RegistroDespesa = () => {
   const [km, setKm] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [quantidadeTotal, setQuantidadeTotal] = useState(0);
+  const [mostrarModalPrevisualizacao, setMostrarModalPrevisualizacao] = useState(false);
+  const [uriPrevisualizacao, setUriPrevisualizacao] = useState<string>("");
+  const [previsualizacaoMime, setPrevisualizacaoMime] = useState<string>("");
 
   type RootStackParamList = {
     Home: undefined;
@@ -75,6 +81,12 @@ const RegistroDespesa = () => {
     userId: string;
     status: string;
   };
+
+  interface ComprovanteItem {
+    id: string;
+    uri: string;
+    mimeType: string;
+  }
 
   const fetchData = async () => {
     try {
@@ -311,188 +323,217 @@ const RegistroDespesa = () => {
     setKmCost(cost);
   };
 
-  const [imageUri, setImageUri] = useState<string | null>(null);
+  const [comprovantes, setComprovantes] = useState<ComprovanteItem[]>([]);
+  const [mimeType, setMimeType] = useState<string>('image/jpeg');
+
+  const { showActionSheetWithOptions } = useActionSheet();
+  const [showPickerModal, setShowPickerModal] = useState(false);
 
   const openImagePickerOptions = () => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ['Cancelar', 'Tirar foto', 'Galeria'],
-          cancelButtonIndex: 0,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 1) tirarFoto();
-          else if (buttonIndex === 2) escolherGaleria();
-        }
-      );
-    } else {
-      Alert.alert(
-        'Selecionar imagem',
-        'Escolha uma opção:',
-        [
-          { text: 'Cancelar', style: 'cancel' },
-          { text: 'Tirar foto', onPress: () => tirarFoto() },
-          { text: 'Galeria',    onPress: () => escolherGaleria() },
-        ],
-        { cancelable: true }
-      );
-    }
+    const options = ['Cancelar', 'Tirar foto', 'Galeria', 'Selecionar PDF'];
+    const cancelButtonIndex = 0;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      (buttonIndex?: number) => {
+      switch (buttonIndex) {
+        case 1: return tirarFoto();
+        case 2: return escolherGaleria();
+        case 3: return selecionarPDF();
+        default: return;
+      }
+      }
+    );
+  };
+
+  const adicionarComprovante = (uri: string, mimeType: string) => {
+    setComprovantes(prev => [
+      ...prev,
+      { id: Date.now().toString(), uri, mimeType }
+    ]);
   };
 
   const escolherGaleria = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      return Alert.alert('Permissão negada', 'Precisa liberar acesso à galeria.');
-    }
+    if (status !== 'granted') return Alert.alert('Permissão negada');
     const result = await ImagePicker.launchImageLibraryAsync({ quality: 1 });
-    if (!result.canceled && result.assets.length > 0) {
-      setImageUri(result.assets[0].uri);
-    }
+    if (result.canceled) return;
+    const asset = result.assets[0];
+    const inferredType = asset.type === 'video' ? asset.type : 'image';
+    adicionarComprovante(
+      asset.uri,
+      inferredType === 'image'
+        ? 'image/jpeg'
+        : asset.uri.endsWith('.png')
+          ? 'image/png'
+          : `video/${asset.uri.split('.').pop()}`
+    );
   };
+
 
   const tirarFoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      return Alert.alert('Permissão negada', 'Você precisa liberar acesso à câmera.');
-    }
+    if (status !== 'granted') return Alert.alert('Permissão negada');
     const result = await ImagePicker.launchCameraAsync({ quality: 1 });
-    if (!result.canceled && result.assets.length > 0) {
-      setImageUri(result.assets[0].uri);
-    }
+    if (result.canceled) return;
+    adicionarComprovante(result.assets[0].uri, 'image/jpeg');
   };
 
+  const selecionarPDF = async () => {
+    const res = await DocumentPicker.getDocumentAsync({
+      type: 'application/pdf',
+      copyToCacheDirectory: true,
+    });
+    if (res.canceled) return;
+    const getMimeTypeFromUri = (uri: string) => {
+      if (uri.endsWith('.pdf')) return 'application/pdf';
+      if (uri.endsWith('.png')) return 'image/png';
+      if (uri.endsWith('.jpg') || uri.endsWith('.jpeg')) return 'image/jpeg';
+      return 'application/octet-stream';
+    };
+    adicionarComprovante(
+      res.assets[0].uri,
+      getMimeTypeFromUri(res.assets[0].uri)
+    );
+  };
+
+
+
+  const removerComprovante = (idx: number) =>
+    setComprovantes(prev => prev.filter((_, i) => i !== idx));
 
   const handleImageUpload = async (despesaId: number) => {
-    if (!imageUri) return;
+    if (comprovantes.length === 0) return;
 
-    const filename = imageUri.split('/').pop()!;
-    const match = /\.(\w+)$/.exec(filename);
-    const mimeType = match ? `image/${match[1]}` : 'image';
-
-    const formData = new FormData();
-    formData.append('profileImage', {
-      uri: imageUri,
-      name: filename,
-      type: mimeType,
-    } as any);
-    formData.append('tipo', 'expense');
-    formData.append('tipoId', String(despesaId));
-
-    try {
-      const res = await api.post('/imagem', formData);
-      if (res.data.success) {
-        Alert.alert('Sucesso', 'Comprovante enviado!');
-      }
-    } catch (err) {
-      console.error('[FRONT] Erro ao enviar imagem:', err);
-      Alert.alert('Erro', 'Falha ao enviar comprovante.');
-    }
+    await Promise.all(comprovantes.map(c => {
+      const fd = new FormData();
+      fd.append('receipt', {
+        uri: c.uri,
+        name: c.uri.split('/').pop()!,
+        type: c.mimeType
+      } as any);
+      fd.append('tipo', 'expense');
+      fd.append('tipoId', String(despesaId));
+      return api.post('/uploadcomprovante', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+    }));
   };
 
-  const handleSubmit = async () => {
-    fetchData();
-    setError(""); // Limpar mensagem de erro anterior
-    setSuccessMessage(""); // Limpar mensagem de sucesso anterior
+  const handlePrevisualizar = (c: ComprovanteItem) => {
+    setUriPrevisualizacao(c.uri);
+    setPrevisualizacaoMime(c.mimeType);
+    setMostrarModalPrevisualizacao(true);
+  };
 
-    if (!selectedPacote || !category || !selectedProject || !date || (categoryName === 'Transporte' ? !km : !amount)) {
-      setError("Por favor, preencha todos os campos.");
+
+  const handleSubmit = async () => {
+    // limpa
+    setError('');
+    setSuccessMessage('');
+    fetchData();
+
+    if (
+      !selectedPacote ||
+      !category ||
+      !selectedProject ||
+      !date ||
+      (categoryName === 'Transporte' ? !km : !amount)
+    ) {
+      setError('Por favor, preencha todos os campos.');
       return;
     }
 
-    const newAmount =
+    // calcula valor
+    const valor =
       categoryName === 'Transporte'
         ? kmCost
         : categoryName === 'Materiais'
           ? quantidadeTotal
           : parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+    const projected = totalGastoCategoria + valor;
 
-    const projectedTotal = totalGastoCategoria + newAmount;
-
-    if (projectedTotal > valor_maximo && description.trim() === "") {
-      setError("Justifique o motivo da despesa.");
+    // justificativa
+    if (projected > valor_maximo && description.trim() === '') {
+      setError('Justifique o motivo da despesa.');
       return;
     }
 
-    // Converte antes:
-    const descriptionToSend =
-      description.trim() === ""
-        ? "Sem Descrição"
-        : description;
-
-    const parsedKm = parseFloat(km.replace(',', '.'));
-    const parsedAmount = parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.'));
-
-    // Validação dinâmica:
-    if (categoryName === 'Transporte') {
-      if (isNaN(parsedKm)) {
-        setError("KM inválido. Insira um número válido.");
-        return;
-      }
-    } else {
-      if (isNaN(parsedAmount)) {
-        setError("Valor inválido. Por favor, insira um valor válido.");
-        return;
-      }
+    // comprovante se exceder
+    if (projected > valor_maximo && comprovantes.length === 0) {
+      setError('Anexe pelo menos um comprovante da despesa.');
+      return;
     }
 
-    const [day, month, year] = date.split("/");
-    const finalDate = new Date(`${year}-${month}-${day}`);
-
-    let finalValue: number;
-    if (categoryName === 'Transporte') {
-      finalValue = kmCost;
-    } else if (categoryName === 'Materiais') {
-      finalValue = quantidadeTotal;
-    } else {
-      finalValue = parsedAmount;
-    }
+    // payload
+    const [d, m, y] = date.split('/');
+    const payload = {
+      pacoteId: selectedPacote,
+      projetoId: selectedProject,
+      userId: user?.userId,
+      categoria: category,
+      data: new Date(`${y}-${m}-${d}`),
+      valor_gasto: valor,
+      descricao: description.trim() || 'Sem Descrição',
+      aprovacao: 'Pendente',
+      km:
+        categoryName === 'Transporte'
+          ? parseFloat(km.replace(',', '.'))
+          : undefined,
+      quantidade:
+        categoryName === 'Materiais'
+          ? parseFloat(quantidade.replace(',', '.'))
+          : undefined,
+    };
 
     try {
-      const response = await api.post("/despesa", {
-        pacoteId: selectedPacote,
-        projetoId: selectedProject,
-        userId: user?.userId,
-        categoria: category,
-        data: finalDate,
-        valor_gasto: finalValue,
-        descricao: descriptionToSend,   // ← use aqui a variável default
-        aprovacao: "Pendente",
-        km:
-          categoryName === "Transporte"
-            ? parseFloat(km.replace(",", "."))
-            : undefined,
-        quantidade:
-          categoryName === "Materiais"
-            ? parseFloat(quantidade.replace(",", "."))
-            : undefined,
-      });
-      /* console.log(response.data); */
-      const novaDespesa = response.data;
-      
-      setSuccessMessage("Despesa cadastrada com sucesso!");
+      const { data: novaDespesa } = await api.post('/despesa', payload);
+      setSuccessMessage('Despesa cadastrada com sucesso!');
 
-      await handleImageUpload(novaDespesa.despesaId);
+      // upload comprovantes
+      await Promise.all(
+        comprovantes.map(c => {
+          const fd = new FormData();
+          fd.append('receipt', {
+            uri: c.uri,
+            name: c.uri.split('/').pop()!,
+            type: c.mimeType
+          } as any);
+          fd.append('tipo', 'expense');
+          fd.append('tipoId', String(novaDespesa.despesaId));
+          return api.post('/uploadcomprovante', fd, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          });
+        })
+      );
+      Alert.alert('Sucesso', 'Todos os comprovantes enviados!');
 
+      // limpa tudo
       setTimeout(() => {
-        setSelectedPacote("");
-        setCategory("");
-        setSelectedProject("");
-        setDate("");
-        setAmount("");
-        setDescription("");
-        setSuccessMessage("");
-        setKm("");
-        setCategoryName("");
-        setTotalGastoCategoria(0);
-        setQuantidade("");
+        setSelectedPacote('');
+        setCategory('');
+        setSelectedProject('');
+        setDate('');
+        setAmount('');
+        setDescription('');
+        setKm('');
+        setQuantidade('');
         setQuantidadeTotal(0);
-
+        setTotalGastoCategoria(0);
+        setComprovantes([]);
+        setSuccessMessage('');
       }, 1500);
-    } catch (error) {
-      console.error("Erro ao cadastrar despesa:", error);
-      setError("Erro ao cadastrar despesa. Por favor, tente novamente.");
+    } catch (err) {
+      console.error(err);
+      setError('Erro ao cadastrar despesa. Tente novamente.');
     }
   };
+
+
+
 
   const newAmount = categoryName === 'Transporte'
     ? kmCost
@@ -659,7 +700,6 @@ const RegistroDespesa = () => {
             </>
           )}
 
-
           <Text style={styles.textBottom}>Data</Text>
           <CustomDatePicker
             value={date}
@@ -715,11 +755,38 @@ const RegistroDespesa = () => {
           <Text style={styles.textBottom}>Adicione o comprovante</Text>
 
           <TouchableOpacity onPress={openImagePickerOptions}>
-            <MaterialCommunityIcons
-              name="image-plus"
-              style={styles.image}
-            />
+      
+              <MaterialCommunityIcons
+                name="image-plus"
+                style={styles.image}
+              />
+
           </TouchableOpacity>
+
+          <View style={styles.comprovantesContainer}>
+            {comprovantes.map((c, i) => (
+              <View key={c.id} style={styles.comprovanteRecebido}>
+  
+                <TouchableOpacity onPress={() => handlePrevisualizar(c)}>
+                  <Text style={styles.textoComprovante}>
+                    {c.uri.split('/').pop()}
+                  </Text>
+                </TouchableOpacity>
+
+                <View style={styles.botoesComprovante}>
+                  <TouchableOpacity onPress={() => removerComprovante(i)}>
+                    <FontAwesome 
+                      name="trash-o" 
+                      size={24} 
+                      color={themas.colors.red} 
+                      style={styles.iconDelete}
+                    />
+                  </TouchableOpacity>
+                </View>
+                
+              </View>
+            ))}
+          </View>
 
           {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
           {error && <Text style={styles.errorMessage}>{error}</Text>}
@@ -732,6 +799,34 @@ const RegistroDespesa = () => {
         </View>
         <View style={styles.teste}></View>
       </ScrollView>
+
+      <Modal transparent animationType="fade" visible={showPickerModal}>
+        <TouchableWithoutFeedback onPress={() => setShowPickerModal(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.modalContainer}>
+          <Pressable style={styles.modalButton} onPress={() => { tirarFoto(); setShowPickerModal(false); }}>
+            <Text style={styles.modalTexto}>Tirar foto</Text>
+          </Pressable>
+          <Pressable style={styles.modalButton} onPress={() => { escolherGaleria(); setShowPickerModal(false); }}>
+            <Text style={styles.modalTexto}>Galeria</Text>
+          </Pressable>
+          <Pressable style={styles.modalButton} onPress={() => { selecionarPDF(); setShowPickerModal(false); }}>
+            <Text style={styles.modalTexto}>Selecionar PDF</Text>
+          </Pressable>
+        </View>
+      </Modal>
+
+      <Modal visible={mostrarModalPrevisualizacao} transparent animationType="fade">
+        <View style={styles.fundoModalEscuro} />
+        <View style={styles.conteudoModal}>
+          <ComprovantePreview
+            uri={uriPrevisualizacao}
+            mimeType={previsualizacaoMime}
+            onClose={() => setMostrarModalPrevisualizacao(false)}
+          />
+        </View>
+      </Modal>
     </>
   );
 };
