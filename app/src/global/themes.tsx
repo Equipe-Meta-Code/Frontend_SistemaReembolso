@@ -59,6 +59,7 @@ export const themas = {
       laranja_claro_opaco: 'rgba(255, 139, 62, 0.21)',
       laranja_escuro_opaco: 'rgba(248, 103, 7, 0.69)',
       roxo_opaco: 'rgba(58, 8, 196, 0.63)',
+      transparente: "rgba(0,0,0,0.8)"
     }
   };
   
@@ -109,7 +110,9 @@ export const themas = {
       roxo: "#3A08C4",
       sempre_branco: "#FFFFFF",
       sempre_preto: "#000000",
-      sempre_cinza_claro: "#9CA3AF"
+      sempre_cinza_claro: "#9CA3AF",
+
+      transparente: "rgba(0,0,0,0.8)"
     }
   };
   

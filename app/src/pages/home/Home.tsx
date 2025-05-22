@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import api from '../../services/api';
 import Foto from '../../components/foto/Foto';
@@ -26,12 +26,14 @@ type RootStackParamList = {
   RegistroDespesa: undefined;
   Historico: undefined;
   Perfil: undefined;
+  Notificacao: undefined; 
 };
 
 const Home: React.FC = () => {
-  const { theme } = useTheme(); 
+  const { theme } = useTheme();
   const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const isScreenFocused = useIsFocused();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const user = useSelector((state: RootState) => state.auth.user);
@@ -95,6 +97,17 @@ const Home: React.FC = () => {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.top, { backgroundColor: theme.colors.primary }]}>
         <Text style={[styles.title, { color: theme.colors.sempre_branco }]}>Bem vindo(a)!</Text>
+        {/* botão de notificação */}
+        <View style={styles.rightIcons}>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Notificacao")}>
+          <FontAwesome5
+            name="bell"
+            style={[styles.iconRight, isScreenFocused && { color: theme.colors.secondary }]}
+          />
+        </TouchableOpacity>
+
+        {/* foto do perfil */}
         <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
           {user ? (
             <Foto
@@ -115,6 +128,7 @@ const Home: React.FC = () => {
             />
           )}
         </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.projectsList}>
@@ -156,6 +170,11 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
   },
+  iconRight: {
+    fontSize: 24,
+    color: 'white',
+    marginRight: 16,
+  },
   projectTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -165,6 +184,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 30,
   },
+  rightIcons: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 12, 
+},
 });
 
 export default Home;

@@ -14,12 +14,14 @@ import Cadastro from "../pages/Cadastro/Cadastro";
 import Intro from "../pages/Intro/Intro";
 import PreRegistro from "../pages/PreRegistro/PreRegistro";
 import guiaDoUsuario from "../pages/guiaDoUsuario/guiaDoUsuario";      
+import Verificacao2FA from "../pages/login/Verificacao2FA";
 import { themas } from "../global/themes";
 
 // Define os params de cada screen do Stack
 type RootStackParamList = {
   Login: undefined;
   Cadastro: undefined;
+  Verificacao2FA: { email: string };
   BottomRoutes: undefined;
   Intro: undefined;
   PreRegistro: undefined;
@@ -55,6 +57,7 @@ function AppWrapper() {
                     <Stack.Screen name="Intro" component={Intro} />
                     <Stack.Screen name="PreRegistro" component={PreRegistro} />
 
+                    <Stack.Screen name="Verificacao2FA" component={Verificacao2FA} />
                 </>
             ) : (
                 <>
