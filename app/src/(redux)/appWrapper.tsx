@@ -16,6 +16,8 @@ import PreRegistro from "../pages/PreRegistro/PreRegistro";
 import guiaDoUsuario from "../pages/guiaDoUsuario/guiaDoUsuario";      
 import Verificacao2FA from "../pages/login/Verificacao2FA";
 import { themas } from "../global/themes";
+import Notificacao from "../pages/notificacao/Notificacao";
+import { useDespesasNotifications } from "../pages/notificacao/NotificationsService";
 
 // Define os params de cada screen do Stack
 type RootStackParamList = {
@@ -26,6 +28,7 @@ type RootStackParamList = {
   Intro: undefined;
   PreRegistro: undefined;
   guiaDoUsuario: undefined;
+    Notificacao: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -40,6 +43,7 @@ function AppWrapper() {
         dispatch(loadUser()).finally(() => setLoading(false));
     }, [dispatch]);
 
+    useDespesasNotifications();
     if (loading) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -63,6 +67,7 @@ function AppWrapper() {
                 <>
                     <Stack.Screen name="BottomRoutes" component={BottomRoutes} />
                     <Stack.Screen name="guiaDoUsuario" component={guiaDoUsuario} />
+                    <Stack.Screen name="Notificacao" component={Notificacao} />
                 </>
             )}
         </Stack.Navigator>
