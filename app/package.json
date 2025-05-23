@@ -32,8 +32,10 @@
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-paper": "^5.13.1",
     "react-native-vector-icons": "^10.2.0",
-    "react-redux": "^9.2.0"
-    "expo-linear-gradient": "~14.1.4"
+    "react-native-webview": "^13.13.5",
+    "react-redux": "^9.2.0",
+    "expo-linear-gradient": "~14.1.4",
+    "expo-notifications": "~0.31.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
