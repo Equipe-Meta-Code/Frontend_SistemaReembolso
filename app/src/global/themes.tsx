@@ -46,7 +46,19 @@ export const themas = {
       sempre_branco: "#FFFFFF",
       sempre_preto: "#000000",
       sempre_cinza_claro: "#e0e0e0",
-
+      
+      azul_escuro_opaco: 'rgba(19, 75, 165, 0.67)',
+      vinho_claro_opaco: 'rgba(209, 53, 53, 0.15)',
+      vinho_escuro_opaco: 'rgba(185, 14, 14, 0.70)',
+      verde_claro_opaco: 'rgba(27, 143, 37, 0.15)',
+      verde_medio_opaco: 'rgba(4, 155, 12, 0.83)',
+      verde_escuro_opaco: 'rgba(6, 58, 40, 0.65)',
+      verde2_escuro_opaco: 'rgba(50, 70, 13, 0.5)',
+      mostarda_opaco: 'rgba(255, 188, 20, 0.21)',
+      mostarda_escuro_opaco: 'rgba(214, 154, 1, 0.96)',
+      laranja_claro_opaco: 'rgba(255, 139, 62, 0.21)',
+      laranja_escuro_opaco: 'rgba(248, 103, 7, 0.69)',
+      roxo_opaco: 'rgba(58, 8, 196, 0.63)',
       transparente: "rgba(0,0,0,0.8)"
     }
   };

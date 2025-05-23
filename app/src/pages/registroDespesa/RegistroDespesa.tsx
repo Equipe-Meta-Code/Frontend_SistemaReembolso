@@ -164,7 +164,8 @@ const RegistroDespesa = () => {
           const despesasFiltradas = despesas.filter(
             (despesa: any) =>
               despesa.projetoId.toString() === selectedProject &&
-              despesa.categoria.toString() === category
+              despesa.categoria.toString() === category &&
+              despesa.userId.toString() === user?.userId.toString()
           );
 
           const total = despesasFiltradas.reduce((acc: number, curr: any) => {
