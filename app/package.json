@@ -22,7 +22,10 @@
     "expo-camera": "^16.1.6",
     "expo-document-picker": "~13.1.5",
     "expo-image-picker": "^16.0.6",
+    "expo-linear-gradient": "~14.1.4",
     "expo-status-bar": "~2.2.3",
+    "lottie-ios": "^4.5.1",
+    "lottie-react-native": "7.2.2",
     "react": "19.0.0",
     "react-native": "0.79.2",
     "react-native-element-dropdown": "^2.12.4",
@@ -33,7 +36,6 @@
     "react-native-paper": "^5.13.1",
     "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.2.0"
-    "expo-linear-gradient": "~14.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
