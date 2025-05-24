@@ -2,10 +2,10 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../services/api';
 import type { RootState } from './store';
 export interface NotificationItem {
-  id: string;       
+  id: string;
   title: string;
   body: string;
-  date: number;     
+  date: number;
   read: boolean;
   despesaId: number;
 }
@@ -18,6 +18,13 @@ const initialState: NotificationsState = {
   items: [],
   loading: false,
 };
+
+export const selectUnreadCount = (state: RootState): number =>
+  state.notifications.items.reduce((count, notif) =>
+    notif.read ? count : count + 1, 0);
+
+export const selectAllNotifications = (state: RootState): NotificationItem[] =>
+  state.notifications.items;
 
 export const fetchNotifications = createAsyncThunk<
   NotificationItem[],
