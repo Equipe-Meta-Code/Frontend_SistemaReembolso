@@ -23,7 +23,7 @@ export default function NovaSenha() {
   const style = createStyles(theme);
   const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute();
-  const { email } = route.params as { email: string };
+  const { email, code } = route.params as { email: string; code: string };
 
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
@@ -70,7 +70,8 @@ export default function NovaSenha() {
     setSenhaFraca(false);
     setLoading(true);
     try {
-      await api.put("/atualizar-senha", { email, novaSenha });
+      await api.put("/atualizar-senha", { email, code, novaSenha });
+
 
       Alert.alert("Sucesso", "Senha atualizada com sucesso!");
       navigation.navigate("Login");
