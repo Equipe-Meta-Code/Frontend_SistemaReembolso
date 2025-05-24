@@ -39,7 +39,7 @@ export default function RecuperacaoSenha() {
     try {
       await api.post('/recuperar-senha', { email });
       Alert.alert('Sucesso', 'Um email foi enviado para recuperação de senha.');
-      navigation.goBack();
+      // navigation.goBack();
     } catch (error: any) {
       console.log('Erro ao enviar recuperação de senha', error);
       const msg = error.response?.data?.mensagem || 'Não foi possível enviar o email.';
@@ -89,6 +89,11 @@ export default function RecuperacaoSenha() {
               title="Enviar Email"
               onPress={handleEnviarEmail}
               loading={loading}
+              buttonStyle={{marginTop: 30, paddingVertical: 18, paddingHorizontal:15, alignItems: "center",   justifyContent: "center", width: '100%'}}
+            />
+            <ButtonCustom
+              title="Verificar Código"
+              onPress={() => navigation.navigate("verificarCodigo", { email })}
               buttonStyle={{marginTop: 30, paddingVertical: 18, paddingHorizontal:15, alignItems: "center",   justifyContent: "center", width: '100%'}}
             />
             <ButtonCustom

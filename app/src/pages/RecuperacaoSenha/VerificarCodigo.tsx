@@ -33,7 +33,7 @@ export default function VerificarCodigo() {
       const response = await api.post("/verificar-codigo", { email, code });
 
       if (response.data.alertType === "success") {
-        navigation.navigate("NovaSenha", { email }); // passa o email pra próxima tela
+        navigation.navigate("NovaSenha", { email, code }); // passa o email pra próxima tela
       } else {
         Alert.alert("Erro", response.data.message || "Código inválido ou expirado.");
       }
