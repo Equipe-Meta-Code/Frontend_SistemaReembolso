@@ -59,7 +59,7 @@ export default function Login() {
 
         } catch (error: any) {
             console.log('Erro ao logar o usuário.', error);
-            const msg = error.response?.data?.mensagem || 'Não foi possível realizar o login. Tente novamente.';
+            const msg = error.response?.data?.message || 'Não foi possível realizar o login. Tente novamente.';
             Alert.alert('Erro', msg);
         } finally {
             setLoading(false);
@@ -76,12 +76,12 @@ export default function Login() {
                 <View style={style.container}>
                     <View style={style.boxTop}>
                         <Text style={style.title}>Login</Text>
-                        <Text style={style.description}>Faça login com seu e-mail e senha para poder acessar a sua conta</Text>
+                        <Text style={style.description}>Faça login com seu e-mail e senha para acessar a sua conta</Text>
                     </View>
 
                     <View style={style.boxMid}>
-                        <Text style={style.welcomeTitle}>Bem-Vindo novamente👋</Text>
-                        <Text style={style.instruction}>Para acessar sua conta você deve fazer o login primeiro.</Text>
+                        <Text style={style.welcomeTitle}>Bem-vindo novamente 👋</Text>
+                        
                         {/* Email */}
                         <Input
                             value={email}

@@ -14,8 +14,9 @@ export const createStyles = (theme: any) => StyleSheet.create({
         backgroundColor: theme.colors.primary,
         alignItems: 'flex-start',
         justifyContent: 'center',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
+        padding: 10,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
     },
     boxMid: {
         flex: 1,
@@ -29,19 +30,25 @@ export const createStyles = (theme: any) => StyleSheet.create({
         fontSize: 18,   
         color: themas.colors.secondary,  
         fontWeight: 'bold',
-        paddingLeft:20  
+        paddingLeft:20, 
+        paddingRight:20, 
+        marginTop: 20,
     },
     description: {
         fontSize: 16,    
         color: themas.colors.secondary,  
         textAlign: 'left',  
         marginTop: 10,  
-        paddingLeft:20
+        paddingLeft:20,
+        paddingRight:20,
     },
     welcomeTitle: {
-        fontSize: 24,    
+        fontSize: 23,    
         fontWeight: 'bold',  
         color: theme.colors.black,  
+        marginTop: 10,
+        marginBottom: 10,
+        paddingLeft:5,
     },
     instruction: {
         fontSize: 16,    
@@ -50,13 +57,13 @@ export const createStyles = (theme: any) => StyleSheet.create({
         marginTop: 10,   
     },
     forgotPassword: {
-        paddingTop:10,
+        paddingTop:20,
         color: theme.colors.primary,
-        fontSize: 16,
-        marginTop: 30,
+        fontSize: 14,
+        marginTop: 35,
         textAlign: 'center',
         textDecorationLine: 'underline', 
-        marginBottom: 40,
+        marginBottom: 25,
     },
     lineContainer: {
         flexDirection: 'row', 
@@ -65,11 +72,11 @@ export const createStyles = (theme: any) => StyleSheet.create({
         marginBottom: 20, 
     },
     noAccountText: {
-        paddingTop:60,
+        paddingTop:45,
         fontSize: 16,
         color: theme.colors.gray,  
         textAlign: 'center', 
-        marginBottom: 40,
+        marginBottom: 10,
     },
     passwordContainer: {
         flexDirection: 'row',
@@ -82,9 +89,9 @@ export const createStyles = (theme: any) => StyleSheet.create({
     erroInput: {
         borderColor: theme.colors.red,
         borderWidth: 1,
-      },
+    },
       
-      erroTexto: {
+    erroTexto: {
         color: theme.colors.red,
         fontSize: 12,
         marginTop: 4,
