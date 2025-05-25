@@ -135,4 +135,63 @@ export const createStyles = (theme: any) => StyleSheet.create({
         position: "absolute",
         alignSelf: "center",
     },
+
+    // Gerenciar2FA
+    container2FA: {
+        flex: 1,
+        backgroundColor: theme.colors.secondary,
+    },
+    header2FA: {
+        height: 100,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 30,
+        backgroundColor: theme.colors.primary,
+        elevation: 4,
+    },
+    backButton: {
+        padding: 5,
+        marginRight: 10,
+        marginTop: 32,
+    },
+    headerTitle: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginRight: 34,
+        marginTop: 30,
+    },
+    textContainer2FA: {
+        paddingHorizontal: 20,
+        paddingTop: 30,
+        paddingBottom: 5,
+    },
+    descricaoCinza: {
+        fontSize: 16,
+        color: theme.colors.cinza,
+        marginBottom: 6,
+        textAlign: 'left',
+    },
+    descricaoNormal: {
+        fontSize: 16,
+        color: theme.colors.cinza,
+        textAlign: 'left',
+    },
+    textoLink2FA: {
+        color: theme.colors.textLink,
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        paddingTop: 25,
+        textDecorationLine: 'underline',
+    },
+    link: {
+        flexDirection: 'row',
+    },
+    iconFA: {
+        paddingHorizontal: 20,
+        paddingTop: 27,
+    }
 });
