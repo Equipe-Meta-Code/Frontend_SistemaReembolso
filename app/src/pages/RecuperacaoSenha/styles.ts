@@ -13,8 +13,8 @@ export const createStyles = (theme: any) => StyleSheet.create({
     backgroundColor: theme.colors.primary,
     alignItems: 'flex-start',
     justifyContent: 'center',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
   },
   boxMid: {
     flex: 1,
