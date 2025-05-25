@@ -772,7 +772,7 @@ const RegistroDespesa = () => {
           </View>
 
           <View style={{ alignItems: 'center', marginBottom: 10 }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, color: theme.colors.text }}>
               {despesas.length > 0 ? `${currentIndex + 1}/${despesas.length}` : '1/1'}
             </Text>
           </View>
