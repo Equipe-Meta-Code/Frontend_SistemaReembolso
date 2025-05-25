@@ -52,4 +52,14 @@ export const createStyles = (theme: any) => StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
+  search: {
+    marginHorizontal: 20,
+    marginVertical: 10,
+    borderRadius: 8,
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+  },
 });

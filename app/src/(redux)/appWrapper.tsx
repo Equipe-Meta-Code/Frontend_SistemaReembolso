@@ -34,7 +34,7 @@ type RootStackParamList = {
   RecuperacaoSenha: undefined;
   VerificarCodigo: { email: string };
   NovaSenha: { email: string }; // Passa o email para verificar o código
-    Notificacao: undefined;
+  Notificacao: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

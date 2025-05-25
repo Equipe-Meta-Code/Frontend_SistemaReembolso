@@ -115,7 +115,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
         paddingVertical: 18,
         borderRadius: 25,
         alignItems: 'center',
-        marginTop: 20,           
+        marginTop: 10,           
       },
       buttonText: {
         color: theme.colors.sempre_branco,
@@ -292,5 +292,18 @@ export const createStyles = (theme: any) => StyleSheet.create({
   },
   iconDelete: {
     marginRight: 5,
+  },
+  botoesMultiplasDespesas: {
+    backgroundColor: theme.colors.cinza_medio_claro,
+    borderRadius: 30,
+    alignItems: 'center',
+    marginTop: 10,   
+    padding: 10,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  textoDespesas: {
+    color: theme.colors.text,
+    fontSize: 16,
   }
 });
