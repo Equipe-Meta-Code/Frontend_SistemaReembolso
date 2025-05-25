@@ -46,7 +46,7 @@ export const themas = {
       sempre_branco: "#FFFFFF",
       sempre_preto: "#000000",
       sempre_cinza_claro: "#e0e0e0",
-      
+      textLink: "#1F48AA",
       azul_escuro_opaco: 'rgba(19, 75, 165, 0.67)',
       vinho_claro_opaco: 'rgba(209, 53, 53, 0.15)',
       vinho_escuro_opaco: 'rgba(185, 14, 14, 0.70)',
@@ -111,7 +111,7 @@ export const themas = {
       sempre_branco: "#FFFFFF",
       sempre_preto: "#000000",
       sempre_cinza_claro: "#9CA3AF",
-
+      textLink: 'lightgray',
       transparente: "rgba(0,0,0,0.8)"
     }
   };

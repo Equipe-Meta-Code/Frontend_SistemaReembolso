@@ -7,6 +7,8 @@ import RegistroDespesa from "../pages/registroDespesa/RegistroDespesa";
 import CustomTabBar from "../components/customTabBar";
 import InfosPessoais from "../pages/perfil/InfosPessoais";
 import PacotesScreen from "../pages/home/PacotesScreen";
+import Gerenciar2FA from "../pages/perfil/Gerenciar2FA";
+import Verificacao2FA from "../pages/login/Verificacao2FA";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +26,8 @@ export default function BottomRoutes() {
       <Tab.Screen name="Historico" component={Historico} />
       <Tab.Screen name="Perfil" component={Perfil} />
       <Tab.Screen name="InfosPessoais" component={InfosPessoais} />
+      <Tab.Screen name="Gerenciar2FA" component={Gerenciar2FA} />
+      <Tab.Screen name="Verificacao2FA" component={Verificacao2FA} />
     </Tab.Navigator>
   );
 }

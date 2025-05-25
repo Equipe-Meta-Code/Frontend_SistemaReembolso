@@ -1,3 +1,4 @@
+// src/pages/login/Verificacao2FA
 import React, { useState } from "react";
 import { View, Text, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from "react-native";
 import { useNavigation, NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
@@ -7,11 +8,14 @@ import { createStyles } from "./styles";
 import { Input } from "../../components/Input/index";
 import { ButtonCustom } from "../../components/customButton";
 import api from "../../services/api";
+import { verify2FACode, resend2FACode, toggle2FA } from '../../services/2faServices';
+
 import { useDispatch } from "react-redux";
 import { loginUserAction } from "../../(redux)/authSlice";
+import { updateTwoFactor } from "../../(redux)/authSlice";
 
 // espera receber um email
-type Verificacao2FARouteProp = RouteProp<{ params: { email: string } }, "params">;
+type Verificacao2FARouteProp = RouteProp<{ params: { email: string; ativar?: boolean } }, "params">;
 
 export default function Verificacao2FA() {
   const { theme } = useTheme();
@@ -20,7 +24,7 @@ export default function Verificacao2FA() {
   const route = useRoute<Verificacao2FARouteProp>();
   const dispatch = useDispatch();
 
-  const email = route.params?.email || ""; //email passado no login
+  const { email, ativar } = route.params || {};
   const [code, setCode] = useState(""); // codigo digitado pelo usuário
   const [loading, setLoading] = useState(false);
   const [formInvalido, setFormInvalido] = useState(false);
@@ -37,26 +41,27 @@ export default function Verificacao2FA() {
     setLoading(true);
 
     try {
-      const response = await api.post("/verify-2fa", { email, code });
+      const response = await verify2FACode(email, code);
       const data = response.data;
 
-      // usuário só recebe o token depois de ser autenticado
-      // então, verifica se recebeu o token
-      if (data.token) {
-        dispatch(loginUserAction(data)); //envia dados para o redux
-        Alert.alert("Sucesso", "Autenticação concluída!");
-        
-        setTimeout(() => {
-          if (data.token) {
-            navigation.navigate('BottomRoutes');
-          } else {
-            Alert.alert('Erro', 'Usuário não foi encontrado');
-          }
-            setLoading(false);
-        }, 1500);
-
+      if (ativar) {
+        if (data.token) {
+          await toggle2FA(true, data.token);
+          dispatch(updateTwoFactor(true));
+          
+          Alert.alert("Sucesso", "2FA ativado com sucesso!");
+          navigation.goBack(); // ou redirecione para onde quiser
+        } else {
+          Alert.alert("Erro", "Token não recebido.");
+        }
       } else {
-        Alert.alert("Erro", "Token não recebido, tente novamente.");
+        if (data.token) {
+          dispatch(loginUserAction(data));
+          Alert.alert("Sucesso", "Autenticação concluída!");
+          navigation.navigate("BottomRoutes");
+        } else {
+          Alert.alert("Erro", "Token não recebido.");
+        }
       }
     } catch (error: any) {
       const msg = error.response?.data?.message || "Código inválido ou expirado.";
@@ -72,7 +77,7 @@ export default function Verificacao2FA() {
   async function handleResendCode() {
     try {
       setLoading(true);
-      await api.post("/resend-code", { email }); 
+      await resend2FACode(email); 
       Alert.alert("Código reenviado", "Verifique sua caixa de entrada.");
     } catch (error: any) {
       const msg = error.response?.data?.message || "Erro ao reenviar o código.";
