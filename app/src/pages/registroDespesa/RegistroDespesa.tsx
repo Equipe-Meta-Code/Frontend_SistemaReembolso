@@ -24,7 +24,7 @@ const KM_PER_LITER = 10; // litro fixo para exemplos
 
 const RegistroDespesa = () => {
   const { theme } = useTheme();
-  const styles = createStyles (theme);
+  const styles = createStyles(theme);
   const [error, setError] = useState("");
   const [pacoteError, setPacoteError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -283,31 +283,47 @@ const RegistroDespesa = () => {
     updateCurrentDespesa('kmCost', cost);
   };
 
-    setKmCost(cost);
+  const adicionarComprovante = (uri: string, mimeType: string) => {
+    setDespesas(prev => {
+      const novo = [...prev];
+      novo[currentIndex] = {
+        ...novo[currentIndex],
+        comprovantes: [
+          ...(novo[currentIndex].comprovantes || []),
+          { id: Date.now().toString(), uri, mimeType }
+        ]
+      };
+      return novo;
+    });
   };
 
-  const [comprovantes, setComprovantes] = useState<ComprovanteItem[]>([]);
-  const [mimeType, setMimeType] = useState<string>('image/jpeg');
+  const removerComprovante = (idx: number) => {
+    setDespesas(prev => {
+      const novo = [...prev];
+      novo[currentIndex] = {
+        ...novo[currentIndex],
+        comprovantes: (novo[currentIndex].comprovantes || []).filter((_: any, i: number) => i !== idx)
+      };
+      return novo;
+    });
+  };
 
   const { showActionSheetWithOptions } = useActionSheet();
-  const [showPickerModal, setShowPickerModal] = useState(false);
-
   const openImagePickerOptions = () => {
     const options = ['Cancelar', 'Tirar foto', 'Galeria', 'Selecionar PDF'];
     const cancelButtonIndex = 0;
-
     showActionSheetWithOptions(
       {
         options,
         cancelButtonIndex,
       },
       (buttonIndex?: number) => {
-      switch (buttonIndex) {
-        case 1: return tirarFoto();
-        case 2: return escolherGaleria();
-        case 3: return selecionarPDF();
-        default: return;
-      }
+        switch (buttonIndex) {
+          case 1: return tirarFoto();
+          case 2: return escolherGaleria();
+          case 3: return selecionarPDF();
+          default: return;
+        }
       }
     );
   };
