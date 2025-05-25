@@ -771,7 +771,7 @@ const RegistroDespesa = () => {
             ))}
           </View>
 
-          <View style={{ alignItems: 'center', marginVertical: 12 }}>
+          <View style={{ alignItems: 'center', marginBottom: 10 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
               {despesas.length > 0 ? `${currentIndex + 1}/${despesas.length}` : '1/1'}
             </Text>
@@ -779,20 +779,20 @@ const RegistroDespesa = () => {
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
             {currentIndex > 0 && (
-              <TouchableOpacity style={styles.button} onPress={handleAnterior}>
-                <Text style={styles.textBottom}>Anterior</Text>
+              <TouchableOpacity style={styles.botoesMultiplasDespesas} onPress={handleAnterior}>
+                <Text style={styles.textoDespesas}>Anterior</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: theme.colors.secondary, marginHorizontal: 8 }]}
+              style={styles.botoesMultiplasDespesas}
               onPress={handleNovaDespesa}
               disabled={!currentDespesa.projetoId || !currentDespesa.pacoteId}
             >
-              <Text style={styles.textBottom}>Nova Despesa</Text>
+              <Text style={styles.textoDespesas}>Nova Despesa</Text>
             </TouchableOpacity>
             {currentIndex < despesas.length - 1 && (
-              <TouchableOpacity style={styles.button} onPress={handleProximo}>
-                <Text style={styles.textBottom}>Próximo</Text>
+              <TouchableOpacity style={styles.botoesMultiplasDespesas} onPress={handleProximo}>
+                <Text style={styles.textoDespesas}>Próximo</Text>
               </TouchableOpacity>
             )}
           </View>
