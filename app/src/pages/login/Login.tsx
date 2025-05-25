@@ -52,14 +52,21 @@ export default function Login() {
 
         try {
             const response = await api.post('/login', { email, password });
-            console.log("Resposta do login:", response.data);
+            const data = response.data;
 
-            // Verificação de dois fatores
-            navigation.navigate("Verificacao2FA", { email });
+            if (data.twoFactorEnabled) {
+                navigation.navigate("Verificacao2FA", {
+                    email: data.email,
+                    userId: data.userId
+            });
+            } else {
+                dispatch(loginUserAction(data));
+            }
+
 
         } catch (error: any) {
             console.log('Erro ao logar o usuário.', error);
-            const msg = error.response?.data?.message || 'Não foi possível realizar o login. Tente novamente.';
+            const msg = error.response?.data?.mensagem || 'Não foi possível realizar o login. Tente novamente.';
             Alert.alert('Erro', msg);
         } finally {
             setLoading(false);
