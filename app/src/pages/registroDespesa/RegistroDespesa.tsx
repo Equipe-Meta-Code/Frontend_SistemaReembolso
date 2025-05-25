@@ -487,37 +487,7 @@ const RegistroDespesa = () => {
     }
   };
 
-
-
-
-  const newAmount = categoryName === 'Transporte'
-    ? kmCost
-    : ['Material', 'Materiais'].includes(categoryName)
-      ? quantidadeTotal
-      : amountFormatted;
-
-  const projectedTotal = totalGastoCategoria + newAmount;
-  const fillPercent = Math.min((projectedTotal / valor_maximo) * 100, 100);
-
-
-  useEffect(() => {
-    if (totalGastoCategoria > valor_maximo) {
-      setShowLimitMessage(true);
-
-      const timer = setTimeout(() => {
-        setShowLimitMessage(false);
-      }, 20000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [totalGastoCategoria, valor_maximo]);
-
-  useEffect(() => {
-    if (selectedProject) {
-      fetchPacotes(selectedProject);
-      fetchData();
-    }
-  }, [selectedProject]);
+  const filteredCategories = categoriesByProject[currentDespesa.projetoId] || [];
 
   const formatCurrency = (value: number) =>
     value.toLocaleString('pt-BR', {
@@ -525,6 +495,26 @@ const RegistroDespesa = () => {
       maximumFractionDigits: 2,
     });
 
+  const newAmount = currentDespesa.categoryName === 'Transporte'
+    ? currentDespesa.kmCost
+    : ['Material', 'Materiais'].includes(currentDespesa.categoryName)
+      ? currentDespesa.quantidadeTotal
+      : currentDespesa.amountFormatted;
+
+  const projectedTotal = (currentDespesa.totalGastoCategoria || 0) + newAmount;
+  const fillPercent = valor_maximo > 0 ? Math.min((projectedTotal / valor_maximo) * 100, 100) : 0;
+
+  useEffect(() => {
+    if ((currentDespesa.totalGastoCategoria || 0) > valor_maximo) {
+      setShowLimitMessage(true);
+      const timer = setTimeout(() => {
+        setShowLimitMessage(false);
+      }, 20000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentDespesa.totalGastoCategoria, valor_maximo, currentIndex]);
+
+  const isFirst = currentIndex === 0;
   return (
     <>
       <ScrollView
