@@ -557,14 +557,15 @@ const RegistroDespesa = () => {
               <Text style={styles.link}> + Criar novo pacote </Text>
             </TouchableOpacity>
           ) : (
-            <>
-              <TextInput
-                placeholder="Nome do novo pacote"
-                value={newPacoteName}
-                onChangeText={setNewPacoteName}
-                style={styles.inputNome}
-                placeholderTextColor={theme.colors.text}
-              />
+            isFirst && (
+              <>
+                <TextInput
+                  placeholder="Nome do novo pacote"
+                  value={newPacoteName}
+                  onChangeText={setNewPacoteName}
+                  style={styles.inputNome}
+                  placeholderTextColor={theme.colors.text}
+                />
 
               <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
                 <Text style={styles.buttonText}> Criar Pacote </Text>
