@@ -30,6 +30,7 @@ export const themas = {
       cinza_muito_claro_historico: "#f5f5f5",
       cinza_tabela: "#f5f5f5",
       cinza_medio: "#9CA3AF",
+      cinza_medio_claro: "#ededee",
   
       chumbo: "#374151",
       chumbo_claro: "#4b5563",
@@ -96,6 +97,7 @@ export const themas = {
       cinza_muito_claro_historico: "#252525",
       cinza_medio: "#FFFFFF", //branco
       cinza_tabela: "#474A51",
+      cinza_medio_claro: "#4e4e4e",
   
       chumbo: "#FFFFFF", //branco
       chumbo_claro: "#FFFFFF", //branco

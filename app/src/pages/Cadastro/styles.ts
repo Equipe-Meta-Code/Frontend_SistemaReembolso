@@ -14,8 +14,9 @@ export const createStyles = (theme: any) => StyleSheet.create({
         backgroundColor: theme.colors.primary,
         alignItems:'flex-start',
         justifyContent:'center',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
+        padding: 3,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
     },
     boxMid:{
         flex:1,
@@ -28,15 +29,16 @@ export const createStyles = (theme: any) => StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20, 
     },
     title: {
         fontSize: 18,
         color: theme.colors.sempre_branco,  
         fontWeight: 'bold',
-        marginLeft: 10, 
+        marginLeft: 10,
+        marginTop: 10, 
     },
     arrowBackIcon: {
+        marginTop: 10,
         paddingLeft: 10, 
     },
     
@@ -45,13 +47,16 @@ export const createStyles = (theme: any) => StyleSheet.create({
         color: theme.colors.sempre_branco, 
         textAlign: 'left', 
         paddingLeft:20,//
-   
+        paddingRight:20,
+        marginTop: 15,
     },
     welcomeTitle: {
         marginTop: 10,
-        fontSize: 24,   
+        fontSize: 22,   
         fontWeight: 'bold', 
         color: theme.colors.black, 
+        marginBottom: 5,
+        paddingLeft:5,
     },
     instruction: {
         fontSize: 16,   
@@ -74,15 +79,17 @@ export const createStyles = (theme: any) => StyleSheet.create({
         marginBottom: 20, 
     },
     noAccountText: {
-        paddingTop:20,
+        paddingTop:45,
         fontSize: 16,
         color: theme.colors.gray,    
         textAlign: 'center', 
+        marginBottom: 10,
     },
     checkboxContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10,
+        marginVertical: 15,
+        marginTop:30,
     },
     checkbox: {
         padding: 10,
