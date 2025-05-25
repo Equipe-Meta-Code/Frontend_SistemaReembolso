@@ -139,8 +139,7 @@ export default function Cadastro() {
                     <Text style={style.description}>Faça o seu cadastro para poder criar uma conta e utilizar os nossos serviços.</Text>
                 </View>
                 <View style={style.boxMid}>
-                    <Text style={style.welcomeTitle}>Bem-Vindo 👋</Text>
-                    <Text style={style.instruction}>Preencha o formulário abaixo para criar sua conta.</Text>
+                    <Text style={style.welcomeTitle}>Bem-vindo 👋</Text>
 
                     {/* Nome Completo */}
                     <Input
@@ -234,7 +233,7 @@ export default function Cadastro() {
                     <View style={style.lineContainer}>
                         <Text style={style.noAccountText}>Já possui uma conta?
                             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                                <Text style={{ color: theme.colors.primary }}> Login</Text>
+                                <Text style={{ color: theme.colors.primary, marginVertical: -3.6 }}>  Login</Text>
                             </TouchableOpacity>
                         </Text>
                     </View>
