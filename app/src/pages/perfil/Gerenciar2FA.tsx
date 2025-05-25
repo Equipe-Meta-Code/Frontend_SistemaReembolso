@@ -33,7 +33,7 @@ export default function Gerenciar2FA() {
     const isEnabled = user?.twoFactorEnabled;
 
     const ativar2FA = async () => {
-        if (!user || !user.email) {
+        if (!user || !user.token || !user.email) {
             Alert.alert("Erro", "Usuário ou e-mail não disponível.");
             return;
         }

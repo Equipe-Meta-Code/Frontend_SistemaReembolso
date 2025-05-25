@@ -12,7 +12,6 @@ import type { AppDispatch } from '../../(redux)/store';
 
 type RootStackParamList = {
   DetalheDespesa: { id: string };
-  Home: undefined;
 };
 
 type NotificationItem = {
@@ -58,7 +57,7 @@ export default function Notificacao() {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: 'row', alignItems: 'center' }}>
           <AntDesign name="arrowleft" style={styles.arrow} />
           <Text style={styles.title_header}>Notificações</Text>
         </TouchableOpacity>
