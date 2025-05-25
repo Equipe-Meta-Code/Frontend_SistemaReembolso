@@ -15,7 +15,7 @@ import { loginUserAction } from "../../(redux)/authSlice";
 import { updateTwoFactor } from "../../(redux)/authSlice";
 
 // espera receber um email
-type Verificacao2FARouteProp = RouteProp<{ params: { email: string; ativar?: boolean } }, "params">;
+type Verificacao2FARouteProp = RouteProp<{ params: { email: string; userId: number; ativar?: boolean } }, "params">;
 
 export default function Verificacao2FA() {
   const { theme } = useTheme();
@@ -24,12 +24,18 @@ export default function Verificacao2FA() {
   const route = useRoute<Verificacao2FARouteProp>();
   const dispatch = useDispatch();
 
-  const { email, ativar } = route.params || {};
+  const { email, userId, ativar } = route.params || {};
   const [code, setCode] = useState(""); // codigo digitado pelo usuário
   const [loading, setLoading] = useState(false);
   const [formInvalido, setFormInvalido] = useState(false);
 
   async function handleVerifyCode() {
+
+    if (!email || !userId) {
+      Alert.alert("Erro", "Informações de verificação incompletas.");
+      navigation.goBack();
+      return null;
+    }
 
     // verifica se campo está vazio ou incompleto
     if (!code || code.length !== 6) {

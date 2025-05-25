@@ -54,11 +54,15 @@ export default function Login() {
             const response = await api.post('/login', { email, password });
             const data = response.data;
 
-            if (data.requires2FA) {
-                navigation.navigate("Verificacao2FA", { email });
+            if (data.twoFactorEnabled) {
+                navigation.navigate("Verificacao2FA", {
+                    email: data.email,
+                    userId: data.userId
+            });
             } else {
                 dispatch(loginUserAction(data));
             }
+
 
         } catch (error: any) {
             console.log('Erro ao logar o usuário.', error);
