@@ -422,68 +422,93 @@ const RegistroDespesa = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    setError('');
+    setSuccessMessage('');
+    fetchData();
 
-    // payload
-    const [d, m, y] = date.split('/');
-    const payload = {
-      pacoteId: selectedPacote,
-      projetoId: selectedProject,
-      userId: user?.userId,
-      categoria: category,
-      data: new Date(`${y}-${m}-${d}`),
-      valor_gasto: valor,
-      descricao: description.trim() || 'Sem Descrição',
-      aprovacao: 'Pendente',
-      km:
-        categoryName === 'Transporte'
-          ? parseFloat(km.replace(',', '.'))
-          : undefined,
-      quantidade:
-        ['Material', 'Materiais'].includes(categoryName)
-          ? parseFloat(quantidade.replace(',', '.'))
-          : undefined,
-    };
+    for (const d of despesas) {
+      if (
+        !d.pacoteId ||
+        !d.categoria ||
+        !d.projetoId ||
+        !d.date ||
+        (d.categoryName === 'Transporte' ? !d.km : !d.amount)
+      ) {
+        setError('Por favor, preencha todos os campos de todas as despesas.');
+        return;
+      }
+    }
 
     try {
-      const { data: novaDespesa } = await api.post('/despesa', payload);
-      setSuccessMessage('Despesa cadastrada com sucesso!');
+      for (const d of despesas) {
+        const valor =
+          d.categoryName === 'Transporte'
+            ? d.kmCost
+            : ['Material', 'Materiais'].includes(d.categoryName)
+              ? d.quantidadeTotal
+              : parseFloat(d.amount.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
 
-      // upload comprovantes
-      await Promise.all(
-        comprovantes.map(c => {
-          const fd = new FormData();
-          fd.append('receipt', {
-            uri: c.uri,
-            name: c.uri.split('/').pop()!,
-            type: c.mimeType
-          } as any);
-          fd.append('tipo', 'expense');
-          fd.append('tipoId', String(novaDespesa.despesaId));
-          return api.post('/uploadcomprovante', fd, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-          });
-        })
-      );
-      Alert.alert('Sucesso', 'Todos os comprovantes enviados!');
+        const [day, month, year] = d.date.split('/');
+        const payload = {
+          pacoteId: d.pacoteId,
+          projetoId: d.projetoId,
+          userId: user?.userId,
+          categoria: d.categoria,
+          data: new Date(`${year}-${month}-${day}`),
+          valor_gasto: valor,
+          descricao: d.description.trim() || 'Sem Descrição',
+          aprovacao: 'Pendente',
+          km: d.categoryName === 'Transporte'
+            ? parseFloat(d.km.replace(',', '.'))
+            : undefined,
+          quantidade: ['Material', 'Materiais'].includes(d.categoryName)
+            ? parseFloat(d.quantidade.replace(',', '.'))
+            : undefined,
+        };
+        const { data: novaDespesa } = await api.post('/despesa', payload);
 
-      // limpa tudo
+        if (d.comprovantes && d.comprovantes.length > 0) {
+          await Promise.all(
+            d.comprovantes.map((c: any) => {
+              const fd = new FormData();
+              fd.append('receipt', {
+                uri: c.uri,
+                name: c.uri.split('/').pop()!,
+                type: c.mimeType
+              } as any);
+              fd.append('tipo', 'expense');
+              fd.append('tipoId', String(novaDespesa.despesaId));
+              return api.post('/uploadcomprovante', fd, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+              });
+            })
+          );
+        }
+      }
+      setSuccessMessage('Todas as despesas cadastradas com sucesso!');
+      setDespesas([{
+        projetoId: '',
+        pacoteId: '',
+        categoria: '',
+        categoryName: '',
+        date: '',
+        amount: '',
+        amountFormatted: 0,
+        description: '',
+        km: '',
+        kmCost: 0,
+        quantidade: '',
+        quantidadeTotal: 0,
+        comprovantes: [],
+        totalGastoCategoria: 0,
+      }]);
+      setCurrentIndex(0);
       setTimeout(() => {
-        setSelectedPacote('');
-        setCategory('');
-        setSelectedProject('');
-        setDate('');
-        setAmount('');
-        setDescription('');
-        setKm('');
-        setQuantidade('');
-        setQuantidadeTotal(0);
-        setTotalGastoCategoria(0);
-        setComprovantes([]);
         setSuccessMessage('');
       }, 1500);
     } catch (err) {
-      console.error(err);
-      setError('Erro ao cadastrar despesa. Tente novamente.');
+      setError('Erro ao cadastrar despesas. Tente novamente.');
     }
   };
 
