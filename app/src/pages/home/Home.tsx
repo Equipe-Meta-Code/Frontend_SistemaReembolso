@@ -10,6 +10,7 @@ import api from '../../services/api';
 import Foto from '../../components/foto/Foto';
 import ProjectCard from '../../components/home/ProjectCard';
 import { useTheme } from '../../context/ThemeContext';
+import { selectUnreadCount } from '../../(redux)/notificationsSlice';
 
 interface Project {
   id: string;
@@ -26,17 +27,19 @@ type RootStackParamList = {
   RegistroDespesa: undefined;
   Historico: undefined;
   Perfil: undefined;
-  Notificacao: undefined; 
+  Notificacao: undefined;
 };
 
 const Home: React.FC = () => {
   const { theme } = useTheme();
+  const styles = createStyles(theme);
   const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const isScreenFocused = useIsFocused();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const user = useSelector((state: RootState) => state.auth.user);
+  const unreadCount = useSelector(selectUnreadCount);
 
   const fetchProjectsAndDespesas = async () => {
     try {
@@ -69,7 +72,7 @@ const Home: React.FC = () => {
       const totalPorProjeto = allDespesas
         .filter(
           (d: any) => projetoIds.includes(d.projetoId) &&
-          d.userId.toString() === user?.userId.toString())
+            d.userId.toString() === user?.userId.toString())
         .reduce((acc: { [key: number]: number }, d: any) => {
           if (!acc[d.projetoId]) acc[d.projetoId] = 0;
           acc[d.projetoId] += d.valor_gasto;
@@ -99,35 +102,42 @@ const Home: React.FC = () => {
         <Text style={[styles.title, { color: theme.colors.sempre_branco }]}>Bem vindo(a)!</Text>
         {/* botão de notificação */}
         <View style={styles.rightIcons}>
-
-        <TouchableOpacity onPress={() => navigation.navigate("Notificacao")}>
-          <FontAwesome5
-            name="bell"
-            style={[styles.iconRight, isScreenFocused && { color: theme.colors.secondary }]}
-          />
-        </TouchableOpacity>
-
-        {/* foto do perfil */}
-        <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-          {user ? (
-            <Foto
-              tipo="user"
-              tipoId={+user.userId}
-              width={50}
-              height={50}
-              borderRadius={25}
-              borderWidth={3}
-              borderColor={theme.colors.secondary}
-              refreshKey={user.profileImage}
-              fallbackSource={require('../../assets/perfil.png')}
+          {/* Ícone de notificação com badge */}
+          <TouchableOpacity onPress={() => navigation.navigate("Notificacao")} style={styles.badgeWrapper}>
+            <FontAwesome5
+              name="bell"
+              style={[styles.iconRight, isScreenFocused && { color: theme.colors.secondary }]}
             />
-          ) : (
-            <Image
-              source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
-              style={styles.image}
-            />
-          )}
-        </TouchableOpacity>
+            {unreadCount > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+
+          {/* foto do perfil */}
+          <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
+            {user ? (
+              <Foto
+                tipo="user"
+                tipoId={+user.userId}
+                width={50}
+                height={50}
+                borderRadius={25}
+                borderWidth={3}
+                borderColor={theme.colors.secondary}
+                refreshKey={user.profileImage}
+                fallbackSource={require('../../assets/perfil.png')}
+              />
+            ) : (
+              <Image
+                source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
+                style={styles.image}
+              />
+            )}
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -149,7 +159,7 @@ const Home: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -172,7 +182,7 @@ const styles = StyleSheet.create({
   },
   iconRight: {
     fontSize: 24,
-    color: 'white',
+    color: theme.colors.sempre_branco,
     marginRight: 16,
   },
   projectTitle: {
@@ -185,10 +195,31 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   rightIcons: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 12, 
-},
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  badgeWrapper: {
+    marginRight: 16,
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: theme.colors.red,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 3,
+  },
+  badgeText: {
+    color: theme.colors.sempre_branco,
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
 });
 
 export default Home;

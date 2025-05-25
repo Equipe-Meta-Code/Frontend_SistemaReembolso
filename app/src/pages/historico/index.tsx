@@ -72,7 +72,7 @@ const Historico: React.FC = () => {
         );
 
         setProjetos(projetosFiltrados);
-        setCategorias(resCategorias.data);
+        setCategorias(resCategorias.data.categorias);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
