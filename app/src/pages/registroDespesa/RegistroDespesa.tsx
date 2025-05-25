@@ -328,13 +328,6 @@ const RegistroDespesa = () => {
     );
   };
 
-  const adicionarComprovante = (uri: string, mimeType: string) => {
-    setComprovantes(prev => [
-      ...prev,
-      { id: Date.now().toString(), uri, mimeType }
-    ]);
-  };
-
   const escolherGaleria = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') return Alert.alert('Permissão negada');
@@ -351,7 +344,6 @@ const RegistroDespesa = () => {
           : `video/${asset.uri.split('.').pop()}`
     );
   };
-
 
   const tirarFoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -379,73 +371,57 @@ const RegistroDespesa = () => {
     );
   };
 
-
-
-  const removerComprovante = (idx: number) =>
-    setComprovantes(prev => prev.filter((_, i) => i !== idx));
-
-  const handleImageUpload = async (despesaId: number) => {
-    if (comprovantes.length === 0) return;
-
-    await Promise.all(comprovantes.map(c => {
-      const fd = new FormData();
-      fd.append('receipt', {
-        uri: c.uri,
-        name: c.uri.split('/').pop()!,
-        type: c.mimeType
-      } as any);
-      fd.append('tipo', 'expense');
-      fd.append('tipoId', String(despesaId));
-      return api.post('/uploadcomprovante', fd, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-    }));
-  };
-
   const handlePrevisualizar = (c: ComprovanteItem) => {
     setUriPrevisualizacao(c.uri);
     setPrevisualizacaoMime(c.mimeType);
     setMostrarModalPrevisualizacao(true);
   };
 
-
-  const handleSubmit = async () => {
-    // limpa
+  const handleNovaDespesa = () => {
+    if (!currentDespesa.projetoId || !currentDespesa.pacoteId) {
+      setError('Selecione Projeto e Pacote antes de criar nova despesa.');
+      return;
+    }
+    setDespesas(prev => [
+      ...prev,
+      {
+        projetoId: currentDespesa.projetoId,
+        pacoteId: currentDespesa.pacoteId,
+        categoria: '',
+        categoryName: '',
+        date: '',
+        amount: '',
+        amountFormatted: 0,
+        description: '',
+        km: '',
+        kmCost: 0,
+        quantidade: '',
+        quantidadeTotal: 0,
+        comprovantes: [],
+        totalGastoCategoria: 0,
+      }
+    ]);
+    setCurrentIndex(despesas.length);
     setError('');
     setSuccessMessage('');
-    fetchData();
+  };
 
-    if (
-      !selectedPacote ||
-      !category ||
-      !selectedProject ||
-      !date ||
-      (categoryName === 'Transporte' ? !km : !amount)
-    ) {
-      setError('Por favor, preencha todos os campos.');
-      return;
+  const handleProximo = () => {
+    if (currentIndex < despesas.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setError('');
+      setSuccessMessage('');
     }
+  };
 
-    // calcula valor
-    const valor =
-      categoryName === 'Transporte'
-        ? kmCost
-        : ['Material', 'Materiais'].includes(categoryName)
-          ? quantidadeTotal
-          : parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-    const projected = totalGastoCategoria + valor;
-
-    // justificativa
-    if (projected > valor_maximo && description.trim() === '') {
-      setError('Justifique o motivo da despesa.');
-      return;
+  const handleAnterior = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+      setError('');
+      setSuccessMessage('');
     }
+  };
 
-    // comprovante se exceder
-    if (projected > valor_maximo && comprovantes.length === 0) {
-      setError('Anexe pelo menos um comprovante da despesa.');
-      return;
-    }
 
     // payload
     const [d, m, y] = date.split('/');
