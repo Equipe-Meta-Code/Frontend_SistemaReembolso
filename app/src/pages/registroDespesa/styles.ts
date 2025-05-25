@@ -1,12 +1,12 @@
 import { StyleSheet} from "react-native";
 import { themas } from "../../global/themes";
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
     container: {
-        backgroundColor: themas.colors.secondary,
+        backgroundColor: theme.colors.secondary,
     },
     boxTop: {
-        backgroundColor: themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         height: '28%',
     },
     boxTitle: {
@@ -25,32 +25,32 @@ export const styles = StyleSheet.create({
     },
     arrow: {
       fontSize: 24,
-      color: themas.colors.secondary,
+      color: theme.colors.sempre_branco,
       paddingLeft: '7%',
       paddingTop: '12%',
     },
     title: {
-        color: themas.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 32,
         fontWeight: 'bold', 
       },
     subTitle: {
-        color: themas.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 16,
         marginTop: 12,
     },
     textTop: {
-        color: themas.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 16,
     },
     textBottom: {
-        color: '#000000',
+        color: theme.colors.black,
         fontSize: 16,
         marginTop: 30,
     },
     dropdown: {
         height: 50,
-        borderColor: 'gray',
+        borderColor: theme.colors.cinza,
         borderWidth: 0.5,
         borderRadius: 8,
         paddingHorizontal: 8,
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
       },
       label: {
         position: 'absolute',
-        backgroundColor: 'white',
+        backgroundColor: theme.colors.secondary,
         left: 22,
         top: 8,
         zIndex: 999,
@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
       },
       inputMask: {
         borderWidth: 0.5,
-        borderColor: 'gray',
+        borderColor: theme.colors.cinza,
         padding: 10,
         height: 50,
         borderRadius: 8,
@@ -92,15 +92,17 @@ export const styles = StyleSheet.create({
       },
       inputDescription: {
         borderWidth: 0.5,
-        borderColor: 'gray',
+        borderColor: theme.colors.cinza,
         paddingLeft: 10,
         height: 90,
         borderRadius: 8,
         marginTop: 12,
       },
       image: {
+        width: 100,
+        height: 100,
         marginTop: 12,
-        fontSize: 140,
+        fontSize: 100,
         color: themas.colors.primary,
         margin: 'auto',
       },
@@ -109,14 +111,14 @@ export const styles = StyleSheet.create({
         
       },
       button: {
-        backgroundColor: themas.colors.primary,
+        backgroundColor: theme.colors.primary,
         paddingVertical: 18,
         borderRadius: 25,
         alignItems: 'center',
         marginTop: 20,           
       },
       buttonText: {
-        color: themas.colors.secondary,
+        color: theme.colors.sempre_branco,
         fontSize: 16,
         fontWeight: 'bold',
       },
@@ -125,22 +127,22 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         padding: 10,
         borderRadius: 8,
-        color: '#721c24',
-        backgroundColor: '#f8d7da',
-        borderColor: '#f5c6cb',
+        color: theme.colors.vinho,
+        backgroundColor: theme.colors.rosa_muito_claro,
+        borderColor: theme.colors.rosa_claro,
         margin: 'auto',
       },
       pacoteErrorMessage: {
         marginTop: 16,
         padding: 10,
         borderRadius: 8,
-        color: 'red',
+        color: theme.colors.red,
         margin: 'auto',
       },
       successMessage: {
-        color: '#155724',
-        backgroundColor: '#d4edda',
-        borderColor: '#c3e6cb',
+        color: theme.colors.verde_escuro,
+        backgroundColor: theme.colors.verde_claro,
+        borderColor: theme.colors.verde_claro,
         marginTop: 16,
         fontWeight: 'bold',
         padding: 10,
@@ -151,7 +153,7 @@ export const styles = StyleSheet.create({
         marginTop: 12,
         height: 18,
         borderRadius: 5,
-        backgroundColor: '#e0e0e0',
+        backgroundColor: theme.colors.cinza_claro,
         overflow: 'hidden',
       },
       progressBarFill: {
@@ -170,24 +172,24 @@ export const styles = StyleSheet.create({
         fontSize: 16,
       },
       limit: {
-        color: 'red',
+        color: theme.colors.red,
         fontSize: 16,
         marginTop: 6,
       },
       aviso: {
-        color: 'gray',
+        color: theme.colors.cinza,
         fontSize: 16,
         marginTop: 6,
       },
 
       link: {
-        color: '#1f4baa',
+        color: theme.colors.primary,
         marginTop: 8,
         textDecorationLine: 'underline',
       },
       
       smallButton: {
-        backgroundColor: '#1f4baa',
+        backgroundColor: theme.colors.primary,
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',
@@ -196,10 +198,99 @@ export const styles = StyleSheet.create({
       
       inputNome: {
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: theme.colors.cinza,
         borderRadius: 8,
         padding: 10,
         marginTop: 8,
-      }
-      
+      },
+      modalOverlay: {
+      position: 'absolute',
+      top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+  modalContainer: {
+    position: 'absolute',
+    top: '40%',
+    left: '10%',
+    right: '10%',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 20,
+    alignItems: 'center',
+    elevation: 5,
+    zIndex: 10,
+  },
+  modalButton: {
+    width: '100%',
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
+  modalTexto: {
+    fontSize: 18,
+    color: themas.colors.primary,
+  },
+  botoesUpload: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  comprovantesContainer: {
+    marginTop: 12,
+    gap: 2,
+  },
+  comprovanteRecebido: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',         // centraliza verticalmente todos os filhos
+    backgroundColor: themas.colors.cinza_muito_claro,
+    paddingHorizontal: 5,
+  },
+
+  textoComprovante: {
+    flex: 1,
+    fontSize: 14,
+    lineHeight: 30,
+    color: themas.colors.primary,
+    fontStyle: 'italic',
+    marginLeft: 5,
+  },
+  botoesComprovante: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  modalContent: {
+    position: 'absolute',
+    top: '10%',
+    left: '5%',
+    right: '5%',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 10,
+    alignItems: 'center',
+  },
+  closeButton: {
+    marginTop: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: themas.colors.primary,
+    borderRadius: 4,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+    fundoModalEscuro: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: themas.colors.transparente,
+  },
+  conteudoModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconDelete: {
+    marginRight: 5,
+  }
 });

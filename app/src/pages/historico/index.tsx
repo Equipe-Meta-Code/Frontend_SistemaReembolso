@@ -3,10 +3,12 @@ import { View, FlatList, TouchableOpacity, Text } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import Header from "../../components/historico/Header";
 import ExpenseSection from "../../components/historico/ExpenseSection";
-import { styles } from "../../styles/historico.styles";
+import { createStyles } from "../../styles/historico.styles";
+import { useTheme } from '../../context/ThemeContext';
 import api from "../../services/api";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
+import { themas } from "../../global/themes";
 
 interface Despesa {
   _id: string;
@@ -40,6 +42,9 @@ const Historico: React.FC = () => {
   interface RouteParams {
     projectId?: string;
   }
+
+  const { theme } = useTheme();
+  const styles = createStyles (theme);
 
   const route = useRoute();
   const { projectId } = (route.params as RouteParams) || {};
@@ -210,7 +215,7 @@ const Historico: React.FC = () => {
       </View>
 
       {despesasFiltradasUsuario.length === 0 && (
-        <Text style={{ textAlign: 'center', marginTop: 20, color: 'gray' }}>
+        <Text style={{ textAlign: 'center', marginTop: 20, color: theme.colors.cinza }}>
           Nenhuma despesa encontrada.
         </Text>
         )}

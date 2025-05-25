@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import ExpenseItem from "./ExpenseItem";
-import { styles, COLUMN_WIDTHS } from "../../styles/historico.styles";
+import { createStyles, COLUMN_WIDTHS } from "../../styles/historico.styles";
+import { useTheme } from '../../context/ThemeContext';
 import { ScrollView } from "react-native";
 
 
@@ -20,6 +21,9 @@ interface ExpenseSectionProps {
 }
 
 const ExpenseSection: React.FC<ExpenseSectionProps> = ({ categoria, itens }) => {
+  const { theme } = useTheme();
+  const styles = createStyles (theme);
+
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>

@@ -4,17 +4,23 @@ import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfileImage } from '../../(redux)/authSlice';
 import { RootState } from '../../(redux)/store';
-import { style } from "./styles";
+import { createStyles } from "./styles";
+import { useTheme } from '../../context/ThemeContext';
 import CustomButton from '../../components/perfil/Botao';
 import BotaoInfoPessoal from '../../components/perfil/BotaoInfoPessoal';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import api from "../../services/api"
 import Foto from '../../com../../components/foto/Foto';
+import { Asset } from 'expo-asset';
+import * as FileSystem from 'expo-file-system'; 
+import { themas } from '../../global/themes';
 
 const InfosPessoais = () => {
     const user = useSelector((state: RootState) => state.auth.user);
     const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
+    const { theme } = useTheme();
+    const style = createStyles (theme);
 
     type RootStackParamList = {
         Perfil: undefined; // Add other routes and their parameters here
@@ -72,9 +78,9 @@ const InfosPessoais = () => {
           });
       
           if (res.data.success) {
-            const newImageUrl = `${res.data.imagemUrl}?ts=${Date.now()}`;
-            dispatch(setProfileImage(newImageUrl));        
-            setImageUri(newImageUrl); // Força a atualização imediata
+            const novaImagemUrl = `${res.data.imagemUrl}?ts=${Date.now()}`;
+            dispatch(setProfileImage(novaImagemUrl));        
+            setImageUri(novaImagemUrl); // Força a atualização imediata
             Alert.alert('Sucesso', 'Foto atualizada!');
           }
         } catch (err) {
@@ -105,17 +111,47 @@ const InfosPessoais = () => {
   useEffect(() => {
     console.log('Estado do user:', user);
   }, [user]);
-    
 
-    const handleEditName = () => {
-        // Alerta para edição do nome
-        Alert.alert("Editar Nome", `Você está prestes a editar o nome: ${user?.name}`);
-    };
+  const handleImagemPadrao = async () => {
+    if (!user) return;
+  
+    try {
+      const imagemPadrao = Asset.fromModule(require('../../assets/perfil.png'));
+      await imagemPadrao.downloadAsync();
+  
+      const uri = imagemPadrao.localUri || imagemPadrao.uri;
+      if (!uri) throw new Error('Não conseguiu obter URI do asset.');
+  
+      const nomeArquivo = uri.split('/').pop()!;
+      const match = /\.(\w+)$/.exec(nomeArquivo);
+      const mimeType = match ? `image/${match[1]}` : 'image/png';
+  
+      const formData = new FormData();
+      formData.append('profileImage', {
+        uri,
+        name: nomeArquivo,
+        type: mimeType,
+      } as any);
+      formData.append('tipo', 'user');
+      formData.append('tipoId', String(user.id));
+  
+      const res = await api.post('/imagem', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
 
-    const handleEditEmail = () => {
-        // Alerta para edição do email
-        Alert.alert("Editar Email", `Você está prestes a editar o email: ${user?.email}`);
-    };
+      if (res.data.success) {
+        const novaUrlImagem = `${res.data.imagemUrl}?ts=${Date.now()}`;
+        dispatch(setProfileImage(novaUrlImagem));
+        setImageUri(novaUrlImagem);
+        Alert.alert('Sucesso', 'Imagem padrão restaurada!');
+      } else {
+        throw new Error('Resposta do servidor sem sucesso.');
+      }
+    } catch (err) {
+      console.error('[PADRÃO] Erro:', err);
+      Alert.alert('Erro', 'Não foi possível restaurar a imagem padrão.');
+    }
+  };
 
     return (
         <ScrollView contentContainerStyle={style.container}>
@@ -138,36 +174,44 @@ const InfosPessoais = () => {
             </View>
 
             <View style={style.containerBotoes}>
-            <TouchableOpacity onPress={handleImageUpload} style={style.imagemPerfil}>
-                <View style={style.imagemPerfil}>
-                {user ? (
-                  <Foto
-                    tipo="user"
-                    tipoId={+user.userId}
-                    width={150}
-                    height={150}
-                    borderRadius={100}
-                    borderWidth={3}
-                    borderColor="#fff"
-                    refreshKey={user.profileImage}
-                    fallbackSource={require('../../assets/perfil.png')}
-                  />
-                ) : (
-                  <Image
-                    source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
-                    style={style.fotoPerfil}
-                  />
-                )}
-                </View>
+              <TouchableOpacity onPress={handleImageUpload} style={style.imagemPerfil}>
+                  <View style={style.imagemPerfil}>
+                  {user ? (
+                    <Foto
+                      tipo="user"
+                      tipoId={+user.userId}
+                      width={150}
+                      height={150}
+                      borderRadius={100}
+                      borderWidth={3}
+                      borderColor={theme.colors.secondary}
+                      refreshKey={user.profileImage}
+                      fallbackSource={require('../../assets/perfil.png')}
+                    />
+                  ) : (
+                    <Image
+                      source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
+                      style={style.fotoPerfil}
+                    />
+                  )}
+                  </View>
 
-        </TouchableOpacity>
+              </TouchableOpacity>
 
-                <CustomButton
-                    titulo={`Editar imagem de perfil`}
-                    onPress={handleImageUpload}
-                    iconName="chevron-forward"
-                    iconColor="#000"
-                />
+              <CustomButton
+                titulo={`Alterar imagem do perfil`}
+                onPress={handleImageUpload}
+                iconName="chevron-forward"
+                iconColor={theme.colors.black}
+              />
+
+              <CustomButton
+                titulo={`Voltar imagem padrão`}
+                onPress={handleImagemPadrao}
+                iconName="chevron-forward"
+                iconColor={theme.colors.black}
+              />
+
             </View>
 
             <View style={style.subtituloContainer}>
@@ -178,14 +222,14 @@ const InfosPessoais = () => {
                 <CustomButton
                     titulo={`Nome: ${user?.name}`}
                     onPress={() => console.log("Nome")}
-                    iconName="chevron-forward"
-                    iconColor="#000"
+                    iconName=""
+                    iconColor={theme.colors.black}
                 />
                 <CustomButton
                     titulo={`Email: ${user?.email}`}
                     onPress={() => console.log("Email")}
-                    iconName="chevron-forward"
-                    iconColor="#000"
+                    iconName=""
+                    iconColor={theme.colors.black}
                 />
                 
             </View>

@@ -3,14 +3,14 @@ import { themas } from "../../global/themes";
 
 const { width, height } = Dimensions.get("window");
 
-export const style = StyleSheet.create({
+export const createStyles = (theme: any) => StyleSheet.create({
   tabArea:{
     flexDirection:'row',
     height: height * 0.09,
     alignItems:'center',
     paddingHorizontal: width * 0.05,
-    backgroundColor: themas.colors.secondary,
-    shadowColor: "#000",
+    backgroundColor: theme.colors.secondary,
+    shadowColor: theme.colors.black,
     shadowOffset:{
         width:0,
         height:3,
@@ -28,7 +28,7 @@ export const style = StyleSheet.create({
     alignItems:'center',
     justifyContent: 'center',
     position:'absolute',
-    backgroundColor:themas.colors.primary,
+    backgroundColor:theme.colors.primary,
     height: height * 0.065,
     width: width * 0.29,
     borderRadius: width * 0.175,
@@ -39,14 +39,14 @@ export const style = StyleSheet.create({
 
  iconHome: {
     fontSize: width * 0.05,
-    color: "white",
+    color: theme.colors.sempre_branco,
     paddingRight: width * 0.02,
     paddingLeft: width * 0.02,
  },
 
  textHome: {
     fontSize: width * 0.039,
-    color: "white",
+    color: theme.colors.sempre_branco,
  },
 
  tabItemCenter: {
@@ -59,12 +59,12 @@ export const style = StyleSheet.create({
 
  iconCenter: {
     fontSize: width * 0.1,
-    color: "black",
+    color: theme.colors.black,
  },
 
  textCenter: {
    fontSize: width * 0.03,
-   color: "black",
+   color: theme.colors.black,
    marginTop: 4,
  },
 
@@ -82,12 +82,12 @@ export const style = StyleSheet.create({
 
  iconRight: {
     fontSize: width * 0.055,
-    color: "black",
+    color: theme.colors.black,
  },
 
  textRight: {
    fontSize: width * 0.03,
-   color: "black",
+   color: theme.colors.black,
    marginTop: 4,
    textAlign: 'center',
  },

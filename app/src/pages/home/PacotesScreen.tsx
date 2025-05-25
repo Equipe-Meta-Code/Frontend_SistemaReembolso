@@ -9,6 +9,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { themas } from "../../global/themes";
+import { useTheme } from '../../context/ThemeContext';
 
 interface Despesa {
   despesaId: string;
@@ -38,14 +40,16 @@ type RootStackParamList = {
 };
 
 const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
-  'Rascunho': { backgroundColor: '#E5E7EB', color: '#374151' },
-  'Aguardando Aprovação': { backgroundColor: 'rgba(255, 188, 20, 0.21)', color: 'rgba(214, 154, 1, 0.96)' },
-  'Recusado': { backgroundColor: 'rgba(209, 53, 53, 0.15)', color: 'rgba(185, 14, 14, 0.70)' },
-  'Aprovado': { backgroundColor: 'rgba(27, 143, 37, 0.15)', color: 'rgba(4, 155, 12, 0.83)' },
-  'Aprovado Parcialmente': { backgroundColor: 'rgba(255, 139, 62, 0.21)', color: 'rgba(248, 103, 7, 0.69)' },
+  'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
+  'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda_opaco, color: themas.colors.mostarda_escuro_opaco },
+  'Recusado': { backgroundColor: themas.colors.vinho_claro_opaco, color: themas.colors.vinho_escuro_opaco },
+  'Aprovado': { backgroundColor: themas.colors.verde_claro_opaco, color: themas.colors.verde_medio_opaco },
+  'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja_claro_opaco, color: themas.colors.laranja_escuro_opaco },
 };
 
 const PacotesScreen = ({ route }: any) => {
+  const { theme } = useTheme();  
+  const styles = createStyles (theme); 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { projectId } = route.params;
   const [pacotes, setPacotes] = useState<Pacote[]>([]);
@@ -181,7 +185,7 @@ const PacotesScreen = ({ route }: any) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.filtroChipLimpar} onPress={() => setStatusSelecionado(null)}>
-            <Ionicons name="close" size={20} color="#374151" />
+            <Ionicons name="close" size={20} color={theme.colors.chumbo} />
           </TouchableOpacity>
 
         </View>
@@ -231,23 +235,23 @@ const PacotesScreen = ({ route }: any) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FBFBFB',
+    backgroundColor: theme.colors.background,
   },
   top: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
     paddingTop: 50,
-    backgroundColor: '#1F48AA',
+    backgroundColor: theme.colors.primary,
     width: '100%',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: theme.colors.sempre_branco,
     paddingLeft: 15,
   },
   image: {
@@ -258,6 +262,7 @@ const styles = StyleSheet.create({
   pacotesTitle: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: theme.colors.text,
   },
   pacotesList: {
     flex: 1,
@@ -265,7 +270,7 @@ const styles = StyleSheet.create({
   },
   arrow: {
     fontSize: 24,
-    color: '#FFFFFF',
+    color: theme.colors.sempre_branco,
   },
   filtroContainer: {
     paddingHorizontal: 50,
@@ -273,12 +278,12 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    color: '#111827',
+    color: theme.colors.azul_escuro,
   },  
   filtroRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: theme.colors.cinza_muito_claro,
     borderRadius: 8,
     paddingHorizontal: 8,
   },
@@ -288,7 +293,7 @@ const styles = StyleSheet.create({
   },
   divisor: {
     height: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: theme.colors.cinza_claro,
     marginVertical: 12,
   },
   emptyContainer: {
@@ -299,7 +304,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: '#9CA3AF',
+    color: theme.colors.cinza_medio,
     textAlign: 'center',
   },  
   filtrosRow: {
@@ -310,29 +315,29 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filtroChip: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: theme.colors.cinza_claro,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   },
   filtroChipText: {
-    color: '#374151',
+    color: theme.colors.chumbo,
     fontSize: 14,
     fontWeight: '500',
   },
   filtroChipSelecionado: {
-    backgroundColor: '#1F48AA',
+    backgroundColor: theme.colors.primary,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   }, 
   filtroChipSelecionadoText: {
-    color: '#FFFFFF',
+    color: theme.colors.secondary,
     fontSize: 14,
     fontWeight: '500',
   },
   filtroChipLimpar: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: theme.colors.cinza_muito_claro,
     borderRadius: 20,
     padding: 6,
     alignItems: 'center',
