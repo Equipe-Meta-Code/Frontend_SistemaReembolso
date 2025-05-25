@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback, Pressable, GestureResponderEvent  } from 'react-native';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback, Pressable } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
 import { createStyles } from "./styles";
 import { useTheme } from '../../context/ThemeContext';
@@ -571,39 +571,6 @@ const RegistroDespesa = () => {
       maximumFractionDigits: 2,
     });
 
-    // Estado para controlar a página atual dos gastos
-    const [paginaAtual, setPaginaAtual] = useState(0);
-    const [gastos, setGastos] = useState<any[]>([]);
-
-    function gastoAnterior(event: GestureResponderEvent): void {
-      setPaginaAtual((prev) => (prev > 0 ? prev - 1 : prev));
-    }
-
-    function proximoGasto(event: GestureResponderEvent): void {
-      setPaginaAtual((prev) => (prev < gastos.length - 1 ? prev + 1 : prev));
-    }
-
-    function adicionarOutroGasto(event: GestureResponderEvent): void {
-      // Limpa os campos do formulário para permitir o cadastro de outro gasto
-      setCategory('');
-      setCategoryName('');
-      setAmount('');
-      setAmountFormatted(0);
-      setKm('');
-      setKmCost(0);
-      setQuantidade('');
-      setQuantidadeTotal(0);
-      setDate('');
-      setDescription('');
-      setComprovantes([]);
-      setError('');
-      setSuccessMessage('');
-      setMostrarModalPrevisualizacao(false);
-      setUriPrevisualizacao('');
-      setPrevisualizacaoMime('');
-      // Mantém o mesmo pacote e projeto selecionados
-    }
-
   return (
     <>
       <ScrollView
@@ -638,8 +605,6 @@ const RegistroDespesa = () => {
             value={selectedPacote}
             onValueChange={handlePacoteChange}
           />
-
-          {/* Se o usuário quiser criar um novo pacote */}
           {!creatingPacote ? (
             <TouchableOpacity onPress={() => {
               setCreatingPacote(true);
@@ -720,7 +685,6 @@ const RegistroDespesa = () => {
 
             </>
           ) : (
-            // SENÃO (outras categorias) → mostra o campo de Valor gasto
             <>
               <TextInputMask
                 type={'money'}
@@ -730,25 +694,20 @@ const RegistroDespesa = () => {
                 placeholder='R$ 0,00'
                 placeholderTextColor={theme.colors.text}
               />
-
             </>
           )}
-
           <Text style={styles.textBottom}>Data</Text>
           <CustomDatePicker
             value={date}
             onValueChange={handleDateChange}
           />
-
           {totalGastoCategoria > valor_maximo && showLimitMessage && (
             <Text style={styles.limit}>O valor máximo já foi atingido. Caso deseje continuar,
               por favor insira uma descrição justificando a despesa.</Text>
           )}
-
           {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
             <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar,
               por favor insira uma descrição justificando a despesa.</Text>}
-
           {selectedProject && category &&
             <>
               <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
@@ -776,7 +735,6 @@ const RegistroDespesa = () => {
               </Text>
             </>
           }
-
           <TextInput
             value={description}
             onChangeText={handleDescriptionChange}
@@ -784,29 +742,21 @@ const RegistroDespesa = () => {
             style={styles.inputDescription}
             placeholderTextColor={theme.colors.text}
           />
-
-
           <Text style={styles.textBottom}>Adicione o comprovante</Text>
-
           <TouchableOpacity onPress={openImagePickerOptions}>
-      
               <MaterialCommunityIcons
                 name="image-plus"
                 style={styles.image}
               />
-
           </TouchableOpacity>
-
           <View style={styles.comprovantesContainer}>
             {comprovantes.map((c, i) => (
               <View key={c.id} style={styles.comprovanteRecebido}>
-  
                 <TouchableOpacity onPress={() => handlePrevisualizar(c)}>
                   <Text style={styles.textoComprovante}>
                     {c.uri.split('/').pop()}
                   </Text>
                 </TouchableOpacity>
-
                 <View style={styles.botoesComprovante}>
                   <TouchableOpacity onPress={() => removerComprovante(i)}>
                     <FontAwesome 
@@ -817,25 +767,11 @@ const RegistroDespesa = () => {
                     />
                   </TouchableOpacity>
                 </View>
-                
               </View>
             ))}
           </View>
-
           {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
           {error && <Text style={styles.errorMessage}>{error}</Text>}
-  <View>
-            <TouchableOpacity onPress={gastoAnterior} disabled={paginaAtual === 0}>
-              <Text>◀️ Anterior</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={proximoGasto} disabled={paginaAtual === gastos.length - 1}>
-              <Text>Próximo ▶️</Text>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity style={styles.button} onPress={adicionarOutroGasto}>
-            <Text style={styles.buttonText}>+ Adicionar outro gasto</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={handleSubmit}>
@@ -844,7 +780,6 @@ const RegistroDespesa = () => {
         </View>
         <View style={styles.teste}></View>
       </ScrollView>
-
       <Modal transparent animationType="fade" visible={showPickerModal}>
         <TouchableWithoutFeedback onPress={() => setShowPickerModal(false)}>
           <View style={styles.modalOverlay} />
@@ -861,7 +796,6 @@ const RegistroDespesa = () => {
           </Pressable>
         </View>
       </Modal>
-
       <Modal visible={mostrarModalPrevisualizacao} transparent animationType="fade">
         <View style={styles.fundoModalEscuro} />
         <View style={styles.conteudoModal}>
