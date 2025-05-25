@@ -535,7 +535,7 @@ const RegistroDespesa = () => {
             <CustomDropdown
               data={projects}
               placeholder='Selecione um projeto'
-              value={selectedProject}
+              value={currentDespesa.projetoId}
               onValueChange={handleProjectChange}
             />
           </View>
@@ -546,7 +546,7 @@ const RegistroDespesa = () => {
           <CustomDropdown
             data={pacotes}
             placeholder='Selecione um pacote'
-            value={selectedPacote}
+            value={currentDespesa.pacoteId}
             onValueChange={handlePacoteChange}
           />
           {!creatingPacote ? (
@@ -584,31 +584,30 @@ const RegistroDespesa = () => {
           <CustomDropdown
             data={filteredCategories}
             placeholder='Selecione uma categoria'
-            value={category}
+            value={currentDespesa.categoria}
             onValueChange={handleCategoryChange}
           />
 
-          {categoryName === 'Transporte' ? (
-            // SE for Transporte → mostra só KM e custo estimado
+          {currentDespesa.categoryName === 'Transporte' ? (
             <>
               <Text style={styles.textBottom}>Quilômetros (KM)</Text>
               <TextInput
                 placeholder="0"
-                value={km}
+                value={currentDespesa.km}
                 onChangeText={handleKmChange}
                 keyboardType="numeric"
                 style={styles.inputMask}
               />
               <Text style={styles.aviso}>
-                {`Custo estimado: R$ ${kmCost.toFixed(2).replace('.', ',')}`}
+                {`Custo estimado: R$ ${currentDespesa.kmCost?.toFixed(2).replace('.', ',') || '0,00'}`}
               </Text>
             </>
-          ) : ['Material', 'Materiais'].includes(categoryName) ? (
+          ) : ['Material', 'Materiais'].includes(currentDespesa.categoryName) ? (
             <>
               <Text style={styles.textBottom}>Valor unitário</Text>
               <TextInputMask
                 type={'money'}
-                value={amount}
+                value={currentDespesa.amount}
                 onChangeText={handleAmountChange}
                 style={styles.inputMask}
                 placeholder="R$ 0,00"
@@ -617,14 +616,14 @@ const RegistroDespesa = () => {
               <Text style={styles.textBottom}>Quantidade</Text>
               <TextInput
                 placeholder="0"
-                value={quantidade}
+                value={currentDespesa.quantidade}
                 onChangeText={handleQuantidadeChange}
                 keyboardType="numeric"
                 style={styles.inputMask}
               />
 
               <Text style={styles.aviso}>
-                {`Valor total: R$ ${formatCurrency(quantidadeTotal)}`}
+                {`Valor total: R$ ${formatCurrency(currentDespesa.quantidadeTotal || 0)}`}
               </Text>
 
             </>
@@ -632,7 +631,7 @@ const RegistroDespesa = () => {
             <>
               <TextInputMask
                 type={'money'}
-                value={amount}
+                value={currentDespesa.amount}
                 onChangeText={handleAmountChange}
                 style={styles.inputMask}
                 placeholder='R$ 0,00'
@@ -642,19 +641,19 @@ const RegistroDespesa = () => {
           )}
           <Text style={styles.textBottom}>Data</Text>
           <CustomDatePicker
-            value={date}
+            value={currentDespesa.date}
             onValueChange={handleDateChange}
           />
-          {totalGastoCategoria > valor_maximo && showLimitMessage && (
+          {currentDespesa.totalGastoCategoria > valor_maximo && showLimitMessage && (
             <Text style={styles.limit}>O valor máximo já foi atingido. Caso deseje continuar,
               por favor insira uma descrição justificando a despesa.</Text>
           )}
-          {amountFormatted > valor_maximo - totalGastoCategoria && totalGastoCategoria < valor_maximo && selectedProject && category &&
+          {currentDespesa.amountFormatted > valor_maximo - (currentDespesa.totalGastoCategoria || 0) && (currentDespesa.totalGastoCategoria || 0) < valor_maximo && currentDespesa.projetoId && currentDespesa.categoria &&
             <Text style={styles.limit}>O valor informado excede o limite de R$ {valor_maximo} permitido para esta categoria. Caso deseje continuar,
               por favor insira uma descrição justificando a despesa.</Text>}
-          {selectedProject && category &&
+          {currentDespesa.projetoId && currentDespesa.categoria &&
             <>
-              <Text style={styles.textBottom}>Progresso de gasto em {categoryName}</Text>
+              <Text style={styles.textBottom}>Progresso de gasto em {currentDespesa.categoryName}</Text>
               <View style={styles.progressBar}>
                 <View
                   style={[
@@ -680,7 +679,7 @@ const RegistroDespesa = () => {
             </>
           }
           <TextInput
-            value={description}
+            value={currentDespesa.description}
             onChangeText={handleDescriptionChange}
             placeholder="Digite uma descrição"
             style={styles.inputDescription}
@@ -694,7 +693,7 @@ const RegistroDespesa = () => {
               />
           </TouchableOpacity>
           <View style={styles.comprovantesContainer}>
-            {comprovantes.map((c, i) => (
+            {(currentDespesa.comprovantes || []).map((c: any, i: number) => (
               <View key={c.id} style={styles.comprovanteRecebido}>
                 <TouchableOpacity onPress={() => handlePrevisualizar(c)}>
                   <Text style={styles.textoComprovante}>
