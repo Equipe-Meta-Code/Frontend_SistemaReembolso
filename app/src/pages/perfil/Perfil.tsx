@@ -1,3 +1,4 @@
+// src/pages/perfil/Perfil.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch  } from 'react-native';
 import { createStyles  } from "./styles";
@@ -16,6 +17,7 @@ import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import Foto from '../../com../../components/foto/Foto';
 import { themas } from '../../global/themes';
 import { useTheme } from '../../context/ThemeContext';
+import { RootStackParamList } from '../../routes/navigation';
 
 interface Funcionario {
     userId: number;
@@ -61,11 +63,6 @@ const Perfil = () => {
     const style = createStyles (theme);
 
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    type RootStackParamList = {
-        InfosPessoais: undefined;
-        Login: undefined;
-        guiaDoUsuario: undefined;
-    };
 
     const user = useSelector((state: RootState) => state.auth.user);
     const dispatch = useDispatch();
@@ -220,6 +217,29 @@ const Perfil = () => {
                     trackColor={{ false: theme.colors.cinza_claro, true: theme.colors.primary }}
                     thumbColor={theme.colors.secondary}
                 /> 
+
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CustomButton
+                        titulo="Verificação em duas etapas"
+                        onPress={() => {
+                            if (!user?.email) {
+                                alert("Email do usuário não está disponível.");
+                            return;
+                            }
+
+                            navigation.navigate("Gerenciar2FA", {
+                                email: user.email,
+                                isEnabled: user.twoFactorEnabled,
+                            });
+                        }}
+                        iconName="chevron-forward"
+                        iconColor={theme.colors.black}
+                    />
+                    <Text style={{ color: theme.colors.cinza, marginLeft: -103, marginBottom: 2, fontSize:13}}>
+                        {user?.twoFactorEnabled === true ? "Ativado" : "Desativado"}
+                    </Text>
+                </View>
+
                 
             </View>
 
