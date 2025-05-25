@@ -93,7 +93,7 @@ export default function RecuperacaoSenha() {
             />
             <ButtonCustom
               title="Verificar Código"
-              onPress={() => navigation.navigate("verificarCodigo", { email })}
+              onPress={() => navigation.navigate("VerificarCodigo", { email })}
               buttonStyle={{marginTop: 30, paddingVertical: 18, paddingHorizontal:15, alignItems: "center",   justifyContent: "center", width: '100%'}}
             />
             <ButtonCustom
