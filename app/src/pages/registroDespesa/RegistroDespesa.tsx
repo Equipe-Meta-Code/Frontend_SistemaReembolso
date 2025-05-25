@@ -745,6 +745,13 @@ const RegistroDespesa = () => {
               </View>
             ))}
           </View>
+
+          <View style={{ alignItems: 'center', marginVertical: 12 }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+              {despesas.length > 0 ? `${currentIndex + 1}/${despesas.length}` : '1/1'}
+            </Text>
+          </View>
+
           {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
           {error && <Text style={styles.errorMessage}>{error}</Text>}
           <TouchableOpacity
