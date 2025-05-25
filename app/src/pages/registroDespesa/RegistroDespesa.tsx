@@ -29,29 +29,38 @@ const RegistroDespesa = () => {
   const [pacoteError, setPacoteError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showLimitMessage, setShowLimitMessage] = useState(false);
-  const [category, setCategory] = useState("");
-  const [selectedProject, setSelectedProject] = useState("");
   const [categoriesByProject, setCategoriesByProject] = useState<{ [key: string]: { label: string; value: string }[] }>({});
-  const [date, setDate] = useState("");
   const [projects, setProjects] = useState([]);
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState('');
-  const [amountFormatted, setAmountFormatted] = useState(0);
   const [allProjects, setAllProjects] = useState<Project[]>([]);
-  const [categoryName, setCategoryName] = useState('');
-  const [totalGastoCategoria, setTotalGastoCategoria] = useState(0);
-  const user = useSelector((state: RootState) => state.auth.user);
-  const [selectedPacote, setSelectedPacote] = useState("");
   const [pacotes, setPacotes] = useState<{ label: string; value: string }[]>([]);
   const [creatingPacote, setCreatingPacote] = useState(false);
   const [newPacoteName, setNewPacoteName] = useState("");
-  const [kmCost, setKmCost] = useState(0);
-  const [km, setKm] = useState('');
-  const [quantidade, setQuantidade] = useState('');
-  const [quantidadeTotal, setQuantidadeTotal] = useState(0);
   const [mostrarModalPrevisualizacao, setMostrarModalPrevisualizacao] = useState(false);
   const [uriPrevisualizacao, setUriPrevisualizacao] = useState<string>("");
   const [previsualizacaoMime, setPrevisualizacaoMime] = useState<string>("");
+  const [showPickerModal, setShowPickerModal] = useState(false);
+
+  const [despesas, setDespesas] = useState<any[]>([{
+    projetoId: '',
+    pacoteId: '',
+    categoria: '',
+    categoryName: '',
+    date: '',
+    amount: '',
+    amountFormatted: 0,
+    description: '',
+    km: '',
+    kmCost: 0,
+    quantidade: '',
+    quantidadeTotal: 0,
+    comprovantes: [],
+    totalGastoCategoria: 0,
+  }]);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentDespesa = despesas[currentIndex];
+  const [valor_maximo, setValorMaximo] = useState(0);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   type RootStackParamList = {
     Home: undefined;
