@@ -567,18 +567,49 @@ const RegistroDespesa = () => {
                   placeholderTextColor={theme.colors.text}
                 />
 
-              <TouchableOpacity style={styles.smallButton} onPress={handleCreatePacote}>
-                <Text style={styles.buttonText}> Criar Pacote </Text>
-              </TouchableOpacity>
-              {pacoteError && (
-                <Text style={[styles.pacoteErrorMessage, { marginTop: 4 }]}>
-                  {pacoteError}
-                </Text>)}
+                <TouchableOpacity style={styles.smallButton} onPress={async () => {
+                  if (!newPacoteName || !currentDespesa.projetoId) {
+                    setError("Informe o nome do pacote.");
+                    return;
+                  }
+                  const pacoteExistente = pacotes.find(
+                    (p) => p.label.trim().toLowerCase() === newPacoteName.trim().toLowerCase()
+                  );
+                  if (pacoteExistente) {
+                    setPacoteError("Já existe um pacote com esse nome neste projeto.");
+                    return;
+                  }
+                  try {
+                    const response = await api.post("/pacote", {
+                      nome: newPacoteName,
+                      projetoId: currentDespesa.projetoId,
+                      userId: user?.userId,
+                    });
+                    const novoPacote = response.data;
+                    const novoPacoteFormatado = {
+                      label: novoPacote.nome,
+                      value: novoPacote.pacoteId.toString(),
+                    };
+                    setPacotes((prev) => [...prev, novoPacoteFormatado]);
+                    updateCurrentDespesa('pacoteId', novoPacote.pacoteId.toString());
+                    setCreatingPacote(false);
+                    setNewPacoteName("");
+                  } catch (error) {
+                    setError("Erro ao criar pacote. Tente novamente.");
+                  }
+                }}>
+                  <Text style={styles.buttonText}> Criar Pacote </Text>
+                </TouchableOpacity>
+                {pacoteError && (
+                  <Text style={[styles.pacoteErrorMessage, { marginTop: 4 }]}>
+                    {pacoteError}
+                  </Text>)}
 
-              <TouchableOpacity onPress={() => setCreatingPacote(false)}>
-                <Text style={styles.link}> Cancelar </Text>
-              </TouchableOpacity>
-            </>
+                <TouchableOpacity onPress={() => setCreatingPacote(false)}>
+                  <Text style={styles.link}> Cancelar </Text>
+                </TouchableOpacity>
+              </>
+            )
           )}
 
           <Text style={styles.textBottom}>Categoria</Text>
