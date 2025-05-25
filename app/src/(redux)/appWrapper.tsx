@@ -13,7 +13,10 @@ import BottomRoutes from "../routes/bottom.routes";
 import Cadastro from "../pages/Cadastro/Cadastro";
 import Intro from "../pages/Intro/Intro";
 import PreRegistro from "../pages/PreRegistro/PreRegistro";
-import guiaDoUsuario from "../pages/guiaDoUsuario/guiaDoUsuario";      
+import guiaDoUsuario from "../pages/guiaDoUsuario/guiaDoUsuario";   
+import RecuperacaoSenha from "../pages/RecuperacaoSenha/RecuperacaoSenha";   
+import VerificarCodigo from "../pages/RecuperacaoSenha/VerificarCodigo";
+import NovaSenha from "../pages/RecuperacaoSenha/NovaSenha";  
 import Verificacao2FA from "../pages/login/Verificacao2FA";
 import { themas } from "../global/themes";
 import Notificacao from "../pages/notificacao/Notificacao";
@@ -28,6 +31,9 @@ type RootStackParamList = {
   Intro: undefined;
   PreRegistro: undefined;
   guiaDoUsuario: undefined;
+  RecuperacaoSenha: undefined;
+  VerificarCodigo: { email: string };
+  NovaSenha: { email: string }; // Passa o email para verificar o código
     Notificacao: undefined;
 };
 
@@ -60,6 +66,10 @@ function AppWrapper() {
                     <Stack.Screen name="Cadastro" component={Cadastro} />
                     <Stack.Screen name="Intro" component={Intro} />
                     <Stack.Screen name="PreRegistro" component={PreRegistro} />
+                    <Stack.Screen name= "RecuperacaoSenha" component={RecuperacaoSenha} />
+                    <Stack.Screen name="VerificarCodigo" component={VerificarCodigo} />
+                    <Stack.Screen name="NovaSenha" component={NovaSenha} />
+
 
                     <Stack.Screen name="Verificacao2FA" component={Verificacao2FA} />
                 </>

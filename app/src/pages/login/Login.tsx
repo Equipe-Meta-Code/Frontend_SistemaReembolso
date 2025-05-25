@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createStyles } from "./styles";
 import { useTheme } from '../../context/ThemeContext';
 import { Text, View, Image, Alert, ActivityIndicator, 
-    TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
+    TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, Platform, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
@@ -121,7 +121,9 @@ export default function Login() {
                             placeholderTextColor={theme.colors.cinza}
                         />
 
+                        <TouchableOpacity onPress={() => navigation.navigate('RecuperacaoSenha')}>
                         <Text style={style.forgotPassword}>Esqueceu a senha?</Text>
+                        </TouchableOpacity>
 
                         <ButtonCustom
                             title="Login"
