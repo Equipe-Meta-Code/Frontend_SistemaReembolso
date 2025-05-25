@@ -752,6 +752,26 @@ const RegistroDespesa = () => {
             </Text>
           </View>
 
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+            {currentIndex > 0 && (
+              <TouchableOpacity style={styles.button} onPress={handleAnterior}>
+                <Text style={styles.textBottom}>Anterior</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: theme.colors.secondary, marginHorizontal: 8 }]}
+              onPress={handleNovaDespesa}
+              disabled={!currentDespesa.projetoId || !currentDespesa.pacoteId}
+            >
+              <Text style={styles.textBottom}>Nova Despesa</Text>
+            </TouchableOpacity>
+            {currentIndex < despesas.length - 1 && (
+              <TouchableOpacity style={styles.button} onPress={handleProximo}>
+                <Text style={styles.textBottom}>Próximo</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
           {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
           {error && <Text style={styles.errorMessage}>{error}</Text>}
           <TouchableOpacity
