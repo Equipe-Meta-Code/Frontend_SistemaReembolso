@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback, Pressable  } from 'react-native';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback, Pressable, GestureResponderEvent  } from 'react-native';
 import React, { useState, useEffect, useMemo } from 'react';
 import { createStyles } from "./styles";
 import { useTheme } from '../../context/ThemeContext';
@@ -571,6 +571,39 @@ const RegistroDespesa = () => {
       maximumFractionDigits: 2,
     });
 
+    // Estado para controlar a página atual dos gastos
+    const [paginaAtual, setPaginaAtual] = useState(0);
+    const [gastos, setGastos] = useState<any[]>([]);
+
+    function gastoAnterior(event: GestureResponderEvent): void {
+      setPaginaAtual((prev) => (prev > 0 ? prev - 1 : prev));
+    }
+
+    function proximoGasto(event: GestureResponderEvent): void {
+      setPaginaAtual((prev) => (prev < gastos.length - 1 ? prev + 1 : prev));
+    }
+
+    function adicionarOutroGasto(event: GestureResponderEvent): void {
+      // Limpa os campos do formulário para permitir o cadastro de outro gasto
+      setCategory('');
+      setCategoryName('');
+      setAmount('');
+      setAmountFormatted(0);
+      setKm('');
+      setKmCost(0);
+      setQuantidade('');
+      setQuantidadeTotal(0);
+      setDate('');
+      setDescription('');
+      setComprovantes([]);
+      setError('');
+      setSuccessMessage('');
+      setMostrarModalPrevisualizacao(false);
+      setUriPrevisualizacao('');
+      setPrevisualizacaoMime('');
+      // Mantém o mesmo pacote e projeto selecionados
+    }
+
   return (
     <>
       <ScrollView
@@ -791,7 +824,18 @@ const RegistroDespesa = () => {
 
           {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
           {error && <Text style={styles.errorMessage}>{error}</Text>}
+  <View>
+            <TouchableOpacity onPress={gastoAnterior} disabled={paginaAtual === 0}>
+              <Text>◀️ Anterior</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={proximoGasto} disabled={paginaAtual === gastos.length - 1}>
+              <Text>Próximo ▶️</Text>
+            </TouchableOpacity>
+          </View>
 
+          <TouchableOpacity style={styles.button} onPress={adicionarOutroGasto}>
+            <Text style={styles.buttonText}>+ Adicionar outro gasto</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={handleSubmit}>
