@@ -147,7 +147,7 @@ const RegistroDespesa = () => {
       }));
 
       setPacotes(pacotesFormatados);
-      console.log('formatados:', pacotesFormatados)
+      /* console.log('formatados:', pacotesFormatados) */
     } catch (error) {
       console.error("Erro ao buscar pacotes:", error);
     }
@@ -297,7 +297,7 @@ const RegistroDespesa = () => {
     const parsedAmount = parseFloat(value.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
     setAmountFormatted(parsedAmount);
 
-    if (categoryName === 'Materiais') {
+    if (['Material', 'Materiais'].includes(categoryName)) {
       const parsedQuantity = parseFloat(quantidade.replace(',', '.')) || 0;
       setQuantidadeTotal(parsedAmount * parsedQuantity);
     }
@@ -452,7 +452,7 @@ const RegistroDespesa = () => {
     const valor =
       categoryName === 'Transporte'
         ? kmCost
-        : categoryName === 'Materiais'
+        : ['Material', 'Materiais'].includes(categoryName)
           ? quantidadeTotal
           : parseFloat(amount.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
     const projected = totalGastoCategoria + valor;
@@ -485,7 +485,7 @@ const RegistroDespesa = () => {
           ? parseFloat(km.replace(',', '.'))
           : undefined,
       quantidade:
-        categoryName === 'Materiais'
+        ['Material', 'Materiais'].includes(categoryName)
           ? parseFloat(quantidade.replace(',', '.'))
           : undefined,
     };
@@ -538,7 +538,7 @@ const RegistroDespesa = () => {
 
   const newAmount = categoryName === 'Transporte'
     ? kmCost
-    : categoryName === 'Materiais'
+    : ['Material', 'Materiais'].includes(categoryName)
       ? quantidadeTotal
       : amountFormatted;
 
@@ -661,7 +661,7 @@ const RegistroDespesa = () => {
                 {`Custo estimado: R$ ${kmCost.toFixed(2).replace('.', ',')}`}
               </Text>
             </>
-          ) : categoryName === 'Materiais' ? (
+          ) : ['Material', 'Materiais'].includes(categoryName) ? (
             <>
               <Text style={styles.textBottom}>Valor unitário</Text>
               <TextInputMask
