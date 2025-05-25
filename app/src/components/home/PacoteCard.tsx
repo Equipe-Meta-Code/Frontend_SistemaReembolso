@@ -88,37 +88,28 @@ export interface Despesa {
       }
   
       return acc;
-    }, []);
-
-    const cardCategoriaCores: Record<string, string> = {
-      'Alimentação': theme.colors.cinza_claro,
-      'Hospedagem': theme.colors.verde_escuro,
-      'Transporte': theme.colors.azul_claro,
-      'Serviços Terceirizados': theme.colors.verde_medio,
-      'Materiais': theme.colors.rosa,
-      'Outros': theme.colors.chumbo_claro,
-    };    
+    }, []); 
 
     const tituloCategoriaCores: Record<string, string> = {
-      'Alimentação': theme.colors.roxo,
-      'Hospedagem': theme.colors.verde_escuro,
-      'Transporte': theme.colors.azul_escuro,
-      'Serviços Terceirizados': theme.colors.amarelo,
-      'Materiais': theme.colors.vinho_claro,
-      'Outros': theme.colors.chumbo, 
+      'Alimentação': themas.colors.roxo_opaco,
+      'Hospedagem': themas.colors.verde_escuro_opaco,
+      'Transporte': themas.colors.azul_escuro_opaco,
+      'Serviços Terceirizados': themas.colors.verde2_escuro_opaco,
+      'Materiais': themas.colors.vinho_escuro_opaco,
+      'Outros': themas.colors.cinza, 
     };    
 
     const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
-      'Rascunho': { backgroundColor: theme.colors.cinza_claro, color: theme.colors.cinza },
-      'Aguardando Aprovação': { backgroundColor: theme.colors.mostarda, color: theme.colors.amarelo },
-      'Recusado': { backgroundColor: theme.colors.vinho_claro, color: theme.colors.vinho_claro }, 
-      'Aprovado': { backgroundColor: theme.colors.verde_medio, color: theme.colors.verde_medio },
-      'Aprovado Parcialmente': { backgroundColor: theme.colors.laranja, color: theme.colors.laranja_forte },
-    };    
+      'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
+      'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda_opaco, color: themas.colors.mostarda_escuro_opaco },
+      'Recusado': { backgroundColor: themas.colors.vinho_claro_opaco, color: themas.colors.vinho_escuro_opaco },
+      'Aprovado': { backgroundColor: themas.colors.verde_claro_opaco, color: themas.colors.verde_medio_opaco },
+      'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja_claro_opaco, color: themas.colors.laranja_escuro_opaco },
+    };   
 
     const aprovacaoDespesaCores: Record<string, string> = {
-      'Aprovado': theme.colors.verde_medio,
-      'Recusado': theme.colors.vinho_claro,
+      'Aprovado': themas.colors.verde_medio_opaco,
+      'Recusado': themas.colors.vinho,
     };    
 
     //mostra legenda apenas se o pacote for aprovado parcialmente
@@ -153,7 +144,7 @@ export interface Despesa {
               <Text style={styles.cardSubtitle}>Histórico de Despesas:</Text>
               {despesas && despesas.length > 0 ? (
                 despesasAgrupadas?.map((grupo) => (
-                  <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || cardCategoriaCores['Outros'] }]}>
+                  <View key={grupo.categoria} style={[styles.categoriaCard]}>
                     <Text style={[styles.cardSubSubtitle, { color: tituloCategoriaCores[grupo.categoria] || tituloCategoriaCores['Outros'] }]}>{grupo.categoria}</Text>
                     
                     {grupo.itens.map((item: any, index: number) => (
@@ -197,7 +188,7 @@ export interface Despesa {
 
   const createStyles = (theme: any) => StyleSheet.create({
     card: {
-      backgroundColor: theme.colors.secondary,
+      backgroundColor: themas.colors.cinza_muito_claro,
       padding: 10,
       borderRadius: 14,
       marginVertical: 12,
@@ -216,7 +207,6 @@ export interface Despesa {
       color: theme.colors.chumbo, 
     },
     cardSubSubtitle: {
-      marginTop: 12,
       fontSize: 15,
       fontWeight: '600',
       color: theme.colors.chumbo, 
@@ -252,6 +242,17 @@ export interface Despesa {
       padding: 16,
       borderRadius: 12,
       marginTop: 12,
+       backgroundColor: 'white',
+       marginVertical: 10,
+
+        // Sombra no iOS
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 2 },
+       shadowOpacity: 0.25,
+       shadowRadius: 3.84,
+
+        // Sombra no Android
+       elevation: 5,
     },
     botaoReembolso: {
       marginTop: 16,
