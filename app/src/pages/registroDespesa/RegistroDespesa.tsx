@@ -103,7 +103,8 @@ const RegistroDespesa = () => {
       const projetos = response.data;
       const userId = Number(user?.userId);
       const userProjects = projetos.filter((project: any) =>
-        project.funcionarios?.some((func: any) => func.userId === userId)
+        project.funcionarios?.some((func: any) => func.userId === userId) &&
+        project.status !== "encerrado"
       );
       setAllProjects(userProjects);
 
