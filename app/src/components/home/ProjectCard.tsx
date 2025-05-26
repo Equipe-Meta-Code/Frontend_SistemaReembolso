@@ -16,66 +16,76 @@ export interface Project {
   spent: number;
 }
 
+interface ProjectCardProps {
+  project: Project;
+  isEncerrado?: boolean;
+}
+
 type RootStackParamList = {
   Pacotes: { projectId: string };
 };
 
-const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, isEncerrado }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const progress = project.total > 0 ? project.spent / project.total : 0;
   const valueLeft = project.total - project.spent;
   const { theme } = useTheme(); 
   const styles = createStyles (theme); 
 
-  return (
-    <TouchableOpacity onPress={() => navigation.navigate('Pacotes', { projectId: project.id })}>
-      <View style={[styles.card, { backgroundColor: theme.colors.secondary}]}>
+  // Cores de texto mais claras se encerrado
+  const textColor = isEncerrado ? theme.colors.cinza : theme.colors.text;
+  const descriptionColor = isEncerrado ? theme.colors.cinza_medio || theme.colors.cinza : theme.colors.text;
 
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate('Pacotes', { projectId: project.id })} >
+      <View style={[styles.card, { backgroundColor: theme.colors.secondary, opacity: isEncerrado ? 0.5 : 1 }]}>
         {project.department && (
           <View style={styles.departmentContainer}>
             {project.department.split(',').map((department, index) => (
-              <Text key={index} style={[styles.department, { backgroundColor: theme.colors.amarelo_muito_claro }]}>  
+              <Text
+                key={index}
+                style={[styles.department, { backgroundColor: theme.colors.amarelo_muito_claro }]}
+              >
                 {department.trim()}
               </Text>
             ))}
           </View>
         )}
 
-        <Text style={styles.cardTitle}>{project.name || 'Sem Nome'}</Text>
+        <Text style={[styles.cardTitle, { color: textColor }]}>{project.name || 'Sem Nome'}</Text>
 
-        {project.descricao && <Text style={[styles.cardDescription, { color: theme.colors.cinza}]}>
-          {project.descricao}
-          </Text>}
+        {project.descricao && (
+          <Text style={[styles.cardDescription, { color: descriptionColor }]}>{project.descricao}</Text>
+        )}
 
-        <Text style={[{ color: theme.colors.text }]}>
+        <Text style={{ color: textColor }}>
           Limite de Gastos: R${project.total?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
         </Text>
 
-
-        <ProgressBar 
-          progress={progress} 
-          color={valueLeft >= 0 ? themas.colors.primary : themas.colors.vinho_escuro_opaco} 
-          style={styles.progressBar} 
+        <ProgressBar
+          progress={progress}
+          color={valueLeft >= 0 ? themas.colors.primary : themas.colors.vinho_escuro_opaco}
+          style={styles.progressBar}
         />
 
-
-        <Text style={[{ color: theme.colors.text }]}>
-          Gasto: R$
-          {project.spent?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) ?? '0,00'}
+        <Text style={{ color: textColor }}>
+          Gasto: R${project.spent?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) ?? '0,00'}
           {valueLeft >= 0 ? (
             <> / Restante: R${valueLeft.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</>
           ) : (
-            <> / <Text style={{ color: themas.colors.vinho_escuro_opaco }}>
-              Limite Ultrapassado: R${Math.abs(valueLeft).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-            </Text></>
+            <>
+              {' '}
+              /{' '}
+              <Text style={{ color: themas.colors.vinho_escuro_opaco }}>
+                Limite Ultrapassado: R${Math.abs(valueLeft).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              </Text>
+            </>
           )}
         </Text>
 
-    
-        <Text style={[styles.category, { color: theme.colors.cinza }]}>
+        <Text style={[styles.category, { color: textColor }]}>
           {project.category?.length ? project.category.join(' • ') : 'Sem Categoria'}
         </Text>
-
       </View>
     </TouchableOpacity>
   );
