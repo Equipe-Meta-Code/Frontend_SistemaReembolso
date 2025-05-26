@@ -171,7 +171,7 @@ const createStyles = (theme: any) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-    paddingTop: Platform.OS === 'android' ? 20 : 50,
+    paddingTop: 50,
     backgroundColor: theme.colors.primary,
   },
   headerBack: {
