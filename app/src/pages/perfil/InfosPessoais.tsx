@@ -21,131 +21,79 @@ const InfosPessoais = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<{ Perfil: undefined }>>();
 
-    type RootStackParamList = {
-        Perfil: undefined; // Add other routes and their parameters here
-    };
+  const [imageUri, setImageUri] = useState<string | null>(user?.profileImage ?? null);
 
-    const dispatch = useDispatch();
-    const navigation = useNavigation<StackNavigationProp<{ Perfil: undefined }>>();
-    const [imageUri, setImageUri] = useState<string | null>(user?.profileImage ?? null);
-    const [originalImage, setOriginalImage] = useState<string | null>(user?.profileImage ?? null);
+  const { showActionSheetWithOptions } = useActionSheet();
 
-    const handleImagePress = () => {
-        // Exibe um alerta com a opção de editar a imagem
-        Alert.alert("Editar Imagem", "Escolha uma nova imagem de perfil.");
-    };
-    
-    useEffect(() => {
-        setImageUri(user?.profileImage ?? null);
-        setOriginalImage(user?.profileImage ?? null);
-    }, [user]);
-    
-    const handleImageUpload = async () => {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          Alert.alert('Permissão negada', 'Você precisa permitir o acesso à galeria.');
-          return;
-        }
-    
-        const result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images, // ← Corrigido aqui
-          quality: 1,
-        });
-        if (result.canceled || !result.assets.length) return;
-    
-        const uri = result.assets[0].uri;
-        setImageUri(uri);
-    
-        const filename = uri.split('/').pop()!;
-        const match = /\.(\w+)$/.exec(filename);
-        const mimeType = match ? `image/${match[1]}` : 'image';
-    
-    
-        try {
-          const formData = new FormData();
-          formData.append('profileImage', {
-            uri: uri,
-            name: filename,
-            type: mimeType,
-          } as any);
-      
-          formData.append('tipo', 'user');
-          formData.append('tipoId', String(user!.id));
-      
-          const res = await api.post('/imagem', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-          });
-      
-          if (res.data.success) {
-            const novaImagemUrl = `${res.data.imagemUrl}?ts=${Date.now()}`;
-            dispatch(setProfileImage(novaImagemUrl));        
-            setImageUri(novaImagemUrl); // Força a atualização imediata
-            Alert.alert('Sucesso', 'Foto atualizada!');
-          }
-        } catch (err) {
-          console.error('[FRONT] Erro completo:', err);
-          Alert.alert('Erro', 'Falha ao enviar imagem.');
-        }
-      };
-
-      
   useEffect(() => {
-    console.log('imageUri atualizado:', user?.profileImage);
     setImageUri(user?.profileImage ?? null);
-    setOriginalImage(user?.profileImage ?? null);
-  }, [user?.profileImage]); // ← Alterado para observar user.profileImage especificamente
-
-  useEffect(() => {
-    console.log('imageUri atualizado:', imageUri); // Deve mostrar a URL com timestamp
-  }, [imageUri]);
-
-  useEffect(() => {
-    console.log('User profileImage atualizado:', user?.profileImage);
-    if (user?.profileImage) {
-      setImageUri(user.profileImage);
-      setOriginalImage(user.profileImage);
-    }
   }, [user?.profileImage]);
 
-  useEffect(() => {
-    console.log('Estado do user:', user);
-  }, [user]);
+  const uploadToServer = async (uri: string) => {
+    const filename = uri.split('/').pop()!;
+    const match = /\.(\w+)$/.exec(filename);
+    const mimeType = match ? `image/${match[1]}` : 'image';
+
+    const formData = new FormData();
+    formData.append('profileImage', { uri, name: filename, type: mimeType } as any);
+    formData.append('tipo', 'user');
+    formData.append('tipoId', String(user!.id));
+
+    try {
+      const res = await api.post('/imagem', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      if (res.data.success) {
+        const novaUrl = `${res.data.imagemUrl}?ts=${Date.now()}`;
+        dispatch(setProfileImage(novaUrl));
+        setImageUri(novaUrl);
+        Alert.alert('Sucesso', 'Foto atualizada!');
+      }
+    } catch (err) {
+      console.error('[FRONT] Erro ao enviar imagem:', err);
+      Alert.alert('Erro', 'Falha ao enviar imagem.');
+    }
+  };
+
+  const escolherGaleria = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') return Alert.alert('Permissão negada', 'Você precisa permitir acesso à galeria.');
+    const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 1 });
+    if (result.canceled || !result.assets.length) return;
+    const uri = result.assets[0].uri;
+    uploadToServer(uri);
+  };
+
+  const tirarFoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') return Alert.alert('Permissão negada', 'Você precisa permitir acesso à câmera.');
+    const result = await ImagePicker.launchCameraAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 1 });
+    if (result.canceled || !result.assets.length) return;
+    const uri = result.assets[0].uri;
+    uploadToServer(uri);
+  };
+
+  const handleImageOptions = () => {
+    const options = ['Cancelar', 'Tirar Foto', 'Galeria'];
+    const cancelButtonIndex = 0;
+    showActionSheetWithOptions({ options, cancelButtonIndex }, (buttonIndex) => {
+      switch (buttonIndex) {
+        case 1:
+          return tirarFoto();
+        case 2:
+          return escolherGaleria();
+        default:
+          return;
+      }
+    });
+  };
 
   const handleImagemPadrao = async () => {
     if (!user) return;
-  
     try {
-      const imagemPadrao = Asset.fromModule(require('../../assets/perfil.png'));
-      await imagemPadrao.downloadAsync();
-  
-      const uri = imagemPadrao.localUri || imagemPadrao.uri;
-      if (!uri) throw new Error('Não conseguiu obter URI do asset.');
-  
-      const nomeArquivo = uri.split('/').pop()!;
-      const match = /\.(\w+)$/.exec(nomeArquivo);
-      const mimeType = match ? `image/${match[1]}` : 'image/png';
-  
-      const formData = new FormData();
-      formData.append('profileImage', {
-        uri,
-        name: nomeArquivo,
-        type: mimeType,
-      } as any);
-      formData.append('tipo', 'user');
-      formData.append('tipoId', String(user.id));
-  
-      const res = await api.post('/imagem', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      if (res.data.success) {
-        const novaUrlImagem = `${res.data.imagemUrl}?ts=${Date.now()}`;
-        dispatch(setProfileImage(novaUrlImagem));
-        setImageUri(novaUrlImagem);
-        Alert.alert('Sucesso', 'Imagem padrão restaurada!');
-      } else {
-        throw new Error('Resposta do servidor sem sucesso.');
-      }
+      const asset = Asset.fromModule(require('../../assets/perfil.png'));
+      await asset.downloadAsync();
+      const uri = asset.localUri || asset.uri;
+      uploadToServer(uri);
+      Alert.alert('Sucesso', 'Imagem padrão restaurada!');
     } catch (err) {
       console.error('[PADRÃO] Erro:', err);
       Alert.alert('Erro', 'Não foi possível restaurar a imagem padrão.');
