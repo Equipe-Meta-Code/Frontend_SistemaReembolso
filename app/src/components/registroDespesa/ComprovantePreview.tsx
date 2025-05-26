@@ -1,4 +1,5 @@
-import React from 'react';
+// ComprovantePreview.tsx
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,8 +8,11 @@ import {
   Image,
   ActivityIndicator,
   Dimensions,
+  Platform,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
+import * as FileSystem from 'expo-file-system';
+import * as IntentLauncher from 'expo-intent-launcher';
 import { themas } from '../../global/themes';
 
 interface Props {
@@ -24,13 +28,42 @@ export default function ComprovantePreview({ uri, mimeType, onClose }: Props) {
   if (!isPdf) {
     return (
       <TouchableOpacity style={styles.imageContainer} onPress={onClose} activeOpacity={1}>
-        <Image
-          source={{ uri }}
-          style={{ width, height }}
-          resizeMode="contain"
-        />
+        <Image source={{ uri }} style={{ width, height }} resizeMode="contain" />
         <Text style={styles.tapToClose}>Toque para fechar</Text>
       </TouchableOpacity>
+    );
+  }
+
+  if (Platform.OS === 'android') {
+    useEffect(() => {
+      (async () => {
+        try {
+          let localUri = uri;
+          if (uri.startsWith('http')) {
+            const path = FileSystem.cacheDirectory + 'comprovante.pdf';
+            await FileSystem.downloadAsync(uri, path);
+            localUri = path;
+          }
+
+          const contentUri = await FileSystem.getContentUriAsync(localUri);
+
+          await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+            data: contentUri,
+            flags: 1, 
+          });
+        } catch (err) {
+          console.error('Erro ao abrir PDF no Android:', err);
+        } finally {
+          onClose();
+        }
+      })();
+    }, [uri]);
+
+    return (
+      <View style={[styles.pdfContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={themas.colors.secondary} />
+        <Text style={styles.loaderText}>Abrindo PDF…</Text>
+      </View>
     );
   }
 
@@ -47,9 +80,6 @@ export default function ComprovantePreview({ uri, mimeType, onClose }: Props) {
           </View>
         )}
         originWhitelist={['*']}
-        allowFileAccess
-        allowUniversalAccessFromFileURLs
-        allowFileAccessFromFileURLs
       />
       <TouchableOpacity style={styles.closePdf} onPress={onClose}>
         <Text style={styles.closeText}>Fechar</Text>
