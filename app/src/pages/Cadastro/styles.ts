@@ -108,17 +108,18 @@ export const createStyles = (theme: any) => StyleSheet.create({
         marginLeft: -30, 
     },
     errorContainer: {
-        marginTop: 10,
-        marginBottom: 10,
-        padding: 10,
-        backgroundColor: theme.colors.rosa_muito_claro, // Fundo vermelho claro
-        borderRadius: 8,
+        marginTop: 2,
+        marginBottom: 2,
+        padding: 4,
+        backgroundColor: theme.colors.errorBackground,
+        borderRadius: 6,
         borderWidth: 1,
-        borderColor: theme.colors.red, // Borda vermelha
-      },
-      errorMessage: {
-        color: theme.colors.red, // Cor do texto vermelho
-        fontSize: 14,
-        fontWeight: 'bold',
-      }
+        borderColor: theme.colors.red,
+    },
+    errorMessage: {
+        color: theme.colors.red,
+        fontSize: 13,
+        marginTop: 0,
+        marginBottom: 0,
+    }
 })

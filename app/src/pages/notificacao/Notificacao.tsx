@@ -91,6 +91,7 @@ export default function Notificacao() {
           <View style={styles.empty}><Text style={styles.emptyText}>Você não possui notificações.</Text></View>
         )}
         contentContainerStyle={sections.length === 0 && styles.emptyContainer}
+        stickySectionHeadersEnabled={true}
       />
     </View>
   );
@@ -116,7 +117,8 @@ const createStyles = (theme: any) => StyleSheet.create({
   title_header: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: theme.colors.sempre_branco
+    color: theme.colors.sempre_branco,
+    marginLeft: 16
   },
   filters: {
     flexDirection: 'row'
