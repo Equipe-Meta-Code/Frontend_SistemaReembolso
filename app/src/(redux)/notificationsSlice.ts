@@ -7,7 +7,7 @@ export interface NotificationItem {
   body: string;
   date: number;
   read: boolean;
-  despesaId: number;
+  pacoteId: string;
 }
 interface NotificationsState {
   items: NotificationItem[];
@@ -31,7 +31,7 @@ export const fetchNotifications = createAsyncThunk<
   void,
   { state: RootState; rejectValue: any }
 >(
-  'notifications/fetchAll',
+  'notificacao/fetchAll',
   async (_, { getState, rejectWithValue }) => {
     try {
       const userId = getState().auth.user?.id;
@@ -47,10 +47,10 @@ export const fetchNotifications = createAsyncThunk<
           body: string;
           date: string;
           read: boolean;
-          despesaId: number;
+          pacoteId: string;
           notificacaoId: number;
         }>;
-      }>(`/notifications?userId=${userId}`);
+      }>(`/notificacao?userId=${userId}`);
 
       return response.data.notificacoes.map(n => ({
         id: n._id,
@@ -58,7 +58,7 @@ export const fetchNotifications = createAsyncThunk<
         body: n.body,
         date: new Date(n.date).getTime(),
         read: n.read,
-        despesaId: n.despesaId,
+        pacoteId: n.pacoteId,
       }));
     } catch (err: any) {
       return rejectWithValue(err.response?.data || err.message);
@@ -71,10 +71,10 @@ export const markNotificationAsRead = createAsyncThunk<
   string,
   { rejectValue: any }
 >(
-  'notifications/markRead',
+  'notificacao/markRead',
   async (id, { rejectWithValue }) => {
     try {
-      await api.patch(`/notifications/${id}`, { read: true });
+      await api.patch(`/notificacao/${id}`, { read: true });
       return id;
     } catch (err: any) {
       return rejectWithValue(err.response?.data || err.message);
