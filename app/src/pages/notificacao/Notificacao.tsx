@@ -112,7 +112,8 @@ const createStyles = (theme: any) => StyleSheet.create({
   },
   arrow: {
     fontSize: 24,
-    color: theme.colors.sempre_branco
+    color: theme.colors.sempre_branco,
+    marginRight: 10,
   },
   title_header: {
     fontSize: 24,
