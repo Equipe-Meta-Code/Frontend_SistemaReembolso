@@ -4,23 +4,22 @@ import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfileImage } from '../../(redux)/authSlice';
 import { RootState } from '../../(redux)/store';
-import { createStyles } from "./styles";
+import { createStyles } from './styles';
 import { useTheme } from '../../context/ThemeContext';
 import CustomButton from '../../components/perfil/Botao';
-import BotaoInfoPessoal from '../../components/perfil/BotaoInfoPessoal';
-import { useNavigation, useFocusEffect  } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import api from "../../services/api"
+import api from '../../services/api';
 import Foto from '../../com../../components/foto/Foto';
 import { Asset } from 'expo-asset';
-import * as FileSystem from 'expo-file-system'; 
-import { themas } from '../../global/themes';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 
 const InfosPessoais = () => {
-    const user = useSelector((state: RootState) => state.auth.user);
-    const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
-    const { theme } = useTheme();
-    const style = createStyles (theme);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const { theme } = useTheme();
+  const style = createStyles(theme);
+  const dispatch = useDispatch();
+  const navigation = useNavigation<StackNavigationProp<{ Perfil: undefined }>>();
 
     type RootStackParamList = {
         Perfil: undefined; // Add other routes and their parameters here
