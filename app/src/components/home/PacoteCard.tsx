@@ -202,12 +202,15 @@ export interface Despesa {
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[styles.botaoExcluir, { backgroundColor: theme.colors.vinho }]}
-                  onPress={handleExcluirPacote}
-                >
-                  <Text style={styles.textoBotao}>Excluir Pacote</Text>
-                </TouchableOpacity>
+                {/* Mostrar botão de excluir pacote somente se não tiver despesas */}
+                {(!despesas || despesas.length === 0) && (
+                  <TouchableOpacity
+                    style={[styles.botaoExcluir, { backgroundColor: theme.colors.primary }]}
+                    onPress={handleExcluirPacote}
+                  >
+                    <Text style={styles.textoBotao}>Excluir Pacote</Text>
+                  </TouchableOpacity>
+                )}
                 </>
               )}
             </>
@@ -309,7 +312,7 @@ export interface Despesa {
 
     botaoExcluir: {
       marginTop: 10,
-      backgroundColor: theme.colors.vinho,
+      backgroundColor: theme.colors.cinza,
       paddingVertical: 10,
       borderRadius: 10,
       alignItems: 'center',
