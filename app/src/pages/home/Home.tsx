@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
-import { RootState } from "../../(redux)/store";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from "../../(redux)/store";
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import api from '../../services/api';
 import Foto from '../../components/foto/Foto';
 import ProjectCard from '../../components/home/ProjectCard';
 import { useTheme } from '../../context/ThemeContext';
-import { selectUnreadCount } from '../../(redux)/notificationsSlice';
+import { selectUnreadCount, fetchNotifications } from '../../(redux)/notificationsSlice';
 
 interface Project {
   id: string;
@@ -40,6 +40,7 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const user = useSelector((state: RootState) => state.auth.user);
   const unreadCount = useSelector(selectUnreadCount);
+  const dispatch = useDispatch<AppDispatch>();
 
   const fetchProjectsAndDespesas = async () => {
     try {
@@ -97,6 +98,14 @@ const Home: React.FC = () => {
       fetchProjectsAndDespesas();
     }
   }, [isScreenFocused]);
+
+  useEffect(() => {
+    if (!isScreenFocused) return;
+    const interval = setInterval(() => {
+      dispatch(fetchNotifications());
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [dispatch, isScreenFocused]);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
