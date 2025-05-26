@@ -120,37 +120,28 @@ const InfosPessoais = () => {
                 refreshKey={user.profileImage}
                 fallbackSource={require('../../assets/perfil.png')}
               />
-
-              <CustomButton
-                titulo={`Voltar imagem padrão`}
-                onPress={handleImagemPadrao}
-                iconName="chevron-forward"
-                iconColor={theme.colors.black}
+            ) : (
+              <Image
+                source={imageUri ? { uri: imageUri } : require('../../assets/perfil.png')}
+                style={style.fotoPerfil}
               />
+            )}
+          </View>
+        </TouchableOpacity>
 
-            </View>
+        <CustomButton titulo="Alterar imagem do perfil" onPress={handleImageOptions} iconName="camera" iconColor={theme.colors.black} />
+        <CustomButton titulo="Voltar imagem padrão" onPress={handleImagemPadrao} iconName="refresh" iconColor={theme.colors.black} />
+      </View>
 
-            <View style={style.subtituloContainer}>
-                <Text style={style.subtitulo}>Sobre</Text>
-            </View>
-            <View style={style.containerBotoes}>
-                
-                <CustomButton
-                    titulo={`Nome: ${user?.name}`}
-                    onPress={() => console.log("Nome")}
-                    iconName=""
-                    iconColor={theme.colors.black}
-                />
-                <CustomButton
-                    titulo={`Email: ${user?.email}`}
-                    onPress={() => console.log("Email")}
-                    iconName=""
-                    iconColor={theme.colors.black}
-                />
-                
-            </View>
-        </ScrollView>
-    );
+      <View style={style.subtituloContainer}>
+        <Text style={style.subtitulo}>Sobre</Text>
+      </View>
+      <View style={style.containerBotoes}>
+        <CustomButton titulo={`Nome: ${user?.name}`} onPress={() => {}} iconName="" iconColor={theme.colors.black} />
+        <CustomButton titulo={`Email: ${user?.email}`} onPress={() => {}} iconName="" iconColor={theme.colors.black} />
+      </View>
+    </ScrollView>
+  );
 };
 
 export default InfosPessoais;
