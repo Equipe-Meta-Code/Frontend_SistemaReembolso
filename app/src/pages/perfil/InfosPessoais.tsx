@@ -100,56 +100,25 @@ const InfosPessoais = () => {
     }
   };
 
-    return (
-        <ScrollView contentContainerStyle={style.container}>
-            <View style={style.containerBotoesTopo}>
-{/*                 <BotaoInfoPessoal 
-                    titulo="Cancelar"
-                    onPress={() => {
-                        Alert.alert('Atenção', 'As alterações não foram salvas!');
-                        navigation.navigate('Perfil');
-                    }}
-                /> */}
-                <Text style={style.titulo}>Informações Pessoais</Text>
-{/*                 <BotaoInfoPessoal 
-                    titulo="OK"
-                    onPress={() => {
-                        Alert.alert('Atenção', 'Alterações salvas com sucesso!');
-                        navigation.navigate('Perfil');
-                    }}
-                /> */}
-            </View>
-
-            <View style={style.containerBotoes}>
-              <TouchableOpacity onPress={handleImageUpload} style={style.imagemPerfil}>
-                  <View style={style.imagemPerfil}>
-                  {user ? (
-                    <Foto
-                      tipo="user"
-                      tipoId={+user.userId}
-                      width={150}
-                      height={150}
-                      borderRadius={100}
-                      borderWidth={3}
-                      borderColor={theme.colors.secondary}
-                      refreshKey={user.profileImage}
-                      fallbackSource={require('../../assets/perfil.png')}
-                    />
-                  ) : (
-                    <Image
-                      source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
-                      style={style.fotoPerfil}
-                    />
-                  )}
-                  </View>
-
-              </TouchableOpacity>
-
-              <CustomButton
-                titulo={`Alterar imagem do perfil`}
-                onPress={handleImageUpload}
-                iconName="chevron-forward"
-                iconColor={theme.colors.black}
+  return (
+    <ScrollView contentContainerStyle={style.container}>
+      <View style={style.containerBotoesTopo}>
+        <Text style={style.titulo}>Informações Pessoais</Text>
+      </View>
+      <View style={style.containerBotoes}>
+        <TouchableOpacity onPress={handleImageOptions} style={style.imagemPerfil}>
+          <View style={style.imagemPerfil}>
+            {user ? (
+              <Foto
+                tipo="user"
+                tipoId={+user.userId}
+                width={150}
+                height={150}
+                borderRadius={100}
+                borderWidth={3}
+                borderColor={theme.colors.secondary}
+                refreshKey={user.profileImage}
+                fallbackSource={require('../../assets/perfil.png')}
               />
 
               <CustomButton
@@ -183,7 +152,5 @@ const InfosPessoais = () => {
         </ScrollView>
     );
 };
-
-
 
 export default InfosPessoais;
