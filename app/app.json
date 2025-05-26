@@ -18,13 +18,13 @@
     "android": {
       "package": "com.pedrohenribeiro.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icone-logo.png",
         "backgroundColor": "#FFFFFF"
       }
 
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icone-logo.png"
     },
     "extra": {
       "eas": {
