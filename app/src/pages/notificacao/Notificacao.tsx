@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, Platform, RefreshControl } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import type { StackNavigationProp } from '@react-navigation/stack';
@@ -30,6 +30,7 @@ export default function Notificacao() {
   const isFocused = useIsFocused();
   const { items: allNotifications, loading } = useSelector((state: RootState) => state.notifications);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -85,6 +86,15 @@ export default function Notificacao() {
       return { title, data };
     })
     .filter(sec => sec.data.length > 0);
+
+  const handleRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await dispatch(fetchNotifications()).unwrap(); 
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   function handlePress(item: NotificationItem) {
     if (!item.read) {
@@ -156,6 +166,8 @@ export default function Notificacao() {
         )}
         contentContainerStyle={sections.length === 0 && styles.emptyContainer}
         stickySectionHeadersEnabled
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
       />
     </View>
   );

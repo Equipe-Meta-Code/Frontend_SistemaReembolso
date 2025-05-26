@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from "../../(redux)/store";
 import { FontAwesome5 } from '@expo/vector-icons';
-import { ScrollView } from 'react-native';
 
 import api from '../../services/api';
 import Foto from '../../components/foto/Foto';
@@ -43,6 +42,7 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [ativos, setAtivos] = useState<Project[]>([]);
   const [encerrados, setEncerrados] = useState<Project[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const user = useSelector((state: RootState) => state.auth.user);
   const unreadCount = useSelector(selectUnreadCount);
@@ -106,6 +106,12 @@ const Home: React.FC = () => {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchProjectsAndDespesas();
+    setRefreshing(false);
+  };
+
   useEffect(() => {
     if (isScreenFocused) {
       fetchProjectsAndDespesas();
@@ -165,7 +171,18 @@ const Home: React.FC = () => {
         </View>
       </View>
 
-      <ScrollView style={styles.projectsList} contentContainerStyle={{ paddingBottom: 30 }}>
+      <ScrollView 
+        style={styles.projectsList} 
+        contentContainerStyle={{ paddingBottom: 30 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[theme.colors.primary]} 
+            tintColor={theme.colors.primary} 
+          />
+        }
+      >
         {ativos.length > 0 && (
           <>
             <Text style={[styles.projectTitle, { color: theme.colors.text, marginBottom: -1, fontSize: 18 }]}>Projetos Ativos</Text>
