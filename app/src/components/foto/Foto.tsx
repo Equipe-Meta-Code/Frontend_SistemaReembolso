@@ -8,6 +8,8 @@ import {
   ImageSourcePropType
 } from 'react-native';
 import api from '../../services/api';
+import { themas } from '../../global/themes';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Props {
   tipo: string;
@@ -28,10 +30,12 @@ export default function Foto({
   height = 200,
   borderRadius = 8,
   borderWidth = 0,
-  borderColor = '#000',
+  borderColor = themas.colors.black,
   refreshKey,
   fallbackSource,
 }: Props) {
+  const { theme } = useTheme();
+  const styles = createStyles (theme);
   const [loading, setLoading] = useState(false);
   const fallback = fallbackSource || require('../../assets/perfil.png');
 
@@ -65,9 +69,10 @@ export default function Foto({
   );
 }
 
-const styles = StyleSheet.create({
+
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
-    backgroundColor: '#eee',
+    backgroundColor: theme.colors.cinza_muito_claro,
     justifyContent: 'center',
     alignItems: 'center',
   },

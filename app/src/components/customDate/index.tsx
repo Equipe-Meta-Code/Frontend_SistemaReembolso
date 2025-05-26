@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { styles } from './styles';
+import { createStyles } from './styles';
+import { useTheme } from '../../context/ThemeContext';
 
 interface CustomDatePickerProps {
   value: string | null; 
@@ -13,6 +14,8 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   onValueChange,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const { theme } = useTheme();
+  const styles = createStyles (theme);
 
   const showDatePicker = () => {
     setIsVisible(true);

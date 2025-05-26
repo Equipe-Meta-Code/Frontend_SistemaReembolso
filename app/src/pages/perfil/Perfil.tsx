@@ -1,6 +1,7 @@
+// src/pages/perfil/Perfil.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch  } from 'react-native';
-import { style } from "./styles";
+import { createStyles  } from "./styles";
 import Indicadores from '../../components/perfil/Indicadores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../../components/perfil/Botao';
@@ -14,6 +15,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import Foto from '../../com../../components/foto/Foto';
+import { themas } from '../../global/themes';
+import { useTheme } from '../../context/ThemeContext';
+import { RootStackParamList } from '../../routes/navigation';
 
 interface Funcionario {
     userId: number;
@@ -55,16 +59,10 @@ interface Despesa {
   }
 
 const Perfil = () => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const toggleDarkMode = () => {
-        setIsDarkMode(previousState => !previousState);
-    };
+    const { isDarkMode, toggleTheme: toggleDarkMode, theme } = useTheme();
+    const style = createStyles (theme);
 
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    type RootStackParamList = {
-        InfosPessoais: undefined;
-        Login: undefined;
-    };
 
     const user = useSelector((state: RootState) => state.auth.user);
     const dispatch = useDispatch();
@@ -72,8 +70,8 @@ const Perfil = () => {
     
     const handleLogout = () => {
         dispatch(logoutAction());
-        navigation.navigate('Login');
-    };
+        // sem navegar manualmente
+      };
 
     const [despesas, setDespesas] = useState<Despesa[]>([]);
     const [totalFiltrado, setTotalFiltrado] = useState<number>(0);
@@ -142,7 +140,8 @@ const Perfil = () => {
     }, [user?.userId]);
 
     const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
-
+    // Removed duplicate RootStackParamList declaration
+      
     return (
         <View style={style.container}>
             <View style={style.corTopo}></View>
@@ -156,7 +155,7 @@ const Perfil = () => {
                         height={150}
                         borderRadius={100}
                         borderWidth={3}
-                        borderColor="#fff"
+                        borderColor={themas.colors.secondary}
                         refreshKey={user.profileImage}
                         fallbackSource={require('../../assets/perfil.png')}
                     />
@@ -202,39 +201,54 @@ const Perfil = () => {
                     titulo="Informações pessoais"
                     onPress={() => navigation.navigate('InfosPessoais')}
                     iconName="chevron-forward"
-                    iconColor="#000"
+                    iconColor={theme.colors.black}
                 />
-
-{/*                 <CustomButton
-                    titulo="Manual do usuário"
-                    onPress={() => alert("Manual do usuário")}
-                    iconName="chevron-forward"
-                    iconColor="#000"
-                />
-
                 <CustomButton
-                    titulo="Alterar Senha"
-                    onPress={() => alert("Alterar Senha")}
+                    titulo="Guia do Usuário"
+                    onPress={() => navigation.navigate('guiaDoUsuario')}
                     iconName="chevron-forward"
-                    iconColor="#000"
+                    iconColor={theme.colors.black}
                 />
 
                 <CustomSwitchButton
-                    titulo="Darkmode"
+                    titulo="Modo Escuro"
                     value={isDarkMode}
                     onValueChange={toggleDarkMode}
-                    trackColor={{ false: "#E0E0E0", true: "#1F48AA" }}
-                    thumbColor="#ffffff"
-                /> */}
+                    trackColor={{ false: theme.colors.cinza_claro, true: theme.colors.primary }}
+                    thumbColor={theme.colors.black}
+                /> 
+
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CustomButton
+                        titulo="Verificação em duas etapas"
+                        onPress={() => {
+                            if (!user?.email) {
+                                alert("Email do usuário não está disponível.");
+                            return;
+                            }
+
+                            navigation.navigate("Gerenciar2FA", {
+                                email: user.email,
+                                isEnabled: user.twoFactorEnabled,
+                            });
+                        }}
+                        iconName="chevron-forward"
+                        iconColor={theme.colors.black}
+                    />
+                    <Text style={{ color: theme.colors.cinza, marginLeft: -103, marginBottom: 2, fontSize:13}}>
+                        {user?.twoFactorEnabled === true ? "Ativado" : "Desativado"}
+                    </Text>
+                </View>
+
                 
             </View>
 
             <View style={style.containerBotoes}>
                 <CustomButton
                     titulo="Sair"
-                    onPress={() => handleLogout()}
+                    onPress={handleLogout}
                     iconName="log-out-outline"
-                    iconColor="#ff0000"
+                    iconColor={theme.colors.red}
                     iconSize={40}
                 />
             </View>

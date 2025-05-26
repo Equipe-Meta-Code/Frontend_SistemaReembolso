@@ -4,21 +4,25 @@ import Login from "../pages/login/Login";
 import BottomRoutes from "./bottom.routes";
 import Home from "../pages/home/Home";
 import RegistroDespesa from "../pages/registroDespesa/RegistroDespesa";
+import { useTheme } from '../context/ThemeContext';
+import Intro from "../pages/Intro/Intro";
+
 
 export default function Routes(){
     const Stack = createStackNavigator()
-
+    const { theme } = useTheme();
+    
     return (
         <Stack.Navigator
             initialRouteName="BottomRoutes"
             screenOptions={{
                 headerShown:false,
                 cardStyle:{
-                    backgroundColor:"#FFF",
+                    backgroundColor:theme.colors.secondary,
                 }
             }}
         >
-
+            <Stack.Screen name="Intro" component={Intro} />
             <Stack.Screen
                 name="Login"
                 component={Login}

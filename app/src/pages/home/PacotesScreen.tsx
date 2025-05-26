@@ -9,6 +9,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { themas } from "../../global/themes";
+import { useTheme } from '../../context/ThemeContext';
 
 interface Despesa {
   despesaId: string;
@@ -37,7 +39,17 @@ type RootStackParamList = {
   Perfil: undefined;
 };
 
+const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
+  'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
+  'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda_opaco, color: themas.colors.mostarda_escuro_opaco },
+  'Recusado': { backgroundColor: themas.colors.vinho_claro_opaco, color: themas.colors.vinho_escuro_opaco },
+  'Aprovado': { backgroundColor: themas.colors.verde_claro_opaco, color: themas.colors.verde_medio_opaco },
+  'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja_claro_opaco, color: themas.colors.laranja_escuro_opaco },
+};
+
 const PacotesScreen = ({ route }: any) => {
+  const { theme } = useTheme();  
+  const styles = createStyles (theme); 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { projectId } = route.params;
   const [pacotes, setPacotes] = useState<Pacote[]>([]);
@@ -133,33 +145,53 @@ const PacotesScreen = ({ route }: any) => {
       {/* o filtro no topo da tela */}
       {!statusSelecionado && (
         <View style={styles.filtrosRow}>
-          {['Rascunho', 'Aguardando Aprovação', 'Aprovado Parcialmente', 'Recusado', 'Aprovado'].map((status) => (
-          <TouchableOpacity
-            key={status}
-            style={styles.filtroChip}
-            onPress={() => setStatusSelecionado(status)}
-          >
-            <Text style={styles.filtroChipText}>{status}</Text>
-          </TouchableOpacity>
+          {Object.keys(statusStyles).map(status => (
+            <TouchableOpacity
+              key={status}
+              style={[
+                styles.filtroChip,
+                { backgroundColor: statusStyles[status].backgroundColor }
+              ]}
+              onPress={() => setStatusSelecionado(status)}
+            >
+              <Text
+                style={[
+                  styles.filtroChipText,
+                  { color: statusStyles[status].color }
+                ]}
+              >
+                {status}
+              </Text>
+            </TouchableOpacity>
           ))}
         </View>
       )}
 
       {statusSelecionado && (
         <View style={styles.filtrosRow}>
-        
-          <TouchableOpacity style={styles.filtroChipSelecionado}>
-            <Text style={styles.filtroChipSelecionadoText}>{statusSelecionado}</Text>
+          <TouchableOpacity
+            style={[
+              styles.filtroChip,
+              { backgroundColor: statusStyles[statusSelecionado].backgroundColor }
+            ]}
+          >
+            <Text
+              style={[
+                styles.filtroChipText,
+                { color: statusStyles[statusSelecionado].color }
+              ]}
+            >
+              {statusSelecionado}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.filtroChipLimpar} onPress={() => setStatusSelecionado(null)}>
-            <Ionicons name="close" size={20} color="#374151" />
+            <Ionicons name="close" size={20} color={theme.colors.chumbo} />
           </TouchableOpacity>
 
         </View>
       )}
 
       <View style={styles.pacotesList}>
-
         <Text style={styles.pacotesTitle}>Meus pacotes</Text>
 
         <FlatList
@@ -203,23 +235,23 @@ const PacotesScreen = ({ route }: any) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FBFBFB',
+    backgroundColor: theme.colors.background,
   },
   top: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
     paddingTop: 50,
-    backgroundColor: '#1F48AA',
+    backgroundColor: theme.colors.primary,
     width: '100%',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: theme.colors.sempre_branco,
     paddingLeft: 15,
   },
   image: {
@@ -230,6 +262,7 @@ const styles = StyleSheet.create({
   pacotesTitle: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: theme.colors.text,
   },
   pacotesList: {
     flex: 1,
@@ -237,7 +270,7 @@ const styles = StyleSheet.create({
   },
   arrow: {
     fontSize: 24,
-    color: '#FFFFFF',
+    color: theme.colors.sempre_branco,
   },
   filtroContainer: {
     paddingHorizontal: 50,
@@ -245,12 +278,12 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    color: '#111827',
+    color: theme.colors.azul_escuro,
   },  
   filtroRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: theme.colors.cinza_muito_claro,
     borderRadius: 8,
     paddingHorizontal: 8,
   },
@@ -260,7 +293,7 @@ const styles = StyleSheet.create({
   },
   divisor: {
     height: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: theme.colors.cinza_claro,
     marginVertical: 12,
   },
   emptyContainer: {
@@ -271,7 +304,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: '#9CA3AF',
+    color: theme.colors.cinza_medio,
     textAlign: 'center',
   },  
   filtrosRow: {
@@ -282,29 +315,29 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filtroChip: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: theme.colors.cinza_claro,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   },
   filtroChipText: {
-    color: '#374151',
+    color: theme.colors.chumbo,
     fontSize: 14,
     fontWeight: '500',
   },
   filtroChipSelecionado: {
-    backgroundColor: '#1F48AA',
+    backgroundColor: theme.colors.primary,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   }, 
   filtroChipSelecionadoText: {
-    color: '#FFFFFF',
+    color: theme.colors.secondary,
     fontSize: 14,
     fontWeight: '500',
   },
   filtroChipLimpar: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: theme.colors.cinza_muito_claro,
     borderRadius: 20,
     padding: 6,
     alignItems: 'center',

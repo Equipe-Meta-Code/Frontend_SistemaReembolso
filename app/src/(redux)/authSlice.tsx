@@ -9,7 +9,9 @@ interface User {
     name: string;
     email: string;
     password: string;
+    twoFactorEnabled: boolean;
     profileImage?: string;
+    token: string;
 }
 
 // Definindo o tipo do estado de autenticação
@@ -59,6 +61,14 @@ const authSlice = createSlice({
               );
             }
         },
+        updateTwoFactor: (state, action) => {
+            if (state.user) {
+                state.user.twoFactorEnabled = action.payload;
+                AsyncStorage.setItem("userInfo", JSON.stringify(state.user)).catch((error) =>
+                console.error("Erro ao atualizar 2FA no AsyncStorage", error)
+                );
+            }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(loadUser.fulfilled, (state, action: PayloadAction<User | null>) => {
@@ -70,7 +80,7 @@ const authSlice = createSlice({
 });
 
 // Gerando as ações a partir do slice
-export const { loginUserAction, logoutAction, setUserAction, setProfileImage } = authSlice.actions;
+export const { loginUserAction, logoutAction, setUserAction, updateTwoFactor, setProfileImage } = authSlice.actions;
 
 // Exportando o reducer
 export const authReducer = authSlice.reducer;

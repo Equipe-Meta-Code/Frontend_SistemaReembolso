@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import ProjectCard from '../../components/home/ProjectCard';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import api from '../../services/api';
 import { useSelector } from 'react-redux';
 import { RootState } from "../../(redux)/store";
-import { themas } from '../../global/themes';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Foto from '../../com../../components/foto/Foto';
+import { FontAwesome5 } from '@expo/vector-icons';
+
+import api from '../../services/api';
+import Foto from '../../components/foto/Foto';
+import ProjectCard from '../../components/home/ProjectCard';
+import { useTheme } from '../../context/ThemeContext';
+import { selectUnreadCount } from '../../(redux)/notificationsSlice';
 
 interface Project {
   id: string;
@@ -26,17 +27,20 @@ type RootStackParamList = {
   RegistroDespesa: undefined;
   Historico: undefined;
   Perfil: undefined;
+  Notificacao: undefined;
 };
 
 const Home: React.FC = () => {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const userProfileImage = useSelector((state: RootState) => state.auth.user?.profileImage);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const isScreenFocused = useIsFocused();
   const [projects, setProjects] = useState<Project[]>([]);
-  const [despesas, setDespesas] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const user = useSelector((state: RootState) => state.auth.user);
+  const unreadCount = useSelector(selectUnreadCount);
 
-  //buscar projetos e despesas do usuário
   const fetchProjectsAndDespesas = async () => {
     try {
       setLoading(true);
@@ -66,7 +70,9 @@ const Home: React.FC = () => {
       const projetoIds = formattedProjects.map(p => p.id);
 
       const totalPorProjeto = allDespesas
-        .filter((d: any) => projetoIds.includes(d.projetoId))
+        .filter(
+          (d: any) => projetoIds.includes(d.projetoId) &&
+            d.userId.toString() === user?.userId.toString())
         .reduce((acc: { [key: number]: number }, d: any) => {
           if (!acc[d.projetoId]) acc[d.projetoId] = 0;
           acc[d.projetoId] += d.valor_gasto;
@@ -87,60 +93,77 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchProjectsAndDespesas();
-  }, []);
+    if (isScreenFocused) {
+      fetchProjectsAndDespesas();
+    }
+  }, [isScreenFocused]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.top}>
-        <Text style={styles.title}>Bem vindo(a)!</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-          {user ? (
-            <Foto
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.top, { backgroundColor: theme.colors.primary }]}>
+        <Text style={[styles.title, { color: theme.colors.sempre_branco }]}>Bem vindo(a)!</Text>
+        {/* botão de notificação */}
+        <View style={styles.rightIcons}>
+          {/* Ícone de notificação com badge */}
+          <TouchableOpacity onPress={() => navigation.navigate("Notificacao")} style={styles.badgeWrapper}>
+            <FontAwesome5
+              name="bell"
+              style={[styles.iconRight, isScreenFocused && { color: theme.colors.black }]}
+            />
+            {unreadCount > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+
+          {/* foto do perfil */}
+          <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
+            {user ? (
+              <Foto
                 tipo="user"
                 tipoId={+user.userId}
                 width={50}
                 height={50}
                 borderRadius={25}
                 borderWidth={3}
-                borderColor="#fff"
+                borderColor={theme.colors.black}
                 refreshKey={user.profileImage}
                 fallbackSource={require('../../assets/perfil.png')}
-            />
+              />
             ) : (
-            <Image
+              <Image
                 source={userProfileImage ? { uri: userProfileImage } : require('../../assets/perfil.png')}
                 style={styles.image}
-            />
-          )}
-        </TouchableOpacity>
-      </View>        
-      
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <View style={styles.projectsList}>
-        <Text style={styles.projectTitle}>Projetos</Text>
+        <Text style={[styles.projectTitle, { color: theme.colors.text }]}>Projetos</Text>
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color={theme.colors.primary} />
         ) : (
           <FlatList
             data={projects}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <ProjectCard project={item} />}
-            
-            //pull-to-refresh
             refreshing={loading}
             onRefresh={fetchProjectsAndDespesas}
           />
         )}
       </View>
-
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
   top: {
     flexDirection: 'row',
@@ -148,26 +171,56 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 20,
     paddingTop: 50,
-    backgroundColor: themas.colors.primary,
     width: '100%',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
   },
   image: {
     width: 50,
     height: 50,
     borderRadius: 25,
   },
+  iconRight: {
+    fontSize: 24,
+    color: theme.colors.sempre_branco,
+    marginRight: 16,
+  },
   projectTitle: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
   projectsList: {
     flex: 1,
     padding: 30,
+  },
+  rightIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  badgeWrapper: {
+    marginRight: 16,
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: theme.colors.red,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 3,
+  },
+  badgeText: {
+    color: theme.colors.sempre_branco,
+    fontSize: 10,
+    fontWeight: 'bold',
   },
 });
 

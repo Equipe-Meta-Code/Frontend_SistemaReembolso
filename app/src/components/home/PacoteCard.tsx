@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import api from '../../services/api';
+import { themas } from "../../global/themes";
+import { useTheme } from '../../context/ThemeContext';
 export interface Despesa {
     categoria: string;
     valor_gasto: number;
@@ -27,6 +29,8 @@ export interface Despesa {
 
   const PacoteCard: React.FC<PacoteCardProps> = ({ nome, despesas, status, pacoteId, fetchPacotesDespesas, resetarExpandido }) => {
     
+      const { theme } = useTheme();
+      const styles = createStyles (theme);    
       const [isSolicitando, setIsSolicitando] = useState(false);
       const [expandido, setExpandido] = useState(false);  
 
@@ -59,6 +63,30 @@ export interface Despesa {
         );
       };
 
+      const handleExcluirPacote = () => {
+        Alert.alert(
+          'Excluir pacote',
+          'Tem certeza que deseja excluir este pacote? Esta ação não pode ser desfeita.',
+          [
+            { text: 'Cancelar', style: 'cancel' },
+            {
+              text: 'Excluir',
+              style: 'destructive',
+              onPress: async () => {
+                try {
+                  await api.delete(`/pacotes/${pacoteId}`);
+                  Alert.alert('Sucesso', 'Pacote excluído com sucesso');
+                  fetchPacotesDespesas();
+                } catch (error: any) {
+                  console.error(error?.response?.data || error);
+                  Alert.alert('Erro', error?.response?.data?.erro || 'Erro ao excluir pacote');
+                }
+              },
+            },
+          ]
+        );
+      };
+
       const despesasOrdenadas = [...(despesas || [])].sort(
         (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
       );
@@ -84,37 +112,28 @@ export interface Despesa {
       }
   
       return acc;
-    }, []);
-
-    const cardCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(234, 234, 255, 0.8)',
-      'Hospedagem': 'rgba(3, 46, 31, 0.07)',
-      'Transporte': 'rgba(52, 163, 238, 0.1)',
-      'Serviços Terceirizados': 'rgba(90, 128, 19, 0.1)',
-      'Materiais': 'rgba(255, 109, 211, 0.06)',
-      'Outros': 'rgba(97, 97, 97, 0.1)',
-    };    
+    }, []); 
 
     const tituloCategoriaCores: Record<string, string> = {
-      'Alimentação': 'rgba(58, 8, 196, 0.63)',
-      'Hospedagem': 'rgba(6, 58, 40, 0.65)',
-      'Transporte': 'rgba(19, 75, 165, 0.67)',
-      'Serviços Terceirizados': 'rgba(50, 70, 13, 0.5)',
-      'Materiais': 'rgba(160, 3, 95, 0.69)',
-      'Outros': 'rgba(54, 52, 52, 0.5)',
+      'Alimentação': themas.colors.roxo_opaco,
+      'Hospedagem': themas.colors.verde_escuro_opaco,
+      'Transporte': themas.colors.azul_escuro_opaco,
+      'Serviços Terceirizados': themas.colors.verde2_escuro_opaco,
+      'Materiais': themas.colors.vinho_escuro_opaco,
+      'Outros': themas.colors.cinza, 
     };    
 
     const statusStyles: Record<string, { backgroundColor: string; color: string }> = {
-      'Rascunho': { backgroundColor: '#E5E7EB', color: '#374151' },
-      'Aguardando Aprovação': { backgroundColor: 'rgba(255, 188, 20, 0.21)', color: 'rgba(214, 154, 1, 0.96)' },
-      'Recusado': { backgroundColor: 'rgba(209, 53, 53, 0.15)', color: 'rgba(185, 14, 14, 0.70)' },
-      'Aprovado': { backgroundColor: 'rgba(27, 143, 37, 0.15)', color: 'rgba(4, 155, 12, 0.83)' },
-      'Aprovado Parcialmente': { backgroundColor: 'rgba(255, 139, 62, 0.21)', color: 'rgba(248, 103, 7, 0.69)' },
-    };    
+      'Rascunho': { backgroundColor: themas.colors.cinza_claro, color: themas.colors.chumbo },
+      'Aguardando Aprovação': { backgroundColor: themas.colors.mostarda_opaco, color: themas.colors.mostarda_escuro_opaco },
+      'Recusado': { backgroundColor: themas.colors.vinho_claro_opaco, color: themas.colors.vinho_escuro_opaco },
+      'Aprovado': { backgroundColor: themas.colors.verde_claro_opaco, color: themas.colors.verde_medio_opaco },
+      'Aprovado Parcialmente': { backgroundColor: themas.colors.laranja_claro_opaco, color: themas.colors.laranja_escuro_opaco },
+    };   
 
     const aprovacaoDespesaCores: Record<string, string> = {
-      'Aprovado': 'rgba(10, 138, 16, 0.87)',
-      'Recusado': 'rgba(224, 7, 7, 0.8)',
+      'Aprovado': themas.colors.verde_medio_opaco,
+      'Recusado': themas.colors.vinho,
     };    
 
     //mostra legenda apenas se o pacote for aprovado parcialmente
@@ -141,7 +160,7 @@ export interface Despesa {
             <Text style={styles.cardTitle}>{nome}</Text>
             <Text style={styles.totalGasto}>Total gasto: R$ {totalGasto.toFixed(2).replace('.', ',')}</Text>
           
-            <Text style={{ color: '#6B7280', marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
+            <Text style={{ color: theme.colors.chumbo_claro, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
 
             {/* Histórico de despesas só aparece se estiver expandido */}
             {expandido && (
@@ -149,13 +168,13 @@ export interface Despesa {
               <Text style={styles.cardSubtitle}>Histórico de Despesas:</Text>
               {despesas && despesas.length > 0 ? (
                 despesasAgrupadas?.map((grupo) => (
-                  <View key={grupo.categoria} style={[styles.categoriaCard, { backgroundColor: cardCategoriaCores[grupo.categoria] || cardCategoriaCores['Outros'] }]}>
+                  <View key={grupo.categoria} style={[styles.categoriaCard]}>
                     <Text style={[styles.cardSubSubtitle, { color: tituloCategoriaCores[grupo.categoria] || tituloCategoriaCores['Outros'] }]}>{grupo.categoria}</Text>
                     
                     {grupo.itens.map((item: any, index: number) => (
                     <Text key={index} style={styles.despesaItem}>
                     {mistoAprovacao && (
-                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || '#4B5563', fontWeight: 'bold' }}>
+                      <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || theme.colors.chumbo_claro, fontWeight: 'bold' }}>
                         [{item.aprovacao}]
                       </Text>
                     )}
@@ -172,8 +191,9 @@ export interface Despesa {
 
               {/* Botão de solicitar reembolso */}
               {status === 'Rascunho' && (
+                <>
                 <TouchableOpacity
-                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: '#9CA3AF' }]}
+                  style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: theme.colors.cinza_medio }]}
                   onPress={handleSolicitarReembolso}
                   disabled={isSolicitando || despesas?.length === 0}
                 >
@@ -181,6 +201,14 @@ export interface Despesa {
                     {isSolicitando ? 'Solicitando...' : 'Solicitar Reembolso'}
                   </Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.botaoExcluir, { backgroundColor: theme.colors.vinho }]}
+                  onPress={handleExcluirPacote}
+                >
+                  <Text style={styles.textoBotao}>Excluir Pacote</Text>
+                </TouchableOpacity>
+                </>
               )}
             </>
           )}
@@ -191,9 +219,9 @@ export interface Despesa {
     );
   };
 
-  const styles = StyleSheet.create({
+  const createStyles = (theme: any) => StyleSheet.create({
     card: {
-      backgroundColor: '#FBFBFB',
+      backgroundColor: themas.colors.cinza_muito_claro,
       padding: 10,
       borderRadius: 14,
       marginVertical: 12,
@@ -202,31 +230,30 @@ export interface Despesa {
     cardTitle: {
       fontSize: 18,
       fontWeight: '700',
-      color: '#1A1A1A',
+      color: theme.colors.black,
       marginBottom: 4,
     },
     cardSubtitle: {
       marginTop: 16,
       fontSize: 15,
       fontWeight: '600',
-      color: '#374151', 
+      color: theme.colors.chumbo, 
     },
     cardSubSubtitle: {
-      marginTop: 12,
       fontSize: 15,
       fontWeight: '600',
-      color: '#374151', 
+      color: theme.colors.chumbo, 
     },
     despesaItem: {
       marginTop: 6,
       fontSize: 15,
-      color: '#4B5563',
+      color: theme.colors.chumbo_claro,
       lineHeight: 22,
     },
     semDespesa: {
       marginTop: 15,
       marginBottom: 10,
-      color: '#9CA3AF', 
+      color: theme.colors.cinza_medio, 
       fontSize: 14,
       fontStyle: 'italic',
     },
@@ -235,8 +262,8 @@ export interface Despesa {
       marginBottom: 15,
     },
     statusText: {
-      backgroundColor: '#E5E7EB', 
-      color: '#374151',
+      backgroundColor: theme.colors.cinza_claro, 
+      color: theme.colors.chumbo,
       fontSize: 12,
       paddingHorizontal: 16,
       paddingVertical: 4,
@@ -248,26 +275,46 @@ export interface Despesa {
       padding: 16,
       borderRadius: 12,
       marginTop: 12,
+       backgroundColor: 'white',
+       marginVertical: 10,
+
+        // Sombra no iOS
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 2 },
+       shadowOpacity: 0.25,
+       shadowRadius: 3.84,
+
+        // Sombra no Android
+       elevation: 5,
     },
     botaoReembolso: {
       marginTop: 16,
-      backgroundColor: '#1F48AA',
+      backgroundColor: theme.colors.primary,
       paddingVertical: 10,
       borderRadius: 10,
       alignItems: 'center',
     },
     textoBotao: {
-      color: '#FFFFFF',
+      color: theme.colors.sempre_branco,
       fontSize: 16,
       fontWeight: '600',
     },
     totalGasto: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#4B5563',
+      color: theme.colors.chumbo_claro,
       marginBottom: 6,
       marginLeft: 2,
     },    
+
+    botaoExcluir: {
+      marginTop: 10,
+      backgroundColor: theme.colors.vinho,
+      paddingVertical: 10,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+
   });
   
 

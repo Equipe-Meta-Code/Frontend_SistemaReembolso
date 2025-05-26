@@ -3,10 +3,12 @@ import { View, FlatList, TouchableOpacity, Text } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import Header from "../../components/historico/Header";
 import ExpenseSection from "../../components/historico/ExpenseSection";
-import { styles } from "../../styles/historico.styles";
+import { createStyles } from "../../styles/historico.styles";
+import { useTheme } from '../../context/ThemeContext';
 import api from "../../services/api";
 import { RootState } from "../../(redux)/store";
 import { useSelector } from "react-redux";
+import { themas } from "../../global/themes";
 
 interface Despesa {
   _id: string;
@@ -41,6 +43,9 @@ const Historico: React.FC = () => {
     projectId?: string;
   }
 
+  const { theme } = useTheme();
+  const styles = createStyles (theme);
+
   const route = useRoute();
   const { projectId } = (route.params as RouteParams) || {};
 
@@ -67,7 +72,7 @@ const Historico: React.FC = () => {
         );
 
         setProjetos(projetosFiltrados);
-        setCategorias(resCategorias.data);
+        setCategorias(resCategorias.data.categorias);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
@@ -90,24 +95,6 @@ const Historico: React.FC = () => {
   const getNomeProjeto = (id: string) => {
     const projeto = projetos.find((p) => String(p.projetoId) === String(id));
     return projeto ? projeto.nome : `Projeto ${id}`;
-  };
-
-  const iconesCategorias: Record<string, string> = {
-    Transporte: "🚖",
-    Hospedagem: "🏨",
-    Alimentação: "🍔",
-    Entretenimento: "🎬",
-    Educação: "📚",
-    Saúde: "⚕️",
-    Outros: "💼",
-  };
-
-  const getIconeCategoria = (categoriaId: string) => {
-    const categoria = categorias.find(c => String(c.categoriaId) === String(categoriaId));
-    if (categoria) {
-      return iconesCategorias[categoria.nome] || "💰";
-    }
-    return "💰";
   };
 
   const getNomeCategoria = (categoriaId: string) => {
@@ -147,7 +134,6 @@ const Historico: React.FC = () => {
       } else {
         const novaCategoria = {
           categoria: nomeCategoria,
-          icone: getIconeCategoria(despesa.categoria), 
           itens: [itemFormatado],
         };
         acc.push(novaCategoria);
@@ -229,7 +215,7 @@ const Historico: React.FC = () => {
       </View>
 
       {despesasFiltradasUsuario.length === 0 && (
-        <Text style={{ textAlign: 'center', marginTop: 20, color: 'gray' }}>
+        <Text style={{ textAlign: 'center', marginTop: 20, color: theme.colors.cinza }}>
           Nenhuma despesa encontrada.
         </Text>
         )}
