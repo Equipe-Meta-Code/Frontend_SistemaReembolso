@@ -46,7 +46,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
   },
   totalValue: {
     fontSize: 26,
-    color: theme.colors.blue,
+    color: theme.colors.primary,
     marginBottom: 4,
     fontWeight: "bold",
   },
@@ -124,7 +124,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
   icon: {
     fontSize: 18,
     fontWeight: "bold",
-    color: theme.colors.azul_escuro,
+    color: theme.colors.secondary,
   },
   sectionTitle: {
     fontSize: 17,
@@ -144,7 +144,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
-    color: theme.colors.azul_escuro,
+    color: theme.colors.secondary,
   },
 
   // Itens de Despesas
@@ -172,14 +172,14 @@ export const createStyles = (theme: any) => StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     textAlign: "center",
-    color: theme.colors.azul_escuro,
+    color: theme.colors.chumbo_claro,
   },
   valor: {
     width: COLUMN_WIDTHS.valor,
     textAlign: "center",
     fontSize: 14,
     fontWeight: "bold",
-    color: theme.colors.azul_escuro,
+    color: theme.colors.chumbo_claro,
   },
   status: {
     fontSize: 14,

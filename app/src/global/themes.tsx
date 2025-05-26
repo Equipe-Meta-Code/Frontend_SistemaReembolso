@@ -30,6 +30,7 @@ export const themas = {
       cinza_muito_claro_historico: "#f5f5f5",
       cinza_tabela: "#f5f5f5",
       cinza_medio: "#9CA3AF",
+      cinza_medio_claro: "#ededee",
   
       chumbo: "#374151",
       chumbo_claro: "#4b5563",
@@ -59,7 +60,8 @@ export const themas = {
       laranja_claro_opaco: 'rgba(255, 139, 62, 0.21)',
       laranja_escuro_opaco: 'rgba(248, 103, 7, 0.69)',
       roxo_opaco: 'rgba(58, 8, 196, 0.63)',
-      transparente: "rgba(0,0,0,0.8)"
+      transparente: "rgba(0,0,0,0.8)",
+      errorBackground: "#ffeaea" 
     }
   };
   
@@ -95,6 +97,7 @@ export const themas = {
       cinza_muito_claro_historico: "#252525",
       cinza_medio: "#FFFFFF", //branco
       cinza_tabela: "#474A51",
+      cinza_medio_claro: "#4e4e4e",
   
       chumbo: "#FFFFFF", //branco
       chumbo_claro: "#FFFFFF", //branco
@@ -112,7 +115,7 @@ export const themas = {
       sempre_preto: "#000000",
       sempre_cinza_claro: "#9CA3AF",
       textLink: 'lightgray',
-      transparente: "rgba(0,0,0,0.8)"
+      transparente: "rgba(0,0,0,0.8)",
+      errorBackground: "#3a1a1a" 
     }
   };
-  

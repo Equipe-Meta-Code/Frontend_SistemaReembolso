@@ -14,8 +14,9 @@ export const createStyles = (theme: any) => StyleSheet.create({
         backgroundColor: theme.colors.primary,
         alignItems:'flex-start',
         justifyContent:'center',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
+        padding: 3,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
     },
     boxMid:{
         flex:1,
@@ -28,15 +29,16 @@ export const createStyles = (theme: any) => StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20, 
     },
     title: {
         fontSize: 18,
         color: theme.colors.sempre_branco,  
         fontWeight: 'bold',
-        marginLeft: 10, 
+        marginLeft: 10,
+        marginTop: 10, 
     },
     arrowBackIcon: {
+        marginTop: 10,
         paddingLeft: 10, 
     },
     
@@ -45,13 +47,16 @@ export const createStyles = (theme: any) => StyleSheet.create({
         color: theme.colors.sempre_branco, 
         textAlign: 'left', 
         paddingLeft:20,//
-   
+        paddingRight:20,
+        marginTop: 15,
     },
     welcomeTitle: {
         marginTop: 10,
-        fontSize: 24,   
+        fontSize: 22,   
         fontWeight: 'bold', 
         color: theme.colors.black, 
+        marginBottom: 5,
+        paddingLeft:5,
     },
     instruction: {
         fontSize: 16,   
@@ -74,15 +79,17 @@ export const createStyles = (theme: any) => StyleSheet.create({
         marginBottom: 20, 
     },
     noAccountText: {
-        paddingTop:20,
+        paddingTop:45,
         fontSize: 16,
         color: theme.colors.gray,    
         textAlign: 'center', 
+        marginBottom: 10,
     },
     checkboxContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10,
+        marginVertical: 15,
+        marginTop:30,
     },
     checkbox: {
         padding: 10,
@@ -101,17 +108,18 @@ export const createStyles = (theme: any) => StyleSheet.create({
         marginLeft: -30, 
     },
     errorContainer: {
-        marginTop: 10,
-        marginBottom: 10,
-        padding: 10,
-        backgroundColor: theme.colors.rosa_muito_claro, // Fundo vermelho claro
-        borderRadius: 8,
+        marginTop: 2,
+        marginBottom: 2,
+        padding: 4,
+        backgroundColor: theme.colors.errorBackground,
+        borderRadius: 6,
         borderWidth: 1,
-        borderColor: theme.colors.red, // Borda vermelha
-      },
-      errorMessage: {
-        color: theme.colors.red, // Cor do texto vermelho
-        fontSize: 14,
-        fontWeight: 'bold',
-      }
+        borderColor: theme.colors.red,
+    },
+    errorMessage: {
+        color: theme.colors.red,
+        fontSize: 13,
+        marginTop: 0,
+        marginBottom: 0,
+    }
 })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import { createStyles } from './styles';
+import { Searchbar } from 'react-native-paper';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -193,6 +194,16 @@ const FAQScreen = () => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const navigation = useNavigation();
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const filteredFaq = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return faqData.filter(
+      item =>
+        item.question.toLowerCase().includes(query) ||
+        item.answer.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
 
   const handleToggle = (id: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -240,8 +251,14 @@ const FAQScreen = () => {
   return (
     <View style={styles.container}>
       <FAQHeader />
+      <Searchbar
+        placeholder="Buscar dúvidas..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        style={[styles.search, { margin: 20, backgroundColor: '#FAFAFA' }]}
+      />
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {faqData.map((item) => (
+        {filteredFaq.map((item) => (
           <FAQItem key={item.id} item={item} />
         ))}
       </ScrollView>

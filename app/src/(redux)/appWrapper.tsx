@@ -20,7 +20,6 @@ import NovaSenha from "../pages/RecuperacaoSenha/NovaSenha";
 import Verificacao2FA from "../pages/login/Verificacao2FA";
 import { themas } from "../global/themes";
 import Notificacao from "../pages/notificacao/Notificacao";
-import { useDespesasNotifications } from "../pages/notificacao/NotificationsService";
 
 // Define os params de cada screen do Stack
 type RootStackParamList = {
@@ -34,7 +33,7 @@ type RootStackParamList = {
   RecuperacaoSenha: undefined;
   VerificarCodigo: { email: string };
   NovaSenha: { email: string }; // Passa o email para verificar o código
-    Notificacao: undefined;
+  Notificacao: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -49,7 +48,6 @@ function AppWrapper() {
         dispatch(loadUser()).finally(() => setLoading(false));
     }, [dispatch]);
 
-    useDespesasNotifications();
     if (loading) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

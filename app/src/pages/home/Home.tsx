@@ -93,8 +93,10 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchProjectsAndDespesas();
-  }, []);
+    if (isScreenFocused) {
+      fetchProjectsAndDespesas();
+    }
+  }, [isScreenFocused]);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>

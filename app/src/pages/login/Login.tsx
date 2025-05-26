@@ -83,12 +83,12 @@ export default function Login() {
                 <View style={style.container}>
                     <View style={style.boxTop}>
                         <Text style={style.title}>Login</Text>
-                        <Text style={style.description}>Faça login com seu e-mail e senha para poder acessar a sua conta</Text>
+                        <Text style={style.description}>Faça login com seu e-mail e senha para acessar a sua conta</Text>
                     </View>
 
                     <View style={style.boxMid}>
-                        <Text style={style.welcomeTitle}>Bem-Vindo novamente👋</Text>
-                        <Text style={style.instruction}>Para acessar sua conta você deve fazer o login primeiro.</Text>
+                        <Text style={style.welcomeTitle}>Bem-vindo novamente 👋</Text>
+                        
                         {/* Email */}
                         <Input
                             value={email}

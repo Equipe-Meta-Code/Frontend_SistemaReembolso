@@ -93,13 +93,13 @@ export default function RecuperacaoSenha() {
             />
             <ButtonCustom
               title="Verificar Código"
-              onPress={() => navigation.navigate("verificarCodigo", { email })}
-              buttonStyle={{marginTop: 30, paddingVertical: 18, paddingHorizontal:15, alignItems: "center",   justifyContent: "center", width: '100%'}}
+              onPress={() => navigation.navigate("VerificarCodigo", { email })}
+              buttonStyle={{marginTop: 15, paddingVertical: 18, paddingHorizontal:15, alignItems: "center",   justifyContent: "center", width: '100%'}}
             />
             <ButtonCustom
               title="Voltar ao Login"
               onPress={() => navigation.navigate("Login")}
-              buttonStyle={{marginTop: 30, paddingVertical: 18, paddingHorizontal:15, alignItems: "center",   justifyContent: "center", width: '100%'}}
+              buttonStyle={{marginTop: 35, paddingVertical: 18, paddingHorizontal:15, alignItems: "center",   justifyContent: "center", width: '100%'}}
             />
           </View>
         </View>
