@@ -5,6 +5,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from "../../(redux)/store";
 import { FontAwesome5 } from '@expo/vector-icons';
+import { ScrollView } from 'react-native';
 
 import api from '../../services/api';
 import Foto from '../../components/foto/Foto';
@@ -20,6 +21,8 @@ interface Project {
   category: string[];
   total: number;
   spent: number;
+  encerrado?: boolean;
+  isEncerrado?: boolean;
 }
 
 type RootStackParamList = {
@@ -38,6 +41,9 @@ const Home: React.FC = () => {
   const isScreenFocused = useIsFocused();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [ativos, setAtivos] = useState<Project[]>([]);
+  const [encerrados, setEncerrados] = useState<Project[]>([]);
+
   const user = useSelector((state: RootState) => state.auth.user);
   const unreadCount = useSelector(selectUnreadCount);
   const dispatch = useDispatch<AppDispatch>();
@@ -66,6 +72,7 @@ const Home: React.FC = () => {
         category: project.categorias?.map((cat: any) => cat.nome) || [],
         total: project.categorias?.reduce((acc: number, cat: any) => acc + (cat.valor_maximo || 0), 0) || 0,
         spent: 0,
+        encerrado: project.status === 'encerrado',
       }));
 
       const projetoIds = formattedProjects.map(p => p.id);
@@ -84,6 +91,12 @@ const Home: React.FC = () => {
         ...p,
         spent: Number((totalPorProjeto[p.id] || 0).toFixed(2))
       }));
+
+      const ativosFiltrados = projetosAtualizados.filter(p => !p.encerrado);
+      const encerradosFiltrados = projetosAtualizados.filter(p => p.encerrado);
+
+      setAtivos(ativosFiltrados);
+      setEncerrados(encerradosFiltrados);
 
       setProjects(projetosAtualizados);
     } catch (error) {
@@ -152,20 +165,45 @@ const Home: React.FC = () => {
         </View>
       </View>
 
-      <View style={styles.projectsList}>
-        <Text style={[styles.projectTitle, { color: theme.colors.text }]}>Projetos</Text>
-        {loading ? (
-          <ActivityIndicator size="large" color={theme.colors.primary} />
-        ) : (
-          <FlatList
-            data={projects}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ProjectCard project={item} />}
-            refreshing={loading}
-            onRefresh={fetchProjectsAndDespesas}
-          />
+      <ScrollView style={styles.projectsList} contentContainerStyle={{ paddingBottom: 30 }}>
+        {ativos.length > 0 && (
+          <>
+            <Text style={[styles.projectTitle, { color: theme.colors.text, marginBottom: -1, fontSize: 18 }]}>Projetos Ativos</Text>
+            <FlatList
+              data={ativos}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ProjectCard project={item} isEncerrado={false} />
+              )}
+              scrollEnabled={false} 
+              ListEmptyComponent={
+                <Text style={{ color: theme.colors.cinza }}>Nenhum projeto ativo</Text>
+              }
+            />
+          </>
         )}
-      </View>
+
+        {encerrados.length > 0 && (
+          <>
+            <Text style={[styles.projectTitle, { color: theme.colors.cinza, marginTop: 30, marginBottom: -1, fontSize: 18 }]}>Projetos Encerrados</Text>
+            <FlatList
+              data={encerrados}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ProjectCard project={item} isEncerrado={true} />
+              )}
+              scrollEnabled={false}
+              ListEmptyComponent={
+                <Text style={{ color: theme.colors.cinza }}>Nenhum projeto encerrado</Text>
+              }
+            />
+          </>
+        )}
+
+        {ativos.length === 0 && encerrados.length === 0 && (
+          <Text style={{ color: theme.colors.cinza, marginTop: 20 }}>Nenhum projeto encontrado</Text>
+        )}
+      </ScrollView>
     </View>
   );
 };
