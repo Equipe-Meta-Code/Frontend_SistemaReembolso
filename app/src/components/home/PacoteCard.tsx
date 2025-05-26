@@ -63,6 +63,30 @@ export interface Despesa {
         );
       };
 
+      const handleExcluirPacote = () => {
+        Alert.alert(
+          'Excluir pacote',
+          'Tem certeza que deseja excluir este pacote? Esta ação não pode ser desfeita.',
+          [
+            { text: 'Cancelar', style: 'cancel' },
+            {
+              text: 'Excluir',
+              style: 'destructive',
+              onPress: async () => {
+                try {
+                  await api.delete(`/pacotes/${pacoteId}`);
+                  Alert.alert('Sucesso', 'Pacote excluído com sucesso');
+                  fetchPacotesDespesas();
+                } catch (error: any) {
+                  console.error(error?.response?.data || error);
+                  Alert.alert('Erro', error?.response?.data?.erro || 'Erro ao excluir pacote');
+                }
+              },
+            },
+          ]
+        );
+      };
+
       const despesasOrdenadas = [...(despesas || [])].sort(
         (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
       );
@@ -167,6 +191,7 @@ export interface Despesa {
 
               {/* Botão de solicitar reembolso */}
               {status === 'Rascunho' && (
+                <>
                 <TouchableOpacity
                   style={[styles.botaoReembolso, (despesas?.length === 0 || isSolicitando) && { backgroundColor: theme.colors.cinza_medio }]}
                   onPress={handleSolicitarReembolso}
@@ -176,6 +201,14 @@ export interface Despesa {
                     {isSolicitando ? 'Solicitando...' : 'Solicitar Reembolso'}
                   </Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.botaoExcluir, { backgroundColor: theme.colors.vinho }]}
+                  onPress={handleExcluirPacote}
+                >
+                  <Text style={styles.textoBotao}>Excluir Pacote</Text>
+                </TouchableOpacity>
+                </>
               )}
             </>
           )}
@@ -273,6 +306,15 @@ export interface Despesa {
       marginBottom: 6,
       marginLeft: 2,
     },    
+
+    botaoExcluir: {
+      marginTop: 10,
+      backgroundColor: theme.colors.vinho,
+      paddingVertical: 10,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+
   });
   
 
