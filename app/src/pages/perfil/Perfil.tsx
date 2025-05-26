@@ -215,7 +215,7 @@ const Perfil = () => {
                     value={isDarkMode}
                     onValueChange={toggleDarkMode}
                     trackColor={{ false: theme.colors.cinza_claro, true: theme.colors.primary }}
-                    thumbColor={theme.colors.secondary}
+                    thumbColor={theme.colors.black}
                 /> 
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
