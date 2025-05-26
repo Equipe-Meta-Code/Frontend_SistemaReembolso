@@ -1,15 +1,15 @@
-import './gesture-handler';
+import 'react-native-gesture-handler';
+import { enableScreens } from 'react-native-screens';
+enableScreens(); // ✅ Chame isso logo no início!
+
 import React from 'react';
 import { StyleSheet } from 'react-native';
-
-/* import Routes from './src/routes/index.routes'; */
 import { NavigationContainer } from '@react-navigation/native';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { store } from './src/(redux)/store';
 import { Provider } from 'react-redux';
 import AppWrapper from './src/(redux)/appWrapper';
 import { ThemeProvider } from './src/context/ThemeContext';
-
 
 export default function App() {
   return (
@@ -25,6 +25,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
