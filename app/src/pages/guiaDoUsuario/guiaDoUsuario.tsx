@@ -255,9 +255,16 @@ const FAQScreen = () => {
         placeholder="Buscar dúvidas..."
         value={searchQuery}
         onChangeText={setSearchQuery}
-        style={[styles.search, { margin: 20, backgroundColor: theme.colors.cinza_medio_claro }]}
+        style={[
+          styles.search,
+          { margin: 20, backgroundColor: theme.colors.cinza_medio_claro }
+        ]}
         placeholderTextColor={theme.colors.text}
         iconColor={theme.colors.text}
+        /** cor do texto digitado */
+        inputStyle={{ color: theme.colors.text }}
+        /** cor do cursor */
+        selectionColor={theme.colors.text}
       />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {filteredFaq.map((item) => (
