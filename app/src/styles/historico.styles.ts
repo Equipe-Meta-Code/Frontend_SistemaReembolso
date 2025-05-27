@@ -144,7 +144,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
-    color: theme.colors.secondary,
+    color: theme.colors.sempre_branco,
   },
 
   // Itens de Despesas

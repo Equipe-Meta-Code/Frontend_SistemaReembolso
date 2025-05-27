@@ -4,7 +4,7 @@ export const createStyles = (theme: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.primary,
+      backgroundColor: theme.colors.background,
       alignItems: 'center',
       justifyContent: 'center',
       paddingHorizontal: 20,
@@ -17,12 +17,12 @@ export const createStyles = (theme: any) =>
     title: {
       fontSize: 32,
       fontWeight: 'bold',
-      color: theme.colors.secondary,
+      color: theme.colors.black,
       marginBottom: 10,
     },
     motto: {
       fontSize: 16,
-      color: theme.colors.secondary,
+      color: theme.colors.cinza,
       textAlign: 'center',
     },
   });

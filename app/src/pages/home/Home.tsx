@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
-import { RootState } from "../../(redux)/store";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from "../../(redux)/store";
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import api from '../../services/api';
 import Foto from '../../components/foto/Foto';
 import ProjectCard from '../../components/home/ProjectCard';
 import { useTheme } from '../../context/ThemeContext';
-import { selectUnreadCount } from '../../(redux)/notificationsSlice';
+import { selectUnreadCount, fetchNotifications } from '../../(redux)/notificationsSlice';
 
 interface Project {
   id: string;
@@ -20,6 +20,8 @@ interface Project {
   category: string[];
   total: number;
   spent: number;
+  encerrado?: boolean;
+  isEncerrado?: boolean;
 }
 
 type RootStackParamList = {
@@ -38,8 +40,15 @@ const Home: React.FC = () => {
   const isScreenFocused = useIsFocused();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [ativos, setAtivos] = useState<Project[]>([]);
+  const [encerrados, setEncerrados] = useState<Project[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   const user = useSelector((state: RootState) => state.auth.user);
+  const userName = user?.name ? user.name.split(' ')[0] : '';
+
   const unreadCount = useSelector(selectUnreadCount);
+  const dispatch = useDispatch<AppDispatch>();
 
   const fetchProjectsAndDespesas = async () => {
     try {
@@ -65,6 +74,7 @@ const Home: React.FC = () => {
         category: project.categorias?.map((cat: any) => cat.nome) || [],
         total: project.categorias?.reduce((acc: number, cat: any) => acc + (cat.valor_maximo || 0), 0) || 0,
         spent: 0,
+        encerrado: project.status === 'encerrado',
       }));
 
       const projetoIds = formattedProjects.map(p => p.id);
@@ -84,6 +94,12 @@ const Home: React.FC = () => {
         spent: Number((totalPorProjeto[p.id] || 0).toFixed(2))
       }));
 
+      const ativosFiltrados = projetosAtualizados.filter(p => !p.encerrado);
+      const encerradosFiltrados = projetosAtualizados.filter(p => p.encerrado);
+
+      setAtivos(ativosFiltrados);
+      setEncerrados(encerradosFiltrados);
+
       setProjects(projetosAtualizados);
     } catch (error) {
       console.error('Erro ao buscar projetos e despesas:', error);
@@ -92,23 +108,37 @@ const Home: React.FC = () => {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchProjectsAndDespesas();
+    setRefreshing(false);
+  };
+
   useEffect(() => {
     if (isScreenFocused) {
       fetchProjectsAndDespesas();
     }
   }, [isScreenFocused]);
 
+  useEffect(() => {
+    if (!isScreenFocused) return;
+    const interval = setInterval(() => {
+      dispatch(fetchNotifications());
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [dispatch, isScreenFocused]);
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.top, { backgroundColor: theme.colors.primary }]}>
-        <Text style={[styles.title, { color: theme.colors.sempre_branco }]}>Bem vindo(a)!</Text>
+        <Text style={[styles.title, { color: theme.colors.sempre_branco }]}>Bem-vindo{userName ? ` ${userName}` : ''}!</Text>
         {/* botão de notificação */}
         <View style={styles.rightIcons}>
           {/* Ícone de notificação com badge */}
           <TouchableOpacity onPress={() => navigation.navigate("Notificacao")} style={styles.badgeWrapper}>
             <FontAwesome5
               name="bell"
-              style={[styles.iconRight, isScreenFocused && { color: theme.colors.black }]}
+              style={[styles.iconRight, isScreenFocused && { color: theme.colors.sempre_branco }]}
             />
             {unreadCount > 0 && (
               <View style={styles.badge}>
@@ -129,7 +159,7 @@ const Home: React.FC = () => {
                 height={50}
                 borderRadius={25}
                 borderWidth={3}
-                borderColor={theme.colors.black}
+                borderColor={theme.colors.sempre_branco}
                 refreshKey={user.profileImage}
                 fallbackSource={require('../../assets/perfil.png')}
               />
@@ -143,20 +173,56 @@ const Home: React.FC = () => {
         </View>
       </View>
 
-      <View style={styles.projectsList}>
-        <Text style={[styles.projectTitle, { color: theme.colors.text }]}>Projetos</Text>
-        {loading ? (
-          <ActivityIndicator size="large" color={theme.colors.primary} />
-        ) : (
-          <FlatList
-            data={projects}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ProjectCard project={item} />}
-            refreshing={loading}
-            onRefresh={fetchProjectsAndDespesas}
+      <ScrollView 
+        style={styles.projectsList} 
+        contentContainerStyle={{ paddingBottom: 30 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[theme.colors.primary]} 
+            tintColor={theme.colors.primary} 
           />
+        }
+      >
+        {ativos.length > 0 && (
+          <>
+            <Text style={[styles.projectTitle, { color: theme.colors.text, marginBottom: -1, fontSize: 18 }]}>Projetos Ativos</Text>
+            <FlatList
+              data={ativos}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ProjectCard project={item} isEncerrado={false} />
+              )}
+              scrollEnabled={false} 
+              ListEmptyComponent={
+                <Text style={{ color: theme.colors.cinza }}>Nenhum projeto ativo</Text>
+              }
+            />
+          </>
         )}
-      </View>
+
+        {encerrados.length > 0 && (
+          <>
+            <Text style={[styles.projectTitle, { color: theme.colors.cinza, marginTop: 30, marginBottom: -1, fontSize: 18 }]}>Projetos Encerrados</Text>
+            <FlatList
+              data={encerrados}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ProjectCard project={item} isEncerrado={true} />
+              )}
+              scrollEnabled={false}
+              ListEmptyComponent={
+                <Text style={{ color: theme.colors.cinza }}>Nenhum projeto encerrado</Text>
+              }
+            />
+          </>
+        )}
+
+        {ativos.length === 0 && encerrados.length === 0 && (
+          <Text style={{ color: theme.colors.cinza, marginTop: 20 }}>Nenhum projeto encontrado</Text>
+        )}
+      </ScrollView>
     </View>
   );
 };

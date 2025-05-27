@@ -58,6 +58,7 @@ const PacotesScreen = ({ route }: any) => {
   const userId = useSelector((state: RootState) => state.auth.user?.userId);
   const [statusSelecionado, setStatusSelecionado] = useState<string | null>(null);
   const [resetarExpandido, setResetarExpandido] = useState(false);
+  const [statusProjeto, setStatusProjeto] = useState<string | null>(null);
 
   const fetchPacotesDespesas = async () => {
     try {
@@ -79,6 +80,9 @@ const PacotesScreen = ({ route }: any) => {
   
       const projetoResponse = await api.get(`/projeto/${Number(projectId)}`);
       setNomeProjeto(projetoResponse.data.nome);
+      setStatusProjeto(projetoResponse.data.status);
+
+      console.log("Status do projeto:", projetoResponse.data.status);
   
       const allDespesaIds = pacotesDoProjeto.flatMap(p => p.despesas || []);
       if (allDespesaIds.length > 0) {
@@ -134,12 +138,15 @@ const PacotesScreen = ({ route }: any) => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.top}>
+    <View style={[styles.container, statusProjeto === 'encerrado' && styles.containerDesativado]}>
+      <View style={statusProjeto === 'encerrado' ? styles.topEncerrado : styles.top}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
               <AntDesign name="arrowleft" style={styles.arrow} />
         </TouchableOpacity>
-        <Text style={styles.title}>{nomeProjeto || 'Carregando...'}</Text>
+        <Text style={styles.title}>
+          {nomeProjeto || 'Carregando...'}{statusProjeto === 'encerrado' ? ' - Encerrado' : ''}
+        </Text>
+
       </View>
 
       {/* o filtro no topo da tela */}
@@ -192,7 +199,7 @@ const PacotesScreen = ({ route }: any) => {
       )}
 
       <View style={styles.pacotesList}>
-        <Text style={styles.pacotesTitle}>Meus pacotes</Text>
+        <Text style={[styles.pacotesTitle, statusProjeto === 'encerrado' && styles.containerDesativado]}>Meus pacotes</Text>
 
         <FlatList
           data={pacotesFiltrados}
@@ -246,6 +253,14 @@ const createStyles = (theme: any) => StyleSheet.create({
     padding: 20,
     paddingTop: 50,
     backgroundColor: theme.colors.primary,
+    width: '100%',
+  },
+  topEncerrado: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    paddingTop: 50,
+    backgroundColor: theme.colors.cinza,
     width: '100%',
   },
   title: {
@@ -343,6 +358,10 @@ const createStyles = (theme: any) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },  
+  containerDesativado: {
+    opacity: 1,
+  },
+
 });
 
 export default PacotesScreen;

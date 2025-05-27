@@ -12,18 +12,18 @@ export default function Intro() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       navigation.navigate('PreRegistro');
-    }, 6000); // 6 segundos
+    }, 3000); 
 
     return () => clearTimeout(timeout); // limpeza se desmontar antes
   }, [navigation]);
 
   return (
     <View style={style.container}>
-      {/* <Image
-        source={require('../../assets/teste.jpeg')} 
+      <Image
+        source={require('../../../assets/icone-logo.png')} 
         style={style.logo}
         resizeMode="contain"
-      /> */}
+      /> 
       <Text style={style.title}>Recibify</Text>
       <Text style={style.motto}>Registro de Gastos Fácil e Rápido</Text>
     </View>
