@@ -115,7 +115,8 @@ export const createStyles = (theme: any) => StyleSheet.create({
         paddingVertical: 18,
         borderRadius: 25,
         alignItems: 'center',
-        marginTop: 10,           
+        marginTop: 10,        
+        marginBottom: 70,   
       },
       buttonText: {
         color: theme.colors.sempre_branco,
