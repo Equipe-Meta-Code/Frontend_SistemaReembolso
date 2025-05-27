@@ -3,7 +3,7 @@ import {
   View,
   Text,
   Animated,
-  Image,
+  ImageBackground,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
@@ -12,9 +12,18 @@ import { createStyles } from './styles';
 import { ButtonCustom } from '../../components/customButton';
 
 const mottos = [
-  'Registro de Gastos Fácil e Rápido',
-  'Tenha controle financeiro no seu projeto',
-  'Simples, Rápido e Eficiente',
+  {
+    text: 'Registro de Gastos Fácil e Rápido',
+    image: require('../../assets/img1.jpg'),
+  },
+  {
+    text: 'Tenha controle financeiro no seu projeto',
+    image: require('../../assets/img2.jpg'),
+  },
+  {
+    text: 'Simples, Rápido e Eficiente',
+    image: require('../../assets/img3.jpg'), 
+  },
 ];
 
 export default function Intro() {
@@ -47,28 +56,24 @@ export default function Intro() {
   }, []);
 
   return (
-    <LinearGradient
-      colors={[theme.colors.secondary, theme.colors.primary, theme.colors.sempre_branco]}
-      style={style.container}
-    >
-      {/* Logo (opcional) */}
-      {/* <Image
-        source={require('../../assets/logo.png')}
-        style={style.logo}
-      /> */}
-
-      <Text style={style.title}>Recibify</Text>
-
-      <Animated.Text style={[style.motto, { opacity: fadeAnim }]}>
-        {mottos[mottoIndex]}
-      </Animated.Text>
-
-      <View style={style.buttonWrapper}>
-        <ButtonCustom
-          title="Começar"
-          onPress={() => navigation.navigate('Login')}
-        />
-      </View>
-    </LinearGradient>
+    <View style={{ flex: 1 }}>
+      <ImageBackground
+        source={mottos[mottoIndex].image}
+        style={style.backgroundImage}
+        resizeMode="cover"
+      >
+        <View style={style.imageOverlay} />
+        <View style={style.overlay}>
+          <Text style={style.title}>Recibify</Text>
+          <Text style={style.motto}>{mottos[mottoIndex].text}</Text>
+          <View style={style.buttonWrapper}>
+            <ButtonCustom
+              title="Começar"
+              onPress={() => navigation.navigate('Login')}
+            />
+          </View>
+        </View>
+      </ImageBackground>
+    </View>
   );
 }
