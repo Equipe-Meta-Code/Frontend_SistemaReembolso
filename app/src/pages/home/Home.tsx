@@ -45,6 +45,8 @@ const Home: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const user = useSelector((state: RootState) => state.auth.user);
+  const userName = user?.name ? user.name.split(' ')[0] : '';
+
   const unreadCount = useSelector(selectUnreadCount);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -129,7 +131,7 @@ const Home: React.FC = () => {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.top, { backgroundColor: theme.colors.primary }]}>
-        <Text style={[styles.title, { color: theme.colors.sempre_branco }]}>Bem vindo(a)!</Text>
+        <Text style={[styles.title, { color: theme.colors.sempre_branco }]}>Bem-vindo{userName ? ` ${userName}` : ''}!</Text>
         {/* botão de notificação */}
         <View style={styles.rightIcons}>
           {/* Ícone de notificação com badge */}
