@@ -136,7 +136,7 @@ const Home: React.FC = () => {
           <TouchableOpacity onPress={() => navigation.navigate("Notificacao")} style={styles.badgeWrapper}>
             <FontAwesome5
               name="bell"
-              style={[styles.iconRight, isScreenFocused && { color: theme.colors.black }]}
+              style={[styles.iconRight, isScreenFocused && { color: theme.colors.sempre_branco }]}
             />
             {unreadCount > 0 && (
               <View style={styles.badge}>
@@ -157,7 +157,7 @@ const Home: React.FC = () => {
                 height={50}
                 borderRadius={25}
                 borderWidth={3}
-                borderColor={theme.colors.black}
+                borderColor={theme.colors.sempre_branco}
                 refreshKey={user.profileImage}
                 fallbackSource={require('../../assets/perfil.png')}
               />
