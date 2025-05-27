@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import api from '../../services/api';
 import { themas } from "../../global/themes";
 import { useTheme } from '../../context/ThemeContext';
+import { Feather } from '@expo/vector-icons';
+import { TextInput } from 'react-native';
 export interface Despesa {
     categoria: string;
     valor_gasto: number;
@@ -33,6 +35,9 @@ export interface Despesa {
       const styles = createStyles (theme);    
       const [isSolicitando, setIsSolicitando] = useState(false);
       const [expandido, setExpandido] = useState(false);  
+      
+      const [editandoNome, setEditandoNome] = useState(false);
+      const [novoNome, setNovoNome] = useState(nome);
 
       const handleSolicitarReembolso = async () => {
         Alert.alert(
@@ -85,6 +90,23 @@ export interface Despesa {
             },
           ]
         );
+      };
+
+      const salvarNome = async () => {
+        if (novoNome === nome) {
+          setEditandoNome(false);
+          return;
+        }
+
+        try {
+          await api.put(`/pacotes/${pacoteId}`, { nome: novoNome });
+          setEditandoNome(false);
+          fetchPacotesDespesas();
+          Alert.alert('Sucesso', 'Nome atualizado com sucesso');
+        } catch (error: any) {
+          console.error(error);
+          Alert.alert('Erro', error?.response?.data?.erro || 'Erro ao atualizar nome do pacote');
+        }
       };
 
       const despesasOrdenadas = [...(despesas || [])].sort(
@@ -157,7 +179,28 @@ export interface Despesa {
                   {status}
                 </Text>
             </View>
-            <Text style={styles.cardTitle}>{nome}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {editandoNome ? (
+                <TextInput
+                  style={[styles.cardTitle, styles.inputEditarNome]}
+                  value={novoNome}
+                  onChangeText={setNovoNome}
+                  onSubmitEditing={salvarNome}
+                  onBlur={salvarNome}
+                  autoFocus
+                />
+              ) : (
+                <>
+                  <Text style={styles.cardTitle}>{novoNome}</Text>
+                  {status === 'Rascunho' && (
+                    <TouchableOpacity onPress={() => setEditandoNome(true)} style={{ marginLeft: 8, marginBottom: 2 }}>
+                      <Feather name="edit" size={18} color={theme.colors.cinza} />
+                    </TouchableOpacity>
+                  )}
+                </>
+              )}
+            </View>
+
             <Text style={styles.totalGasto}>Total gasto: R$ {totalGasto.toFixed(2).replace('.', ',')}</Text>
           
             <Text style={{ color: theme.colors.chumbo_claro, marginTop: 8, marginLeft: 3, marginBottom: 3 }}>{expandido ? '▲  Recolher' : '▼ Ver despesas'}</Text>
@@ -172,7 +215,7 @@ export interface Despesa {
                     <Text style={[styles.cardSubSubtitle, { color: tituloCategoriaCores[grupo.categoria] || tituloCategoriaCores['Outros'] }]}>{grupo.categoria}</Text>
                     
                     {grupo.itens.map((item: any, index: number) => (
-                    <Text key={index} style={styles.despesaItem}>
+                    <Text key={index} style={styles.despesaItem} numberOfLines={1} ellipsizeMode='tail'>
                     {mistoAprovacao && (
                       <Text style={{ color: aprovacaoDespesaCores[item.aprovacao] || theme.colors.chumbo_claro, fontWeight: 'bold' }}>
                         [{item.aprovacao}]
@@ -316,6 +359,14 @@ export interface Despesa {
       paddingVertical: 10,
       borderRadius: 10,
       alignItems: 'center',
+    },
+    inputEditarNome: {
+      fontSize: 18,
+      fontWeight: '700',
+      color: theme.colors.black,
+      borderBottomWidth: 1,
+      borderColor: theme.colors.primary,
+      paddingVertical: 2,
     },
 
   });
