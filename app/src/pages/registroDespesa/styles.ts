@@ -89,6 +89,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
         height: 50,
         borderRadius: 8,
         marginTop: 12,
+        color: theme.colors.text,
       },
       inputDescription: {
         borderWidth: 0.5,
@@ -97,6 +98,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
         height: 90,
         borderRadius: 8,
         marginTop: 12,
+        color: theme.colors.text,
       },
       image: {
         width: 100,
@@ -171,6 +173,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
         justifyContent: 'center',
         marginTop: 6,
         fontSize: 16,
+        color: theme.colors.text
       },
       limit: {
         color: theme.colors.red,
@@ -203,6 +206,7 @@ export const createStyles = (theme: any) => StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         marginTop: 8,
+        color: theme.colors.text,
       },
       modalOverlay: {
       position: 'absolute',
