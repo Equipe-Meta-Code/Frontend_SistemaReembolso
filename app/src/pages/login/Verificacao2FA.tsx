@@ -64,7 +64,6 @@ export default function Verificacao2FA() {
         if (data.token) {
           dispatch(loginUserAction(data));
           Alert.alert("Sucesso", "Autenticação concluída!");
-          navigation.navigate("BottomRoutes");
         } else {
           Alert.alert("Erro", "Token não recebido.");
         }

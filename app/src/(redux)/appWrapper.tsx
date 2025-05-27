@@ -60,10 +60,10 @@ function AppWrapper() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             {!isAuthenticated ? (
                 <>  
-                    <Stack.Screen name="Login" component={Login} />
-                    <Stack.Screen name="Cadastro" component={Cadastro} />
                     <Stack.Screen name="Intro" component={Intro} />
                     <Stack.Screen name="PreRegistro" component={PreRegistro} />
+                    <Stack.Screen name="Login" component={Login} />
+                    <Stack.Screen name="Cadastro" component={Cadastro} />
                     <Stack.Screen name= "RecuperacaoSenha" component={RecuperacaoSenha} />
                     <Stack.Screen name="VerificarCodigo" component={VerificarCodigo} />
                     <Stack.Screen name="NovaSenha" component={NovaSenha} />

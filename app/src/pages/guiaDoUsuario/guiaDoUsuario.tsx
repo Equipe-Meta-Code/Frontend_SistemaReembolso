@@ -223,7 +223,7 @@ const FAQScreen = () => {
     const isOpen = openId === item.id;
 
     return (
-      <View style={[styles.accordionItem, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.accordionItem, { backgroundColor: theme.colors.secondary }]}>
         <TouchableOpacity
           style={styles.accordionButton}
           onPress={() => handleToggle(item.id)}
@@ -255,7 +255,9 @@ const FAQScreen = () => {
         placeholder="Buscar dúvidas..."
         value={searchQuery}
         onChangeText={setSearchQuery}
-        style={[styles.search, { margin: 20, backgroundColor: '#FAFAFA' }]}
+        style={[styles.search, { margin: 20, backgroundColor: theme.colors.cinza_medio_claro }]}
+        placeholderTextColor={theme.colors.text}
+        iconColor={theme.colors.text}
       />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {filteredFaq.map((item) => (

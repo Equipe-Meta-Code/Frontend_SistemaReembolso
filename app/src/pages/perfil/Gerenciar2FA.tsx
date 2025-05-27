@@ -39,7 +39,12 @@ export default function Gerenciar2FA() {
         }
         try {
             await resend2FACode(user.email); 
-            navigation.navigate('Verificacao2FA', { email: user.email, ativar: true });
+            navigation.navigate('Verificacao2FA', { 
+                email: user.email, 
+                userId: user.userId,
+                ativar: true 
+            });
+
         } catch (err) {
             Alert.alert('Erro', 'Não foi possível enviar o código.');
         }
